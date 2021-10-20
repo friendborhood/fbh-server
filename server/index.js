@@ -33,7 +33,6 @@ app.get('/endPoint/:index', (req, res) => {
 
   const PORT_NUMBER = 3001;
   const server = app.listen(PORT_NUMBER);
-  console.log(`the server has started...
-   port: ${PORT_NUMBER}`);
+  console.log(`the server has started on port: ${PORT_NUMBER} !`);
   
 module.exports = server;
