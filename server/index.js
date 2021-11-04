@@ -4,11 +4,10 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const cors = require('cors');
-const { mainModule } = require('process');
-const { default: axios } = require('axios');
+const Sequelize = require('sequlize');
 app.use(cors());
 
-
+const sequelize = new Sequelize();
 
 let dataMap = new Map();
 dataMap.set('omer','ahla');
@@ -35,11 +34,6 @@ app.get('/endPoint/:index', (req, res) => {
 });
 const main = () => {
   console.log('hi');
-  //let i = 120;
-  //while(i > 0){
-  //axios.get('https://3e9d-206-189-30-76.ngrok.io/endPoint/omer');
-  //i-=1;
-  
 }
   const PORT_NUMBER = 3001;
   const server = app.listen(PORT_NUMBER);
