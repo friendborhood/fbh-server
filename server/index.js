@@ -1,13 +1,11 @@
 const express = require('express');
-const ngrok = require('ngrok');
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const cors = require('cors');
-const Sequelize = require('sequlize');
 app.use(cors());
 
-const sequelize = new Sequelize();
 
 let dataMap = new Map();
 dataMap.set('omer','ahla');
@@ -37,8 +35,5 @@ const main = () => {
 }
   const PORT_NUMBER = 3001;
   const server = app.listen(PORT_NUMBER);
-  const url = ngrok.connect({ port: PORT_NUMBER });
-  console.log(url);
   console.log(`the server has started on port: ${PORT_NUMBER} !`);
-  main(url);
 module.exports = server;
