@@ -30,6 +30,13 @@ app.get('/endPoint/:index', (req, res) => {
     value:dataMap.get(key),
   });
 });
+
+app.get('/', (req, res) => {
+    console.log('hello');
+  res.json({
+    status: 'OK',
+  });
+});
   const PORT_NUMBER = 8080;
   const server = app.listen(PORT_NUMBER);
   console.log(`the server has started on port: ${PORT_NUMBER} !`);
