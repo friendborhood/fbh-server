@@ -32,12 +32,13 @@ app.get('/endPoint/:index', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    console.log('get');
+    console.log(res);
   res.json({
     status: 'OK',
     message: 'This is FriendBorHood Backend. you made a GET request.'
   });
 });
+
   const PORT_NUMBER = process.env.PORT || 8085;
   const server = app.listen(PORT_NUMBER);
   console.log(`the server has started on port: ${PORT_NUMBER} !`);
