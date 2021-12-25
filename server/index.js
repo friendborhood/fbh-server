@@ -34,7 +34,8 @@ app.get('/endPoint/:index', (req, res) => {
 app.get('/', (req, res) => {
     console.log('get');
   res.json({
-    status: 'We are live daniel and arzi',
+    status: 'OK',
+    message: 'This is FriendBorHood Backend. you have made a GET request.'
   });
 });
   const PORT_NUMBER = process.env.PORT || 8085;
