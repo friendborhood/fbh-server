@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
     status: 'OK',
   });
 });
-  const PORT_NUMBER = 8085;
+  const PORT_NUMBER = process.env.PORT || 8085;
   const server = app.listen(PORT_NUMBER);
   console.log(`the server has started on port: ${PORT_NUMBER} !`);
 module.exports = server;
