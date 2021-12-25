@@ -34,7 +34,7 @@ app.get('/endPoint/:index', (req, res) => {
 app.get('/', (req, res) => {
     console.log('get');
   res.json({
-    status: 'OK',
+    status: 'We are live daniel and arzi',
   });
 });
   const PORT_NUMBER = process.env.PORT || 8085;
