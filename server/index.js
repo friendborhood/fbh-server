@@ -32,12 +32,12 @@ app.get('/endPoint/:index', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    console.log('hello');
+    console.log(`GET ${req}`);
   res.json({
     status: 'OK',
   });
 });
-  const PORT_NUMBER = 8080;
+  const PORT_NUMBER = 8085;
   const server = app.listen(PORT_NUMBER);
   console.log(`the server has started on port: ${PORT_NUMBER} !`);
 module.exports = server;
