@@ -32,7 +32,7 @@ app.get('/endPoint/:index', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    console.log(res);
+    console.log('GET');
   res.json({
     status: 'OK',
     message: 'This is FriendBorHood Backend. you made a GET request.'
