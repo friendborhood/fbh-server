@@ -4,6 +4,7 @@
   "description": "",
   "main": "./server/index.js",
   "scripts": {
+    "linter": "./node_modules/.bin/eslint .",
     "start": "node server"
   },
   "repository": {
@@ -17,8 +18,13 @@
   },
   "homepage": "https://github.com/OmerGery/Takhles-Backend#readme",
   "dependencies": {
+    "@google-cloud/storage": "^5.16.1",
     "cors": "^2.8.5",
-    "express": "^4.17.2"
+    "eslint": "^8.5.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "express": "^4.17.2",
+    "firebase": "^9.6.1",
+    "firebase-admin": "^10.0.1"
   },
   "engines": {
     "node": "16.x"
@@ -28,6 +34,3 @@
     "heroku"
   ]
 }
-
- 
- 
