@@ -7,7 +7,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
-
 app.get('/', (req, res) => {
   console.log('GET');
 
@@ -30,5 +29,5 @@ app.get('/users/:userId', async (req, res) => {
 });
 
 const PORT_NUMBER = process.env.PORT || 8085;
-const server = app.listen(PORT_NUMBER);
+app.listen(PORT_NUMBER);
 console.log(`the server has started on port: ${PORT_NUMBER} !`);
