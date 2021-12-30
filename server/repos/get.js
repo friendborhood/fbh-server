@@ -4,14 +4,14 @@ const {
 require('./init');
 
 const dbRef = ref(getDatabase());
-const getUser = (id) => {
-  get(child(dbRef, `users/${id}`)).then((snapshot) => {
+
+const getUser = async (userId) => {
+  get(child(dbRef, `users/${userId}`)).then((snapshot) => {
     if (snapshot.exists()) {
       return snapshot.val();
     }
     console.log('No data available');
+    return null;
   });
-  
-
-
+};
 module.exports = getUser;

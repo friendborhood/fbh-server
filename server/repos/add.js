@@ -8,6 +8,7 @@ const writeUserData = (userId, name) => {
   const db = getDatabase();
   set(ref(db, `users/${userId}`), {
     username: name,
+    phone: '054',
   });
 };
-writeUserData(4, 'omer GA');
+writeUserData(5, 'Omer Arzi');
