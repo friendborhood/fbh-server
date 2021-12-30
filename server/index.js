@@ -1,4 +1,5 @@
 const express = require('express');
+const getUser = require('./repos/get');
 
 const app = express();
 app.use(express.json());
@@ -12,6 +13,16 @@ app.get('/', (req, res) => {
   res.json({
     status: 'OK',
     message: 'This is FriendBorHood Backend. you made a GET request.',
+  });
+});
+
+app.get('/users/:userId', async (req, res) => {
+  console.log('GET');
+  const { userId } = req.params;
+  const user = await getUser(userId);
+  res.json({
+    status: 'OK',
+    data: user,
   });
 });
 
