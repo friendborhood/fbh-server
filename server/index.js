@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
 
   res.json({
     status: 'OK',
-    message: 'This is FriendBorHood Backend. you made a GET request.',
+    message: 'Hey, This is FriendBorHood Backend. you made a GET request.',
   });
 });
 
