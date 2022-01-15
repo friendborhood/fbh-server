@@ -13,7 +13,7 @@ jobs:
           node-version: 16
       - run: npm i
       - run: npm run test
-        with: 
+        env: 
           FIRE_BASE: ${{secrets.FIRE_BASE}}
 
   deploy:
