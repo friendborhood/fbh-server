@@ -34,5 +34,14 @@ app.get('/users/:userId', async (req, res) => {
 });
 
 const PORT_NUMBER = process.env.PORT || 3000;
-app.listen(PORT_NUMBER);
-console.log(`the server has started on port: ${PORT_NUMBER} !`);
+let server;
+const startServer = () => {
+  server = app.listen(PORT_NUMBER);
+  console.log(`the server has started on port: ${PORT_NUMBER} !`);
+};
+
+startServer();
+const closeServer = () => {
+  server.close();
+};
+module.exports = { startServer, closeServer };
