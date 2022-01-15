@@ -6,7 +6,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://friendborhood.herokuapp.com/',
+}));
 app.get('/', (req, res) => {
   console.log('GET');
 
@@ -17,17 +19,20 @@ app.get('/', (req, res) => {
 });
 
 app.get('/users/:userId', async (req, res) => {
-  console.log('GET User By ID : ');
+  console.log('try get user');
   const { userId } = req.params;
-  console.log(userId);
+  console.log(`user id: ${userId}`);
   const user = await getUser(userId);
-  console.log(user);
+  if (!user) {
+    res.status(404).send(`User with id ${userId} was not found.`);
+    return;
+  }
   res.json({
     status: 'OK',
     data: user,
   });
 });
 
-const PORT_NUMBER = process.env.PORT || 8085;
+const PORT_NUMBER = process.env.PORT || 3000;
 app.listen(PORT_NUMBER);
 console.log(`the server has started on port: ${PORT_NUMBER} !`);
