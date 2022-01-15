@@ -2,10 +2,11 @@
   "name": "takhles-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "./server/index.js",
+  "main": "./src/index.js",
   "scripts": {
+    "dev": "nodemon src",
     "linter": "./node_modules/.bin/eslint .",
-    "start": "node server"
+    "start": "node src"
   },
   "repository": {
     "type": "git",

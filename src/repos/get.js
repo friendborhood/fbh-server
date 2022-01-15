@@ -5,13 +5,11 @@ require('./init');
 
 const dbRef = ref(getDatabase());
 
-const getUser = async (userId) => {
+module.exports = async (userId) => {
   const user = await get(child(dbRef, `users/${userId}`));
   if (user.exists()) {
     return user.val();
   }
-  console.log('No data available');
+  console.log(`User with id :${userId} not found`);
   return null;
 };
-
-module.exports = getUser;
