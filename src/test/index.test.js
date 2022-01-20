@@ -1,6 +1,6 @@
 require('dotenv').config();
 const axios = require('axios');
-const { closeServer } = require('..');
+require('..');
 
 jest.setTimeout(1000 * 10);
 describe('Basic sanity server CRUD tests', () => {
@@ -16,8 +16,5 @@ describe('Basic sanity server CRUD tests', () => {
       const { response: { status } } = error;
       expect(status).toBe(404);
     }
-  });
-  afterAll(async () => {
-    closeServer();
   });
 });

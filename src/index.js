@@ -13,8 +13,7 @@ app.get('/', (req, res) => {
   console.log('GET');
 
   res.json({
-    status: 'OK',
-    message: 'Hey, This is FriendBorHood Backend. you made a GET request.',
+    message: 'Welcome to FriendBorHood API! 🐿️',
   });
 });
 
@@ -28,20 +27,10 @@ app.get('/users/:userId', async (req, res) => {
     return;
   }
   res.json({
-    status: 'OK',
     data: user,
   });
 });
 
 const PORT_NUMBER = process.env.PORT || 3000;
-let server;
-const startServer = () => {
-  server = app.listen(PORT_NUMBER);
-  console.log(`the server has started on port: ${PORT_NUMBER} !`);
-};
-
-startServer();
-const closeServer = () => {
-  server.close();
-};
-module.exports = { startServer, closeServer };
+app.listen(PORT_NUMBER);
+console.log(`the server has started on port: ${PORT_NUMBER} !`);
