@@ -7,7 +7,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
-  origin: 'https://friendborhood.herokuapp.com/',
+  origin: 'https://friendborhood.herokuapp.com',
 }));
 app.get('/', (req, res) => {
   console.log('GET');
