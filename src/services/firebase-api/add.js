@@ -5,7 +5,7 @@ const db = getDatabase();
 
 module.exports = async (userId, name) => {
   set(ref(db, `users/${userId}`), {
-    username: name,
+    userName: name,
     phone: '054',
   });
 };

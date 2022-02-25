@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const getUser = require('./repos/get');
 
 const app = express();
 app.use(express.json());
@@ -14,20 +13,7 @@ app.get('/', (req, res) => {
     message: 'Welcome to FriendBorHood API! 🐿️',
   });
 });
-
-app.get('/users/:userId', async (req, res) => {
-  console.log('try get user');
-  const { userId } = req.params;
-  console.log(`user id: ${userId}`);
-  const user = await getUser(userId);
-  if (!user) {
-    res.status(404).send(`User with id ${userId} was not found.`);
-    return;
-  }
-  res.json({
-    data: user,
-  });
-});
+app.use('/user', require('./user'));
 
 const PORT_NUMBER = process.env.PORT || 3000;
 app.listen(PORT_NUMBER);
