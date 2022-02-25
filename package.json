@@ -5,9 +5,9 @@
   "main": "./src/index.js",
   "scripts": {
     "test": "jest --forceExit",
-    "dev": "nodemon src",
+    "dev": "nodemon src/api",
     "linter": "./node_modules/.bin/eslint .",
-    "start": "node src"
+    "start": "node src/api"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
     "firebase": "^9.6.1",
     "firebase-admin": "^10.0.1",
     "jest": "^27.4.7",
+    "nodemailer": "^6.7.2",
     "nodemon": "^2.0.15"
   },
   "engines": {
