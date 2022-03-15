@@ -1,0 +1,59 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.1", 
+      "title": "My User Project CRUD",
+      "description": "My User Project Application API",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "paths": {
+        "/user/{userId}": {
+            "parameters": [
+                {
+                  "name": "userId",
+                  "in": "path",
+                  "required": true,
+                  "description": "ID of user that we want to find",
+                  "type": "integer"
+                }
+              ],
+          "get": {
+            "tags": ["User"],
+            "summary": "Get all uses in system",
+            "responses": {
+              "200": {
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/definitions/User"
+                }
+              }
+            }
+          }
+        }
+      },
+      "definitions": {
+        "User": {
+          "required": ["userId"],
+          "properties": {
+            "userId": {
+              "type": "integer",
+              "uniqueItems": true
+            }
+          }
+        }
+      },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "tags": [
+      {
+        "name": "User",
+        "description": "API for user in the system"
+      }
+    ],
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"]
+  }
