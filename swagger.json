@@ -1,0 +1,73 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0", 
+      "title": "Friendborhood API",
+      "description": "Api to share stuff with people around you",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "paths": {
+        "/user/{userId}": {
+            "parameters": [
+                {
+                  "name": "userId",
+                  "in": "path",
+                  "required": true,
+                  "description": "ID of user that we want to find",
+                  "type": "integer"
+                }
+              ],
+          "get": {
+            "tags": ["User"],
+            "summary": "Get user by id",
+            "responses": {
+              "200": {
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/definitions/User"
+                }
+              }
+            }
+          }
+        }
+      },
+      "definitions": {
+        "User": {
+          "required": ["userId"],
+          "properties": {
+            "data": {
+              "properties": {
+              "userName": {
+              "type": "string",
+              "uniqueItems": true
+            },
+            "firstName": {
+              "type": "string"
+            },
+            "lastName": {
+              "type": "string"
+            },
+            "points":{ 
+              "type": "integer"
+            },
+            "email": {
+              "type": "string"
+          }
+        }
+        }
+        }
+      }
+    },
+    "tags": [
+      {
+        "name": "User",
+        "description": "API for user in the system"
+      }
+    ],
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"]
+  }
