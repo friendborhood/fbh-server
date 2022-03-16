@@ -1,9 +1,9 @@
 {
     "swagger": "2.0",
     "info": {
-      "version": "1.0.1", 
-      "title": "My User Project CRUD",
-      "description": "My User Project Application API",
+      "version": "1.0.0", 
+      "title": "Friendborhood API",
+      "description": "Api to share stuff with people around you",
       "license": {
         "name": "MIT",
         "url": "https://opensource.org/licenses/MIT"
@@ -22,7 +22,7 @@
               ],
           "get": {
             "tags": ["User"],
-            "summary": "Get all uses in system",
+            "summary": "Get user by id",
             "responses": {
               "200": {
                 "description": "OK",
@@ -38,15 +38,29 @@
         "User": {
           "required": ["userId"],
           "properties": {
-            "userId": {
-              "type": "integer",
+            "data": {
+              "properties": {
+              "userName": {
+              "type": "string",
               "uniqueItems": true
-            }
+            },
+            "firstName": {
+              "type": "string"
+            },
+            "lastName": {
+              "type": "string"
+            },
+            "points":{ 
+              "type": "integer"
+            },
+            "email": {
+              "type": "string"
           }
         }
-      },
-    "host": "localhost:3000",
-    "basePath": "/",
+        }
+        }
+      }
+    },
     "tags": [
       {
         "name": "User",
