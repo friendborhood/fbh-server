@@ -35,17 +35,17 @@ router.post('/auth/:userName', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  //const { email, firstName, lastName, location, rating} = req.body;
+  // const { email, firstName, lastName, location, rating} = req.body;
   const data = req.body;
   console.log(`try add user by name ${data.userName}`);
   const isExist = await findByName(data.userName);
   if (isExist) {
-    return res.status(400).send(`User name ${data.userName} already exists.`)
+    return res.status(400).send(`User name ${data.userName} already exists. must be unique`);
   }
   const newUserId = await addUser(data);
   return res.json({
-    msg : "user was added to database",
-    newUserId
+    msg: 'user was added to database',
+    newUserId,
   });
 });
 module.exports = router;
