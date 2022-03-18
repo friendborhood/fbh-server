@@ -1,6 +1,6 @@
+const { uuid } = require('short-uuid');
 const getModel = require('../../services/firebase-api/get');
 const addData = require('../../services/firebase-api/add');
-const { uuid } = require('short-uuid');
 
 const modelName = 'users';
 const findByName = async (userName) => {
@@ -8,11 +8,11 @@ const findByName = async (userName) => {
   console.log('try find user');
   console.log(userModel);
   let relevantUser = null;
-  for (let key in userModel) {
-      if (userModel[key].userName === userName) {
-          foundUser = userModel[key];
-          break;
-      }
+  for (const key in userModel) {
+    if (userModel[key].userName === userName) {
+      relevantUser = userModel[key];
+      break;
+    }
   }
   if (!relevantUser) {
     console.log('user not found');
