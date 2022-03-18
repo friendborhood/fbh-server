@@ -3,6 +3,12 @@ const getModel = require('../../services/firebase-api/get');
 const addData = require('../../services/firebase-api/add');
 
 const modelName = 'users';
+const validateUserData = (data) => {
+  const { email } = data;
+  if (!email) {
+    throw new Error('email must be provided');
+  }
+};
 const findByName = async (userName) => {
   const userModel = await getModel(modelName);
   console.log('try find user');
@@ -35,4 +41,9 @@ const addUser = async (data) => {
   await addData(modelName, data, generatedId);
   return generatedId;
 };
-module.exports = { findByName, findById, addUser };
+module.exports = {
+  findByName,
+  findById,
+  addUser,
+  validateUserData,
+};

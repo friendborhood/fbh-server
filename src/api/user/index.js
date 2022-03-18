@@ -1,5 +1,7 @@
 const { Router } = require('express');
-const { findById, findByName, addUser } = require('../../models/user');
+const {
+  findById, findByName, addUser, validateUserData,
+} = require('../../models/user');
 const { sendAuthCodeToUserEmail } = require('../../services/node-mail-auth');
 
 const router = Router();
@@ -34,17 +36,23 @@ router.post('/auth/:userName', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  // const { email, firstName, lastName, location, rating} = req.body;
-  const data = req.body;
-  console.log(`try add user by name ${data.userName}`);
-  const isExist = await findByName(data.userName);
-  if (isExist) {
-    return res.status(400).send(`User name ${data.userName} already exists. must be unique`);
+  try {
+    const data = req.body;
+    validateUserData(data);
+    console.log(`try add user by name ${data.userName}`);
+    const isExist = await findByName(data.userName);
+    if (isExist) {
+      return res.status(400).send(`User name ${data.userName} already exists. user name must be unique`);
+    }
+    console.log(`try add user with data ${JSON.stringify(data)}`);
+    const newUserId = await addUser(data);
+    return res.json({
+      msg: 'user was added to database successfully',
+      userId: newUserId,
+    });
+  } catch (e) {
+    console.log(e.message);
+    return res.status(500).send(e.message);
   }
-  const newUserId = await addUser(data);
-  return res.json({
-    msg: 'user was added to database',
-    newUserId,
-  });
 });
 module.exports = router;
