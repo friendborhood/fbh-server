@@ -10,10 +10,9 @@ router.get('/:userId', async (req, res) => {
   console.log(`user id: ${userId}`);
   const user = await findById(userId);
   if (!user) {
-    res.status(404).send(`User with id ${userId} was not found.`);
-    return;
+    return res.status(404).send(`User with id ${userId} was not found.`);
   }
-  res.json({
+  return res.json({
     data: user,
   });
 });

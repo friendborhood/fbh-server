@@ -6,7 +6,6 @@ const modelName = 'users';
 const findByName = async (userName) => {
   const userModel = await getModel(modelName);
   console.log('try find user');
-  console.log(userModel);
   let relevantUser = null;
   for (const key in userModel) {
     if (userModel[key].userName === userName) {
