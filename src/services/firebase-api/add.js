@@ -3,9 +3,8 @@ require('./init');
 
 const db = getDatabase();
 
-module.exports = async (userId, name) => {
-  set(ref(db, `users/${userId}`), {
-    userName: name,
-    phone: '054',
-  });
+module.exports = async (moduleName, data) => {
+  set(ref(db, `${moduleName}/a`), 
+    data
+);
 };

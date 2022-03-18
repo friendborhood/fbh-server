@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { findByIndex, findByName } = require('../../models/user');
+const { findByIndex, findByName, addUser } = require('../../models/user');
 const { sendAuthCodeToUserEmail } = require('../../services/node-mail-auth');
 
 const router = Router();
@@ -31,6 +31,20 @@ router.post('/auth/:userName', async (req, res) => {
   console.log(authCode);
   res.json({
     authCode,
+  });
+});
+
+router.post('/', async (req, res) => {
+  //const { email, firstName, lastName, location, rating} = req.body;
+  const {userName} = req.body;
+  console.log(`try add user by name ${userName}`);
+  // const isExist = await findByName(userName);
+  // if (isExist) {
+  //   return res.status(400).send(`User name ${userName} already exists.`)
+  // }
+  await addUser({userName});
+  return res.json({
+    msg : "user was added to database"
   });
 });
 module.exports = router;
