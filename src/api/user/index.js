@@ -1,5 +1,7 @@
 const { Router } = require('express');
-const { findByIndex, findByName } = require('../../models/user');
+const {
+  findById, findByName, addUser, validateUserData,
+} = require('../../models/user');
 const { sendAuthCodeToUserEmail } = require('../../services/node-mail-auth');
 
 const router = Router();
@@ -8,12 +10,11 @@ router.get('/:userId', async (req, res) => {
   console.log('try get user');
   const { userId } = req.params;
   console.log(`user id: ${userId}`);
-  const user = await findByIndex(userId);
+  const user = await findById(userId);
   if (!user) {
-    res.status(404).send(`User with id ${userId} was not found.`);
-    return;
+    return res.status(404).send(`User with id ${userId} was not found.`);
   }
-  res.json({
+  return res.json({
     data: user,
   });
 });
@@ -32,5 +33,26 @@ router.post('/auth/:userName', async (req, res) => {
   res.json({
     authCode,
   });
+});
+
+router.post('/', async (req, res) => {
+  try {
+    const data = req.body;
+    validateUserData(data);
+    console.log(`try add user by name ${data.userName}`);
+    const isExist = await findByName(data.userName);
+    if (isExist) {
+      return res.status(400).send(`User name ${data.userName} already exists. user name must be unique`);
+    }
+    console.log(`try add user with data ${JSON.stringify(data)}`);
+    const newUserId = await addUser(data);
+    return res.json({
+      msg: 'user was added to database successfully',
+      userId: newUserId,
+    });
+  } catch (e) {
+    console.log(e.message);
+    return res.status(500).send(e.message);
+  }
 });
 module.exports = router;

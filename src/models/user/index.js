@@ -1,22 +1,31 @@
+const { uuid } = require('short-uuid');
 const getModel = require('../../services/firebase-api/get');
+const addData = require('../../services/firebase-api/add');
 
 const modelName = 'users';
+const validateUserData = (data) => {
+  const { email } = data;
+  if (!email) {
+    throw new Error('email must be provided');
+  }
+};
 const findByName = async (userName) => {
   const userModel = await getModel(modelName);
   console.log('try find user');
-  const relevantUser = userModel.find((user) => {
-    if (user) {
-      return user.userName === userName;
+  let relevantUser = null;
+  for (const key in userModel) {
+    if (userModel[key].userName === userName) {
+      relevantUser = userModel[key];
+      break;
     }
-    return false;
-  });
+  }
   if (!relevantUser) {
     console.log('user not found');
     return null;
   }
   return relevantUser;
 };
-const findByIndex = async (index) => {
+const findById = async (index) => {
   console.log('getting model from db');
   const userModel = await getModel(modelName);
   const relevantUser = userModel[index];
@@ -26,4 +35,15 @@ const findByIndex = async (index) => {
   }
   return relevantUser;
 };
-module.exports = { findByName, findByIndex };
+const addUser = async (data) => {
+  console.log('adding user to db');
+  const generatedId = uuid();
+  await addData(modelName, data, generatedId);
+  return generatedId;
+};
+module.exports = {
+  findByName,
+  findById,
+  addUser,
+  validateUserData,
+};
