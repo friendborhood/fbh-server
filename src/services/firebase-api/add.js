@@ -4,7 +4,8 @@ require('./init');
 const db = getDatabase();
 
 module.exports = async (moduleName, data, id) => {
-  set(ref(db, `${moduleName}/${id}`), 
-    data
-);
+  set(
+    ref(db, `${moduleName}/${id}`),
+    data,
+  );
 };
