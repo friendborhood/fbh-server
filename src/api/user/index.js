@@ -2,7 +2,7 @@ const { Router } = require('express');
 const {
   findById, findByName, addUser, validateUserData,
 } = require('../../models/user');
-const { sendAuthCodeToUserEmail } = require('../../services/node-mail-auth');
+const { sendAuthCodeToUserEmail } = require('../../services/mail-service');
 
 const router = Router();
 
