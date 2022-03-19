@@ -1,4 +1,6 @@
-const { transporter, mailOptions, getRandomCode } = require('./utils');
+const {
+  transporter, mailOptions, getRandomCode, FBH_EMAIL,
+} = require('./utils');
 
 const sendAuthCodeToUserEmail = async (userEmail) => {
   const authCode = getRandomCode();
@@ -7,6 +9,9 @@ const sendAuthCodeToUserEmail = async (userEmail) => {
   return authCode;
 };
 const sendMail = async ({ mailSubject, content, userEmail }) => {
-  await transporter.sendMail({ subject: mailSubject, to: userEmail, text: content });
+  await transporter.sendMail({
+    from: FBH_EMAIL, subject: mailSubject, to: userEmail, text: content,
+  });
 };
+
 module.exports = { sendAuthCodeToUserEmail, sendMail };
