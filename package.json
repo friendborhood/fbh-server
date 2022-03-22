@@ -24,6 +24,7 @@
     "axios": "^0.24.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
+    "email-validator": "^2.0.4",
     "eslint": "^8.5.0",
     "eslint-config-airbnb": "^19.0.4",
     "express": "^4.17.2",
