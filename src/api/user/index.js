@@ -2,7 +2,7 @@ const { Router } = require('express');
 const {
   findById, findByName, addUser, validateUserData,
 } = require('../../models/user');
-const { sendAuthCodeToUserEmail } = require('../../services/mail-service');
+const { sendAuthCodeToUserEmail, sendMail } = require('../../services/mail-service');
 
 const router = Router();
 
@@ -38,6 +38,7 @@ router.post('/auth/:userName', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const data = req.body;
+    console.log(data);
     validateUserData(data);
     console.log(`try add user by name ${data.userName}`);
     const isExist = await findByName(data.userName);
@@ -46,6 +47,12 @@ router.post('/', async (req, res) => {
     }
     console.log(`try add user with data ${JSON.stringify(data)}`);
     const newUserId = await addUser(data);
+    
+    sendMail({
+      mailSubject:`Welcome to friendborhood!`,
+      content:`Hello ${data.userName}`,
+      userEmail: data.email
+    });
     return res.json({
       msg: 'user was added to database successfully',
       userId: newUserId,
