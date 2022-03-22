@@ -1,12 +1,21 @@
 const { uuid } = require('short-uuid');
 const getModel = require('../../services/firebase-api/get');
 const addData = require('../../services/firebase-api/add');
+const validator = require("email-validator");
+
 
 const modelName = 'users';
 const validateUserData = (data) => {
-  const { email } = data;
+  const {email}  = data;
   if (!email) {
     throw new Error('email must be provided');
+  }
+  validateEmail(email);
+};
+
+const validateEmail = (email) => {
+if (!validator.validate(email)) {
+  throw new Error('Email is not valid');
   }
 };
 const findByName = async (userName) => {
