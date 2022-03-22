@@ -17,7 +17,7 @@
                   "in": "path",
                   "required": true,
                   "description": "ID of user that we want to find",
-                  "type": "integer"
+                  "type": "string"
                 }
               ],
           "get": {
@@ -32,6 +32,39 @@
               }
             }
           }
+        },
+        "/user": {
+            "parameters": [
+                {
+                  "name": "body",
+                  "in": "body",
+                  "required": true,
+                  "description": "Add user to DB",
+                  "schema": {
+                    "$ref": "#/definitions/User"
+                  }
+                }
+              ],
+          "post": {
+            "tags": ["User"],
+            "summary": "Add a new user to DB",
+            "requestBody":{
+                "content":{
+        "application/json":{
+          "schema":{      
+            "type": "object",
+            "$ref": "#/definitions/User"
+          },
+            "required": true
+        }
+    }
+        },
+            "responses": {
+              "201": {
+                "description": "Created"
+              }
+            }
+          }
         }
       },
       "definitions": {
@@ -43,7 +76,7 @@
               "userName": {
               "type": "string",
               "uniqueItems": true
-            },
+                },
             "firstName": {
               "type": "string"
             },
