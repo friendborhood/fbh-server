@@ -6,7 +6,7 @@ const validator = require("email-validator");
 
 const modelName = 'users';
 const validateUserData = (data) => {
-  const email  = data.email;
+  const {email}  = data;
   if (!email) {
     throw new Error('email must be provided');
   }
