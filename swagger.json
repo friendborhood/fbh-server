@@ -71,8 +71,6 @@
         "User": {
           "required": ["userId"],
           "properties": {
-            "data": {
-              "properties": {
               "userName": {
               "type": "string",
               "uniqueItems": true
@@ -89,8 +87,6 @@
             "email": {
               "type": "string"
           }
-        }
-        }
         }
       }
     },
