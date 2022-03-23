@@ -86,7 +86,10 @@
             },
             "email": {
               "type": "string"
-          }
+            },
+            "registerDate": {
+                "type": "integer"
+            }
         }
       }
     },

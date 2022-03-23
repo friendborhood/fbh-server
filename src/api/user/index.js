@@ -45,10 +45,11 @@ router.post('/', async (req, res) => {
     if (isExist) {
       return res.status(400).send(`User name ${data.userName} already exists. user name must be unique`);
     }
+    data.registerDate = Date.now();
     console.log(`try add user with data ${JSON.stringify(data)}`);
     const newUserId = await addUser(data);
     
-    sendMail({
+    await sendMail({
       mailSubject:`Welcome to friendborhood!`,
       content:`Hello ${data.userName}`,
       userEmail: data.email
