@@ -3,7 +3,6 @@ const { createClient } = require('redis');
 class RedisService {
   constructor() {
     this.created = false;
-    console.log(this.created);
   }
 
   async init() {
