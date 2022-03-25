@@ -45,20 +45,28 @@ router.post('/auth/:userName', async (req, res) => {
 router.get('/auth/validate/:userName', async (req, res) => {
   try {
     const { userName } = req.params;
+    const user = await findByName(userName);
+    if (!user) {
+      res.status(404).send(`User name ${userName} was not found.`);
+      return;
+    }
     const { code: userCodeInput } = req.query;
     console.log(`try validate user ${userName} entered correct pin code`);
     await CacheService.init();
     const correctCode = await CacheService.getKey(userName);
+    console.log(`user code ${userCodeInput} correct code ${correctCode}`);
     if (correctCode !== userCodeInput) {
-      return res.status(400).json({
+      res.status(400).json({
         error: 'user entered wrong pin code',
       });
+      console.log('wrong code');
     }
-    return res.json({
+    console.log('correct code');
+    res.json({
       message: 'user entered correct code',
     });
   } catch (e) {
-    return res.status(500).json({
+    res.status(500).json({
       error: e,
     });
   }
