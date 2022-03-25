@@ -48,11 +48,11 @@ router.post('/', async (req, res) => {
     data.registerDate = Date.now();
     console.log(`try add user with data ${JSON.stringify(data)}`);
     const newUserId = await addUser(data);
-    
+
     await sendMail({
-      mailSubject:`Welcome to friendborhood!`,
-      content:`Hello ${data.userName}`,
-      userEmail: data.email
+      mailSubject: 'Welcome to friendborhood!',
+      content: `Hello ${data.userName}`,
+      userEmail: data.email,
     });
     return res.json({
       msg: 'user was added to database successfully',
