@@ -1,4 +1,5 @@
 const { createClient } = require('redis');
+require('dotenv').config();
 
 class RedisService {
   constructor() {
@@ -8,10 +9,9 @@ class RedisService {
   async init() {
     if (!this.created) {
       console.log('try init redis');
-      const rtg = process.env.REDISTOGO_URL;
-      if (rtg) {
-        this.client.createClient(rtg.port, rtg.hostname);
-        this.client.auth(rtg.auth.split(':')[1]);
+      const redisUrl = process.env.REDIS_URL;
+      if (redisUrl) {
+        this.client.createClient({ url: redisUrl });
       } else {
         this.client = createClient();
       }
