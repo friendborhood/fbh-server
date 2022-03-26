@@ -19,7 +19,7 @@ const validateUserData = (data) => {
 
 const findByName = async (userName) => {
   const userModel = await getModel(modelName);
-  console.log('try find user');
+  console.log(`try find user ${userName}`);
   let relevantUser = null;
   for (const key in userModel) {
     if (userModel[key].userName === userName) {
@@ -28,9 +28,11 @@ const findByName = async (userName) => {
     }
   }
   if (!relevantUser) {
-    console.log('user not found');
+    console.log(`user ${userName} was not found`);
     return null;
   }
+  console.log(`user ${userName} was  found `);
+
   return relevantUser;
 };
 const findById = async (index) => {

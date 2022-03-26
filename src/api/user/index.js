@@ -32,12 +32,15 @@ router.post('/auth/:userName', async (req, res) => {
     }
     const { email } = user;
     const authCode = await sendAuthCodeToUserEmail(email);
+    console.log(`user email was sent to ${userName}`);
     await CacheService.init();
     await CacheService.setKey(userName, authCode);
+    console.log(`redis set ${userName} to ${authCode}`);
     res.json({
       message: 'OK',
     });
   } catch (e) {
+    console.error(e);
     res.status(500).json({
       error: e,
     });
