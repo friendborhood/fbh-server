@@ -11,7 +11,7 @@ class RedisService {
       console.log('try init redis');
       const redisUrl = process.env.REDIS_URL;
       if (redisUrl) {
-        this.client.createClient({ url: redisUrl });
+        this.client = createClient({ url: redisUrl });
       } else {
         this.client = createClient();
       }
