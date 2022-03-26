@@ -34,6 +34,7 @@
     "nodemailer": "^6.7.2",
     "nodemon": "^2.0.15",
     "openapi": "^1.0.1",
+    "redis": "^4.0.4",
     "short-uuid": "^4.2.0",
     "swagger-ui-express": "^4.3.0"
   },
