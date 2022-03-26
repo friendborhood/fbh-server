@@ -7,9 +7,16 @@ class RedisService {
 
   async init() {
     if (!this.created) {
-      console.log('redis created');
-      this.client = createClient();
+      console.log('try init redis');
+      const rtg = process.env.REDISTOGO_URL;
+      if (rtg) {
+        this.client.createClient(rtg.port, rtg.hostname);
+        this.client.auth(rtg.auth.split(':')[1]);
+      } else {
+        this.client = createClient();
+      }
       await this.client.connect();
+      console.log('success init redis');
       this.created = true;
     }
   }
