@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const { Router } = require('express');
 const {
   findById, findByName, addUser, validateUserData,
@@ -56,17 +57,17 @@ router.get('/auth/validate/:userName', async (req, res) => {
     const correctCode = await CacheService.getKey(userName);
     console.log(`user code ${userCodeInput} correct code ${correctCode}`);
     if (correctCode !== userCodeInput) {
-      res.status(400).json({
+      console.log('wrong code');
+      return res.status(400).json({
         error: 'user entered wrong pin code',
       });
-      console.log('wrong code');
     }
     console.log('correct code');
-    res.json({
+    return res.json({
       message: 'user entered correct code',
     });
   } catch (e) {
-    res.status(500).json({
+    return res.status(500).json({
       error: e,
     });
   }
