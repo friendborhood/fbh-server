@@ -11,10 +11,10 @@ const router = Router();
 router.get('/:userName', async (req, res) => {
   console.log('try get user');
   const { userName } = req.params;
-  console.log(`user id: ${userName}`);
+  console.log(`user name: ${userName}`);
   const user = await findByName(userName);
   if (!user) {
-    return res.status(404).send(`User with id ${userName} was not found.`);
+    return res.status(404).send(`username ${userName} was not found.`);
   }
   return res.json({
     data: user,
@@ -109,16 +109,16 @@ router.post('/', async (req, res) => {
     data.registerDate = new Date();
     console.log(`try add user with data ${JSON.stringify(data)}`);
     delete data.userName;
-    const newUserId = await addUser(data, userName);
+    await addUser(data, userName);
 
     await sendMail({
       mailSubject: 'Welcome to friendborhood!',
-      content: `Hello ${data.userName}`,
+      content: `Hello ${userName}`,
       userEmail: data.email,
     });
     return res.json({
       msg: 'user was added to database successfully',
-      userId: newUserId,
+      userName,
     });
   } catch (e) {
     console.log(e.message);
