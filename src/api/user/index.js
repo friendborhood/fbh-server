@@ -1,20 +1,20 @@
 /* eslint-disable consistent-return */
 const { Router } = require('express');
 const {
-  findById, findByName, addUser, validateUserData,
+  findByName, addUser, validateUserData, patchUser,
 } = require('../../models/user');
 const { sendAuthCodeToUserEmail, sendMail } = require('../../services/mail-service');
 const CacheService = require('../../services/redis');
 
 const router = Router();
 
-router.get('/:userId', async (req, res) => {
+router.get('/:userName', async (req, res) => {
   console.log('try get user');
-  const { userId } = req.params;
-  console.log(`user id: ${userId}`);
-  const user = await findById(userId);
+  const { userName } = req.params;
+  console.log(`user id: ${userName}`);
+  const user = await findByName(userName);
   if (!user) {
-    return res.status(404).send(`User with id ${userId} was not found.`);
+    return res.status(404).send(`User with id ${userName} was not found.`);
   }
   return res.json({
     data: user,
@@ -84,7 +84,7 @@ router.patch('/:userName', async (req, res) => {
     if (!isExist) {
       return res.status(400).send(`User name ${userName} does not exists. cant patch.`);
     }
-    await addUser(data);
+    await patchUser(data, userName);
 
     return res.json({
       msg: `user ${userName} was patched successfully`,
@@ -99,15 +99,17 @@ router.post('/', async (req, res) => {
   try {
     const data = req.body;
     console.log(data);
-    validateUserData(data);
-    console.log(`try add user by name ${data.userName}`);
-    const isExist = await findByName(data.userName);
+    await validateUserData(data);
+    const { userName } = data;
+    console.log(`try add user by name ${userName}`);
+    const isExist = await findByName(userName);
     if (isExist) {
-      return res.status(400).send(`User name ${data.userName} already exists. user name must be unique`);
+      return res.status(400).send(`User name ${userName} already exists. user name must be unique`);
     }
     data.registerDate = new Date();
     console.log(`try add user with data ${JSON.stringify(data)}`);
-    const newUserId = await addUser(data);
+    delete data.userName;
+    const newUserId = await addUser(data, userName);
 
     await sendMail({
       mailSubject: 'Welcome to friendborhood!',

@@ -31,6 +31,7 @@
     "firebase": "^9.6.1",
     "firebase-admin": "^10.0.1",
     "jest": "^27.4.7",
+    "joi": "^17.6.0",
     "nodemailer": "^6.7.2",
     "nodemon": "^2.0.15",
     "openapi": "^1.0.1",
