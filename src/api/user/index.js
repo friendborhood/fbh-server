@@ -75,7 +75,26 @@ router.get('/auth/validate/:userName', async (req, res) => {
     });
   }
 });
+router.patch('/:userName', async (req, res) => {
+  try {
+    const data = req.body;
+    const { userName } = req.params;
+    console.log(`try patch user by name ${userName}`);
+    const isExist = await findByName(userName);
+    if (!isExist) {
+      return res.status(400).send(`User name ${userName} does not exists. cant patch.`);
+    }
+    await addUser(data);
 
+    return res.json({
+      msg: `user ${userName} was patched successfully`,
+
+    });
+  } catch (e) {
+    console.log(e.message);
+    return res.status(500).json({ error: e.message });
+  }
+});
 router.post('/', async (req, res) => {
   try {
     const data = req.body;

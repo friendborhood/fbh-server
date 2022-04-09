@@ -51,7 +51,12 @@ const addUser = async (data) => {
   await addData(modelName, data, generatedId);
   return generatedId;
 };
+const patchUser = async (data, userName) => {
+  console.log(`patching user ${userName}, modifing data ${JSON.stringify(data)}`);
+  await patchDb(modelName, data, userName);
+};
 module.exports = {
+  patchUser,
   findByName,
   findById,
   addUser,
