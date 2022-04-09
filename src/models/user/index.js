@@ -7,7 +7,6 @@ const validateUserData = async (data) => {
   console.log('validating user data : ', data);
   const schema = Joi.object({
     userName: Joi.string()
-      .alphanum()
       .min(3)
       .max(30)
       .required(),
