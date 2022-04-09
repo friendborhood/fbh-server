@@ -99,7 +99,12 @@ router.post('/', async (req, res) => {
   try {
     const data = req.body;
     console.log(data);
-    await validateUserData(data);
+    try {
+      await validateUserData(data);
+    } catch (e) {
+      console.log(e.message);
+      return res.status(400).json({ error: e.message });
+    }
     const { userName } = data;
     console.log(`try add user by name ${userName}`);
     const isExist = await findByName(userName);
