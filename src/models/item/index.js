@@ -1,4 +1,3 @@
-const { uuid } = require('short-uuid');
 const getModel = require('../../services/firebase-api/get');
 const addData = require('../../services/firebase-api/upsert');
 
@@ -33,10 +32,8 @@ const findById = async (index) => {
   return relevantUser;
 };
 const addItem = async (data) => {
-  console.log('hi');
+  console.log('hi', data);
 };
 module.exports = {
-  findByName,
-  findById,
-  addItem,
+  addItem, findById, findByName,
 };

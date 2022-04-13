@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 const { Router } = require('express');
 const {
-  addItem, findByCatagory, findById, findByName,
+  addItem, findByCategory, findById, findByName,
 } = require('../../models/item');
 
 const router = Router();
@@ -35,16 +35,16 @@ router.post('/', async (req, res) => {
   try {
     const data = req.body;
     console.log(data);
-    //validateItemData(data); need to add this function
+    // validateItemData(data); need to add this function
     console.log(`try add item by name ${data.itemName}`);
-    //const isExist = await findByName(data.itemName);
+    // const isExist = await findByName(data.itemName);
     const isExist = false;
     if (isExist) {
       return res.status(400).send(`Item name ${data.itemName} already exists. item name must be unique`);
     }
     console.log(`try add item with data ${JSON.stringify(data)}`);
     const newItemId = await addItem(data);
-    
+
     return res.json({
       msg: 'item was added to database successfully',
       itemId: newItemId,
