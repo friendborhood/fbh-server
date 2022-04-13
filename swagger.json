@@ -65,7 +65,63 @@
               }
             }
           }
+        },
+        "/item": {
+          "parameters": [
+              {
+                "name": "body",
+                "in": "body",
+                "required": true,
+                "description": "Add item to DB",
+                "schema": {
+                  "$ref": "#/definitions/Item"
+                }
+              }
+            ],
+        "post": {
+          "tags": ["Item"],
+          "summary": "Add a new item to DB",
+          "requestBody":{
+              "content":{
+      "application/json":{
+        "schema":{      
+          "type": "object",
+          "$ref": "#/definitions/Item"
+        },
+          "required": true
+      }
+  }
+      },
+          "responses": {
+            "201": {
+              "description": "Created"
+            }
+          }
         }
+      },
+      "/item/{itemId}": {
+        "parameters": [
+            {
+              "name": "itemId",
+              "in": "path",
+              "required": true,
+              "description": "ID of item that we want to find",
+              "type": "string"
+            }
+          ],
+      "get": {
+        "tags": ["Item"],
+        "summary": "Get item by id",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Item"
+            }
+          }
+        }
+      }
+    }
       },
       "definitions": {
         "User": {
@@ -91,12 +147,36 @@
                 "type": "integer"
             }
         }
-      }
+      },
+      "Item": {
+        "properties": {
+          "itemName": {
+            "type": "string",
+            "uniqueItems": true
+          },
+          "picUrl": {
+            "type": "string"
+          },
+          "priceRange":{
+            "min": {
+              "type": "integer"
+            },
+            "max": {
+              "type": "integer"
+            }
+          }
+      },
+      "required": ["itemId"]
+    }
     },
     "tags": [
       {
         "name": "User",
         "description": "API for user in the system"
+      },
+      {
+        "name": "Item",
+        "description": "API for item in the system"
       }
     ],
     "schemes": ["http", "https"],
