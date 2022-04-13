@@ -32,14 +32,11 @@ const findById = async (index) => {
   }
   return relevantUser;
 };
-const addUser = async (data) => {
-  console.log('adding user to db');
-  const generatedId = uuid();
-  await addData(modelName, data, generatedId);
-  return generatedId;
+const addItem = async (data) => {
+  console.log('hi');
 };
 module.exports = {
   findByName,
   findById,
-  addUser,
+  addItem,
 };
