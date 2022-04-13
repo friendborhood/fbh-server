@@ -1,39 +1,67 @@
+const { uuid } = require('short-uuid');
 const getModel = require('../../services/firebase-api/get');
-const addData = require('../../services/firebase-api/upsert');
+const upsert = require('../../services/firebase-api/upsert');
 
 const modelName = 'items';
 
-const findByName = async (userName) => {
-  const userModel = await getModel(modelName);
-  console.log(`try find user ${userName}`);
-  let relevantUser = null;
-  for (const key in userModel) {
-    if (userModel[key].userName === userName) {
-      relevantUser = userModel[key];
+const findAll = async _ => {
+  console.log('getting model from db');
+  const itemModel = await getModel(modelName);
+  return itemModel;
+};
+
+const findByName = async (itemName) => {
+  const itemModel = await getModel(modelName);
+  console.log(`try find item ${itemName}`);
+  let relevantItem = null;
+  for (const key in itemModel) {
+    if (itemModel[key].itemName === itemName) {
+      relevantItem = itemModel[key];
       break;
     }
   }
-  if (!relevantUser) {
-    console.log(`user ${userName} was not found`);
+  if (!relevantItem) {
+    console.log(`item ${itemName} was not found`);
     return null;
   }
-  console.log(`user ${userName} was  found `);
+  console.log(`item ${itemName} was  found `);
 
-  return relevantUser;
+  return relevantItem;
 };
 const findById = async (index) => {
   console.log('getting model from db');
-  const userModel = await getModel(modelName);
-  const relevantUser = userModel[index];
-  if (!relevantUser) {
-    console.log('user not found');
+  const itemModel = await getModel(modelName);
+  const relevantItem = itemModel[index];
+  if (!relevantItem) {
+    console.log('item was not found');
     return null;
   }
-  return relevantUser;
+  return relevantItem;
+};
+const findByCatagory = async (catagoryName) => {
+  const itemModel = await getModel(modelName);
+  console.log(`try to find items in ${catagoryName}`);
+  let relevantItems = [];
+  for (const key in itemModel) {
+    if (itemModel[key].catagoryName === catagoryName) {
+      relevantItems.push(itemModel[key]);
+      break;
+    }
+  }
+  if (!relevantItems) {
+    console.log(`items in ${catagoryName} were not found`);
+    return null;
+  }
+  console.log(`item in ${catagoryName} were found `);
+
+  return relevantItems;
 };
 const addItem = async (data) => {
-  console.log('hi', data);
+  console.log('adding item to db');
+  const generatedId = uuid();
+  await upsert(modelName, data, generatedId);
+  return generatedId;
 };
 module.exports = {
-  addItem, findById, findByName,
+  addItem, findByCatagory, findById, findByName, findAll
 };

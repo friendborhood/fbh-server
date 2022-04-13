@@ -60,14 +60,15 @@
     }
         },
             "responses": {
-              "201": {
+              "200": {
                 "description": "Created"
               }
             }
           }
         },
         "/item": {
-          "parameters": [
+          "post": {
+            "parameters": [
               {
                 "name": "body",
                 "in": "body",
@@ -78,26 +79,34 @@
                 }
               }
             ],
-        "post": {
-          "tags": ["Item"],
-          "summary": "Add a new item to DB",
-          "requestBody":{
-              "content":{
-      "application/json":{
-        "schema":{      
-          "type": "object",
-          "$ref": "#/definitions/Item"
+            "tags": ["Item"],
+            "summary": "Add a new item to DB",
+            "requestBody":{
+                "content":{
+        "application/json":{
+          "schema":{      
+            "type": "object",
+            "$ref": "#/definitions/Item"
+          },
+            "required": true
+        }
+    }
         },
-          "required": true
-      }
-  }
-      },
-          "responses": {
-            "201": {
-              "description": "Created"
+            "responses": {
+              "200": {
+                "description": "Created"
+              }
+            }
+          },
+          "get": {
+            "tags": ["Item"],
+            "summary": "Get all items",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
             }
           }
-        }
       },
       "/item/{itemId}": {
         "parameters": [
@@ -157,16 +166,21 @@
           "picUrl": {
             "type": "string"
           },
-          "priceRange":{
-            "min": {
-              "type": "integer"
-            },
-            "max": {
-              "type": "integer"
-            }
+          "priceRange":
+          {
+            "type": "array",
+            "$ref": "#/definitions/priceRange"
           }
       },
       "required": ["itemId"]
+    },
+    "priceRange": {
+      "min": {
+        "type": "integer"
+      },
+      "max": {
+        "type": "integer"
+      }
     }
     },
     "tags": [
