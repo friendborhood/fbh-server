@@ -1,59 +1,51 @@
-const { uuid } = require('short-uuid');
-const validator = require('email-validator');
+const Joi = require('joi');
 const getModel = require('../../services/firebase-api/get');
-const addData = require('../../services/firebase-api/add');
+const upsert = require('../../services/firebase-api/upsert');
 
+const DEFAULT_SEARCH_RADIUS = 3;
 const modelName = 'users';
-const validateEmail = (email) => {
-  if (!validator.validate(email)) {
-    throw new Error('Email is not valid');
-  }
-};
-const validateUserData = (data) => {
-  const { email } = data;
-  if (!email) {
-    throw new Error('email must be provided');
-  }
-  validateEmail(email);
+const validateUserData = async (data) => {
+  console.log('validating user data : ', data);
+  const schema = Joi.object({
+    userName: Joi.string()
+      .alphanum()
+      .min(3)
+      .max(30)
+      .required(),
+    email: Joi.string()
+      .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+      .required(),
+    firstName: Joi.string()
+      .required(),
+    lastName: Joi.string()
+      .required(),
+    imageUrl: Joi.string().uri(),
+  });
+  await schema.validateAsync(data);
+  console.log('user data okay');
 };
 
 const findByName = async (userName) => {
-  const userModel = await getModel(modelName);
-  console.log(`try find user ${userName}`);
-  let relevantUser = null;
-  for (const key in userModel) {
-    if (userModel[key].userName === userName) {
-      relevantUser = userModel[key];
-      break;
-    }
-  }
-  if (!relevantUser) {
-    console.log(`user ${userName} was not found`);
-    return null;
-  }
-  console.log(`user ${userName} was  found `);
-
-  return relevantUser;
-};
-const findById = async (index) => {
   console.log('getting model from db');
   const userModel = await getModel(modelName);
-  const relevantUser = userModel[index];
+  const relevantUser = userModel[userName];
   if (!relevantUser) {
     console.log('user not found');
     return null;
   }
   return relevantUser;
 };
-const addUser = async (data) => {
+const addUser = async (data, userName) => {
   console.log('adding user to db');
-  const generatedId = uuid();
-  await addData(modelName, data, generatedId);
-  return generatedId;
+  await upsert(modelName, { ...data, searchRadius: DEFAULT_SEARCH_RADIUS }, userName);
+};
+const patchUser = async (data, userName) => {
+  console.log(`patching user ${userName}, modifing data ${JSON.stringify(data)}`);
+  await upsert(modelName, data, userName);
 };
 module.exports = {
+  patchUser,
   findByName,
-  findById,
   addUser,
   validateUserData,
 };

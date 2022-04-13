@@ -1,20 +1,20 @@
 /* eslint-disable consistent-return */
 const { Router } = require('express');
 const {
-  findById, findByName, addUser, validateUserData,
+  findByName, addUser, validateUserData, patchUser,
 } = require('../../models/user');
 const { sendAuthCodeToUserEmail, sendMail } = require('../../services/mail-service');
 const CacheService = require('../../services/redis');
 
 const router = Router();
 
-router.get('/:userId', async (req, res) => {
+router.get('/:userName', async (req, res) => {
   console.log('try get user');
-  const { userId } = req.params;
-  console.log(`user id: ${userId}`);
-  const user = await findById(userId);
+  const { userName } = req.params;
+  console.log(`user name: ${userName}`);
+  const user = await findByName(userName);
   if (!user) {
-    return res.status(404).send(`User with id ${userId} was not found.`);
+    return res.status(404).send(`username ${userName} was not found.`);
   }
   return res.json({
     data: user,
@@ -75,29 +75,55 @@ router.get('/auth/validate/:userName', async (req, res) => {
     });
   }
 });
+router.patch('/:userName', async (req, res) => {
+  try {
+    const data = req.body;
+    const { userName } = req.params;
+    console.log(`try patch user by name ${userName}`);
+    const isExist = await findByName(userName);
+    if (!isExist) {
+      return res.status(400).send(`User name ${userName} does not exists. cant patch.`);
+    }
+    await patchUser(data, userName);
 
+    return res.json({
+      msg: `user ${userName} was patched successfully`,
+
+    });
+  } catch (e) {
+    console.log(e.message);
+    return res.status(500).json({ error: e.message });
+  }
+});
 router.post('/', async (req, res) => {
   try {
     const data = req.body;
     console.log(data);
-    validateUserData(data);
-    console.log(`try add user by name ${data.userName}`);
-    const isExist = await findByName(data.userName);
+    try {
+      await validateUserData(data);
+    } catch (e) {
+      console.log(e.message);
+      return res.status(400).json({ error: e.message });
+    }
+    const { userName } = data;
+    console.log(`try add user by name ${userName}`);
+    const isExist = await findByName(userName);
     if (isExist) {
-      return res.status(400).send(`User name ${data.userName} already exists. user name must be unique`);
+      return res.status(400).send(`User name ${userName} already exists. user name must be unique`);
     }
     data.registerDate = new Date();
     console.log(`try add user with data ${JSON.stringify(data)}`);
-    const newUserId = await addUser(data);
+    delete data.userName;
+    await addUser(data, userName);
 
     await sendMail({
       mailSubject: 'Welcome to friendborhood!',
-      content: `Hello ${data.userName}`,
+      content: `Hello ${userName}`,
       userEmail: data.email,
     });
     return res.json({
       msg: 'user was added to database successfully',
-      userId: newUserId,
+      userName,
     });
   } catch (e) {
     console.log(e.message);
