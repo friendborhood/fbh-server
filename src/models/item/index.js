@@ -13,13 +13,9 @@ const findAll = async () => {
 const findByName = async (itemName) => {
   const itemModel = await getModel(modelName);
   console.log(`try find item ${itemName}`);
-  let relevantItem;
-  for (const key in itemModel) {
-    if (itemModel[key].itemName === itemName) {
-      relevantItem = itemModel[key];
-      break;
-    }
-  }
+  const relevantItem = Object.values(itemModel)
+    .find((item) => item.itemName === itemName);
+
   if (!relevantItem) {
     console.log(`item ${itemName} was not found`);
     return null;
