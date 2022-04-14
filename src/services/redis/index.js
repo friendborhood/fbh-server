@@ -16,6 +16,7 @@ class RedisService {
         this.client = createClient();
       }
       await this.client.connect();
+      await this.client.flushDb();
       console.log('success init redis');
       this.created = true;
     }
