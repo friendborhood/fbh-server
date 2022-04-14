@@ -13,7 +13,7 @@ const findAll = async () => {
 const findByName = async (itemName) => {
   const itemModel = await getModel(modelName);
   console.log(`try find item ${itemName}`);
-  let relevantItem = null;
+  let relevantItem;
   for (const key in itemModel) {
     if (itemModel[key].itemName === itemName) {
       relevantItem = itemModel[key];
