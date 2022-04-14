@@ -99,6 +99,15 @@
             }
           },
           "get": {
+            "parameters": [
+              {
+                "name": "categoryName",
+                "in": "query",
+                "required": false,
+                "description": "Category Name of the item we want to find",
+                "type": "string"
+              }
+            ],
             "tags": ["Item"],
             "summary": "Get all items",
             "responses": {
@@ -168,19 +177,22 @@
           },
           "priceRange":
           {
-            "type": "array",
-            "$ref": "#/definitions/priceRange"
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "integer"
+              },
+              "max": {
+                "type": "integer"
+              }
+            }
+          },
+          "categoryName":
+          {
+            "type": "string"
           }
       },
       "required": ["itemId"]
-    },
-    "priceRange": {
-      "min": {
-        "type": "integer"
-      },
-      "max": {
-        "type": "integer"
-      }
     }
     },
     "tags": [

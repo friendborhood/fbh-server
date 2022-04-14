@@ -4,7 +4,7 @@ const upsert = require('../../services/firebase-api/upsert');
 
 const modelName = 'items';
 
-const findAll = async _ => {
+const findAll = async () => {
   console.log('getting model from db');
   const itemModel = await getModel(modelName);
   return itemModel;
@@ -38,21 +38,17 @@ const findById = async (index) => {
   }
   return relevantItem;
 };
-const findByCatagory = async (catagoryName) => {
+const findByCategory = async (categoryName) => {
   const itemModel = await getModel(modelName);
-  console.log(`try to find items in ${catagoryName}`);
-  let relevantItems = [];
-  for (const key in itemModel) {
-    if (itemModel[key].catagoryName === catagoryName) {
-      relevantItems.push(itemModel[key]);
-      break;
-    }
-  }
+  console.log(`try to find items in ${categoryName}`);
+  console.log(itemModel);
+  const relevantItems = Object.values(itemModel)
+    .filter((item) => item.categoryName === categoryName);
   if (!relevantItems) {
-    console.log(`items in ${catagoryName} were not found`);
+    console.log(`items in ${categoryName} were not found`);
     return null;
   }
-  console.log(`item in ${catagoryName} were found `);
+  console.log(`item in ${categoryName} were found `);
 
   return relevantItems;
 };
@@ -63,5 +59,5 @@ const addItem = async (data) => {
   return generatedId;
 };
 module.exports = {
-  addItem, findByCatagory, findById, findByName, findAll
+  addItem, findByCategory, findById, findByName, findAll,
 };
