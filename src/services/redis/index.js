@@ -23,10 +23,12 @@ class RedisService {
   }
 
   async removeKey(key) {
+    console.log(`removing from cache ${key}`);
     await this.client.del(key);
   }
 
   async setKey(key, value) {
+    console.log(`adding to cache ${key} with value ${value}`);
     await this.client.set(key, value);
   }
 
