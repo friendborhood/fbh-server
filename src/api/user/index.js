@@ -66,6 +66,10 @@ router.get('/auth/validate/:userName', async (req, res) => {
       });
     }
     console.log('correct code');
+
+    // no need to await here
+    CacheService.removeKey(userName);
+
     return res.json({
       message: 'user entered correct code',
     });

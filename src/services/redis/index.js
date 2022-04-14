@@ -21,6 +21,10 @@ class RedisService {
     }
   }
 
+  async removeKey(key) {
+    await this.client.del(key);
+  }
+
   async setKey(key, value) {
     await this.client.set(key, value);
   }
