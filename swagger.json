@@ -60,12 +60,86 @@
     }
         },
             "responses": {
-              "201": {
+              "200": {
                 "description": "Created"
               }
             }
           }
+        },
+        "/item": {
+          "post": {
+            "parameters": [
+              {
+                "name": "body",
+                "in": "body",
+                "required": true,
+                "description": "Add item to DB",
+                "schema": {
+                  "$ref": "#/definitions/Item"
+                }
+              }
+            ],
+            "tags": ["Item"],
+            "summary": "Add a new item to DB",
+            "requestBody":{
+                "content":{
+        "application/json":{
+          "schema":{      
+            "type": "object",
+            "$ref": "#/definitions/Item"
+          },
+            "required": true
         }
+    }
+        },
+            "responses": {
+              "200": {
+                "description": "Created"
+              }
+            }
+          },
+          "get": {
+            "parameters": [
+              {
+                "name": "categoryName",
+                "in": "query",
+                "required": false,
+                "description": "Category Name of the item we want to find",
+                "type": "string"
+              }
+            ],
+            "tags": ["Item"],
+            "summary": "Get all items",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+      },
+      "/item/{itemId}": {
+        "parameters": [
+            {
+              "name": "itemId",
+              "in": "path",
+              "required": true,
+              "description": "ID of item that we want to find",
+              "type": "string"
+            }
+          ],
+      "get": {
+        "tags": ["Item"],
+        "summary": "Get item by id",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Item"
+            }
+          }
+        }
+      }
+    }
       },
       "definitions": {
         "User": {
@@ -91,12 +165,44 @@
                 "type": "integer"
             }
         }
-      }
+      },
+      "Item": {
+        "properties": {
+          "itemName": {
+            "type": "string",
+            "uniqueItems": true
+          },
+          "picUrl": {
+            "type": "string"
+          },
+          "priceRange":
+          {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "integer"
+              },
+              "max": {
+                "type": "integer"
+              }
+            }
+          },
+          "categoryName":
+          {
+            "type": "string"
+          }
+      },
+      "required": ["itemId"]
+    }
     },
     "tags": [
       {
         "name": "User",
         "description": "API for user in the system"
+      },
+      {
+        "name": "Item",
+        "description": "API for item in the system"
       }
     ],
     "schemes": ["http", "https"],
