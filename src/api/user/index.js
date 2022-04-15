@@ -16,9 +16,7 @@ router.get('/:userName', async (req, res) => {
   if (!user) {
     return res.status(404).json({ error: `username ${userName} was not found.` });
   }
-  return res.json({
-    data: user,
-  });
+  return res.json(user);
 });
 
 router.post('/auth/:userName', async (req, res) => {
@@ -120,7 +118,7 @@ router.post('/', async (req, res) => {
     delete data.userName;
     await addUser(data, userName);
 
-    await sendMail({
+    sendMail({
       mailSubject: 'Welcome to friendborhood!',
       content: `Hello ${userName}`,
       userEmail: data.email,
