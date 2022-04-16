@@ -153,7 +153,44 @@
             "description": "id not found"
             }
           }
-        }
+        },
+        "put": {
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "description": "Update item in DB",
+              "schema": {
+                "$ref": "#/definitions/Item"
+              }
+            }
+          ],
+          "tags": ["Item"],
+          "summary": "Update item by id",
+          "requestBody":{
+                "content":{
+                  "application/json":{
+                    "schema":{      
+                      "type": "object",
+                      "$ref": "#/definitions/Item"
+                    },
+                      "required": true
+                   }
+                }
+           },
+          "responses": {
+            "200": {
+              "description": "Updated"
+              },
+            "401": {
+              "description": "Unauthorized"
+              },
+            "404": {
+              "description": "id not found"
+              }
+            }
+          }
     }
       },
       "definitions": {

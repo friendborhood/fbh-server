@@ -1,9 +1,26 @@
 const { uuid } = require('short-uuid');
+const Joi = require('joi');
 const getModel = require('../../services/firebase-api/get');
 const upsert = require('../../services/firebase-api/upsert');
 const add = require('../../services/firebase-api/add');
 
 const modelName = 'items';
+
+const validateItemData = async (data) => {
+  console.log('validating item data : ', data);
+  const schema = Joi.object({
+    itemName: Joi.string()
+      .alphanum()
+      .min(3)
+      .max(30)
+      .required(),
+    categoryName: Joi.string()
+      .required(),
+    imageUrl: Joi.string().uri(),
+  });
+  await schema.validateAsync(data);
+  console.log('item data is okay');
+};
 
 const findAll = async () => {
   console.log('getting model from db');
@@ -59,6 +76,10 @@ const deleteItem = async (index) => {
   console.log('deleting item from db');
   await add(modelName, null, index);
 };
+const updateItem = async (data, itemId) => {
+  console.log('adding item to db');
+  await upsert(modelName, data, itemId);
+};
 module.exports = {
-  addItem, findByCategory, findById, findByName, findAll, deleteItem,
+  addItem, findByCategory, findById, findByName, findAll, deleteItem, updateItem, validateItemData,
 };
