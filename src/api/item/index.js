@@ -44,12 +44,6 @@ router.post('/', async (req, res) => {
     if (isExist) {
       return res.status(400).json({ msg: `Item name ${data.itemName} already exists. item name must be unique` });
     }
-    try {
-      await validateItemData(data);
-    } catch (e) {
-      console.log(e.message);
-      return res.status(400).json({ error: e.message });
-    }
     console.log(`try add item with data ${JSON.stringify(data)}`);
     const newItemId = await addItem(data);
 
