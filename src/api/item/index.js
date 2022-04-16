@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 const { Router } = require('express');
 const {
-  addItem, findByCategory, findById, findByName, findAll, deleteItem, updateItem, validateItemData,
+  addItem, findByCategory, findById, findByName, findAll, getAllCategories, validateItemData,
 } = require('../../models/item');
 
 const router = Router();
@@ -25,12 +25,20 @@ router.get('/:itemId', async (req, res) => {
   }
   return res.json(item);
 });
-
+router.get('/categories', async (req, res) => {
+  const categories = await getAllCategories();
+  console.log(categories);
+  return res.json({ categories });
+});
 router.post('/', async (req, res) => {
   try {
     const data = req.body;
     console.log(data);
-    // validateItemData(data); need to add this function
+    try {
+      await validateItemData(data);
+    } catch (e) {
+      return res.status(400).json({ error: e.message });
+    }
     console.log(`try add item by name ${data.itemName}`);
     const isExist = await findByName(data.itemName);
     if (isExist) {
