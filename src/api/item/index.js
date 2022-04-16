@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 const { Router } = require('express');
 const {
-  addItem, findByCategory, findById, findByName, findAll,
+  addItem, findByCategory, findById, findByName, findAll, deleteItem,
 } = require('../../models/item');
 
 const router = Router();
@@ -48,4 +48,17 @@ router.post('/', async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 });
+
+router.delete('/:itemId', async (req, res) => {
+  console.log('try get item');
+  const { itemId } = req.params;
+  console.log(`item id: ${itemId}`);
+  const item = await findById(itemId);
+  if (!item) {
+    return res.status(404).json({ msg: `Item with id ${itemId} was not found.` });
+  }
+  await deleteItem(itemId);
+  return res.status(204).json({ msg: `item with id:${itemId} was deleted` });
+});
+
 module.exports = router;

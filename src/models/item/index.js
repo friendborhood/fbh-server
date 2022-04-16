@@ -1,6 +1,7 @@
 const { uuid } = require('short-uuid');
 const getModel = require('../../services/firebase-api/get');
 const upsert = require('../../services/firebase-api/upsert');
+const add = require('../../services/firebase-api/add');
 
 const modelName = 'items';
 
@@ -54,6 +55,10 @@ const addItem = async (data) => {
   await upsert(modelName, data, generatedId);
   return generatedId;
 };
+const deleteItem = async (index) => {
+  console.log('deleting item from db');
+  await add(modelName, null, index);
+};
 module.exports = {
-  addItem, findByCategory, findById, findByName, findAll,
+  addItem, findByCategory, findById, findByName, findAll, deleteItem,
 };
