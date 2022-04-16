@@ -16,11 +16,11 @@ const validateItemData = async (data) => {
   console.log(categories);
   const schema = Joi.object({
     itemName: Joi.string()
-      .alphanum()
       .min(3)
       .max(30)
       .required(),
     categoryName: Joi.string().valid(...categories),
+    priceRange: Joi.any().required(),
     imageUrl: Joi.string().uri(),
   });
   await schema.validateAsync(data);

@@ -224,7 +224,7 @@
             "type": "string",
             "uniqueItems": true
           },
-          "picUrl": {
+          "imageUrl": {
             "type": "string"
           },
           "priceRange":
