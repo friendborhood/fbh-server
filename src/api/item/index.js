@@ -33,7 +33,6 @@ router.get('/categories', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const data = req.body;
-    console.log(data);
     try {
       await validateItemData(data);
     } catch (e) {
