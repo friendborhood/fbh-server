@@ -14,7 +14,8 @@ const validateItemData = async (data) => {
   const categories = await getAllCategories();
   console.log(categories);
   const schema = Joi.object({
-    categoryName: Joi.string().valid(categories),
+
+    categoryName: Joi.string().valid(...categories),
   });
   await schema.validateAsync(data);
   console.log('user data okay');

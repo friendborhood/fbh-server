@@ -37,7 +37,7 @@ router.post('/', async (req, res) => {
     try {
       await validateItemData(data);
     } catch (e) {
-      return res.status(400).json({ e });
+      return res.status(400).json({ error: e.message });
     }
     console.log(`try add item by name ${data.itemName}`);
     const isExist = await findByName(data.itemName);
