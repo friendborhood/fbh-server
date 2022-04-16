@@ -1,9 +1,24 @@
+const Joi = require('joi');
 const { uuid } = require('short-uuid');
 const getModel = require('../../services/firebase-api/get');
 const upsert = require('../../services/firebase-api/upsert');
 
 const modelName = 'items';
+const getAllCategories = async () => {
+  const { categories } = await getModel(modelName);
+  return categories;
+};
 
+const validateItemData = async (data) => {
+  console.log('validating item data : ', data);
+  const categories = await getAllCategories();
+  console.log(categories);
+  const schema = Joi.object({
+    categoryName: Joi.string().valid(categories),
+  });
+  await schema.validateAsync(data);
+  console.log('user data okay');
+};
 const findAll = async () => {
   console.log('getting model from db');
   const itemModel = await getModel(modelName);
@@ -55,5 +70,11 @@ const addItem = async (data) => {
   return generatedId;
 };
 module.exports = {
-  addItem, findByCategory, findById, findByName, findAll,
+  addItem,
+  findByCategory,
+  findById,
+  findByName,
+  findAll,
+  validateItemData,
+  getAllCategories,
 };
