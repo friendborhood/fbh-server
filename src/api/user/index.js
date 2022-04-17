@@ -14,11 +14,9 @@ router.get('/:userName', async (req, res) => {
   console.log(`user name: ${userName}`);
   const user = await findByName(userName);
   if (!user) {
-    return res.status(404).send(`username ${userName} was not found.`);
+    return res.status(404).json({ error: `username ${userName} was not found.` });
   }
-  return res.json({
-    data: user,
-  });
+  return res.json(user);
 });
 
 router.post('/auth/:userName', async (req, res) => {
@@ -27,7 +25,7 @@ router.post('/auth/:userName', async (req, res) => {
   try {
     const user = await findByName(userName);
     if (!user) {
-      res.status(404).send(`User name ${userName} was not found.`);
+      res.status(404).json({ error: `User name ${userName} was not found.` });
       return;
     }
     const { email } = user;
@@ -51,7 +49,7 @@ router.get('/auth/validate/:userName', async (req, res) => {
     const { userName } = req.params;
     const user = await findByName(userName);
     if (!user) {
-      res.status(404).send(`User name ${userName} was not found.`);
+      res.status(404).json({ error: `User name ${userName} was not found.` });
       return;
     }
     const { code: userCodeInput } = req.query;
@@ -66,6 +64,10 @@ router.get('/auth/validate/:userName', async (req, res) => {
       });
     }
     console.log('correct code');
+
+    // no need to await here
+    CacheService.removeKey(userName);
+
     return res.json({
       message: 'user entered correct code',
     });
@@ -82,7 +84,7 @@ router.patch('/:userName', async (req, res) => {
     console.log(`try patch user by name ${userName}`);
     const isExist = await findByName(userName);
     if (!isExist) {
-      return res.status(400).send(`User name ${userName} does not exists. cant patch.`);
+      return res.status(400).json({ error: `User name ${userName} does not exists. cant patch.` });
     }
     await patchUser(data, userName);
 
@@ -109,14 +111,14 @@ router.post('/', async (req, res) => {
     console.log(`try add user by name ${userName}`);
     const isExist = await findByName(userName);
     if (isExist) {
-      return res.status(400).send(`User name ${userName} already exists. user name must be unique`);
+      return res.status(400).json({ error: `User name ${userName} already exists. user name must be unique` });
     }
     data.registerDate = new Date();
     console.log(`try add user with data ${JSON.stringify(data)}`);
     delete data.userName;
     await addUser(data, userName);
 
-    await sendMail({
+    sendMail({
       mailSubject: 'Welcome to friendborhood!',
       content: `Hello ${userName}`,
       userEmail: data.email,

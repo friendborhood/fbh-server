@@ -16,12 +16,19 @@ class RedisService {
         this.client = createClient();
       }
       await this.client.connect();
+      await this.client.flushDb();
       console.log('success init redis');
       this.created = true;
     }
   }
 
+  async removeKey(key) {
+    console.log(`removing from cache ${key}`);
+    await this.client.del(key);
+  }
+
   async setKey(key, value) {
+    console.log(`adding to cache ${key} with value ${value}`);
     await this.client.set(key, value);
   }
 

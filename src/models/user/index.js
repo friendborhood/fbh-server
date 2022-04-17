@@ -13,7 +13,7 @@ const validateUserData = async (data) => {
       .max(30)
       .required(),
     email: Joi.string()
-      .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+      .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'io', 'il'] } })
       .required(),
     firstName: Joi.string()
       .required(),
