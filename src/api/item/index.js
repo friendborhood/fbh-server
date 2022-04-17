@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 const { Router } = require('express');
 const {
-  addItem, findByCategory, findById, findByName, findAll, deleteItem, updateItem, validateItemData,
+  addItem, findByCategory, findById, findByName, findAll, deleteItem, validateItemData, patchItem,
 } = require('../../models/item');
 
 const router = Router();
@@ -67,21 +67,26 @@ router.delete('/:itemId', async (req, res) => {
   return res.status(200).json({ msg: `item with id:${itemId} was deleted` });
 });
 
-router.put('/:itemId', async (req, res) => {
-  console.log('try get item');
-  const { itemId } = req.params;
-  console.log(`item id: ${itemId}`);
-  const item = await findById(itemId);
-  if (!item) {
-    return res.status(404).json({ msg: `Item with id ${itemId} was not found.` });
-  }
-  const data = req.body;
-  updateItem(data, itemId);
+router.patch('/:itemId', async (req, res) => {
+  try {
+    console.log('try get item');
+    const { itemId } = req.params;
+    console.log(`item id: ${itemId}`);
+    const item = await findById(itemId);
+    if (!item) {
+      return res.status(404).json({ msg: `Item with id ${itemId} was not found.` });
+    }
+    const data = req.body;
+    patchItem(data, itemId);
 
-  return res.json({
-    msg: 'item was updated in database successfully',
-    itemId,
-  });
+    return res.json({
+      msg: 'item was updated in database successfully',
+      itemId,
+    });
+  } catch (e) {
+    console.log(e.message);
+    return res.status(500).json({ error: e.message });
+  }
 });
 
 module.exports = router;

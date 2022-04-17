@@ -10,10 +10,43 @@
       }
     },
     "paths": {
-        "/user/{userId}": {
+      "/user": {
+        "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "description": "Add user to DB",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          ],
+      "post": {
+        "tags": ["User"],
+        "summary": "Add a new user to DB",
+        "requestBody":{
+            "content":{
+    "application/json":{
+      "schema":{      
+        "type": "object",
+        "$ref": "#/definitions/User"
+      },
+        "required": true
+    }
+}
+    },
+        "responses": {
+          "200": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+        "/user/{userName}": {
             "parameters": [
                 {
-                  "name": "userId",
+                  "name": "userName",
                   "in": "path",
                   "required": true,
                   "description": "ID of user that we want to find",
@@ -31,40 +64,38 @@
                 }
               }
             }
-          }
-        },
-        "/user": {
-            "parameters": [
-                {
-                  "name": "body",
-                  "in": "body",
-                  "required": true,
-                  "description": "Add user to DB",
-                  "schema": {
-                    "$ref": "#/definitions/User"
-                  }
-                }
-              ],
-          "post": {
-            "tags": ["User"],
-            "summary": "Add a new user to DB",
-            "requestBody":{
-                "content":{
-        "application/json":{
-          "schema":{      
-            "type": "object",
-            "$ref": "#/definitions/User"
           },
-            "required": true
-        }
-    }
-        },
+          "patch": {
+            "parameters": [
+              {
+                "name": "userName",
+                "in": "path",
+                "required": true,
+                "description": "Update User in DB"
+              },
+              {
+                "name": "supportedProperties",
+                "in": "body",
+                "required": true,
+                "schema":{
+                  "$ref":"#/definitions/User"
+                }
+              }
+            ],
+            "tags": ["User"],
+            "summary": "Update user by id",
             "responses": {
               "200": {
-                "description": "Created"
+                "description": "Updated"
+                },
+              "401": {
+                "description": "Unauthorized"
+                },
+              "404": {
+                "description": "id not found"
+                }
               }
             }
-          }
         },
         "/item": {
           "post": {
@@ -139,6 +170,37 @@
           }
         }
       },
+      "patch": {
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "description": "Update item in DB"
+          },
+          {
+            "name": "supportedProperties",
+            "in": "body",
+            "required": true,
+            "schema":{
+              "$ref":"#/definitions/Item"
+            }
+          }
+        ],
+        "tags": ["Item"],
+        "summary": "Update item by id",
+        "responses": {
+          "200": {
+            "description": "Updated"
+            },
+          "401": {
+            "description": "Unauthorized"
+            },
+          "404": {
+            "description": "id not found"
+            }
+          }
+        },
       "delete": {
         "tags": ["Item"],
         "summary": "Delete item by id",
@@ -153,49 +215,12 @@
             "description": "id not found"
             }
           }
-        },
-        "put": {
-          "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "required": true,
-              "description": "Update item in DB",
-              "schema": {
-                "$ref": "#/definitions/Item"
-              }
-            }
-          ],
-          "tags": ["Item"],
-          "summary": "Update item by id",
-          "requestBody":{
-                "content":{
-                  "application/json":{
-                    "schema":{      
-                      "type": "object",
-                      "$ref": "#/definitions/Item"
-                    },
-                      "required": true
-                   }
-                }
-           },
-          "responses": {
-            "200": {
-              "description": "Updated"
-              },
-            "401": {
-              "description": "Unauthorized"
-              },
-            "404": {
-              "description": "id not found"
-              }
-            }
-          }
+        }
     }
       },
       "definitions": {
         "User": {
-          "required": ["userId"],
+          "required": ["userName"],
           "properties": {
               "userName": {
               "type": "string",
@@ -215,8 +240,37 @@
             },
             "registerDate": {
                 "type": "integer"
+            },
+            "favoriteCategory": {
+              "type": "string"
+            },
+            "imageUrl": {
+              "type": "string"
+            },
+            "searchRadius": {
+              "type": "integer"
+            },
+            "location":
+          {
+            "type": "object",
+            "properties": {
+              "address": {
+                "type": "string"
+              },
+              "geoCode": {
+                "type": "object",
+            "properties": {
+              "lat": {
+                "type": "number"
+              },
+              "lng": {
+                "type": "number"
+              }
+              }
             }
+          }
         }
+      }
       },
       "Item": {
         "properties": {
@@ -224,7 +278,7 @@
             "type": "string",
             "uniqueItems": true
           },
-          "picUrl": {
+          "imageUrl": {
             "type": "string"
           },
           "priceRange":
