@@ -80,8 +80,8 @@ const deleteItem = async (index) => {
   console.log('deleting item from db');
   await add(modelName, null, index);
 };
-const updateItem = async (data, itemId) => {
-  console.log('adding item to db');
+const patchItem = async (data, itemId) => {
+  console.log(`patching item ${itemId}, modifing data ${JSON.stringify(data)}`);
   await upsert(modelName, data, itemId);
 };
 module.exports = {
@@ -93,5 +93,5 @@ module.exports = {
   validateItemData,
   getAllCategories,
   deleteItem,
-  updateItem,
+  patchItem,
 };
