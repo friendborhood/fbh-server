@@ -4,7 +4,6 @@ const upsert = require('../../services/firebase-api/upsert');
 
 const DEFAULT_SEARCH_RADIUS = 3;
 const modelName = 'users';
-
 const validateUserData = async (data) => {
   console.log('validating user data : ', data);
   const schema = Joi.object({
