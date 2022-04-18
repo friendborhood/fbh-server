@@ -1,7 +1,14 @@
 /* eslint-disable consistent-return */
 const { Router } = require('express');
 const {
-  addItem, findByCategory, findById, findByName, findAll,
+  addItem,
+  findByCategory, findById,
+  findByName,
+  findAll,
+  getAllCategories,
+  validateItemData,
+  deleteItem,
+  patchItem,
 } = require('../../models/item');
 
 const router = Router();
@@ -25,12 +32,19 @@ router.get('/:itemId', async (req, res) => {
   }
   return res.json(item);
 });
-
+router.get('/categories', async (req, res) => {
+  const categories = await getAllCategories();
+  console.log(categories);
+  return res.json({ categories });
+});
 router.post('/', async (req, res) => {
   try {
     const data = req.body;
-    console.log(data);
-    // validateItemData(data); need to add this function
+    try {
+      await validateItemData(data);
+    } catch (e) {
+      return res.status(400).json({ error: e.message });
+    }
     console.log(`try add item by name ${data.itemName}`);
     const isExist = await findByName(data.itemName);
     if (isExist) {
@@ -48,4 +62,38 @@ router.post('/', async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 });
+
+router.delete('/:itemId', async (req, res) => {
+  console.log('try get item');
+  const { itemId } = req.params;
+  console.log(`item id: ${itemId}`);
+  const item = await findById(itemId);
+  if (!item) {
+    return res.status(404).json({ msg: `Item with id ${itemId} was not found.` });
+  }
+  await deleteItem(itemId);
+  return res.status(200).json({ msg: `item with id:${itemId} was deleted` });
+});
+
+router.patch('/:itemId', async (req, res) => {
+  try {
+    console.log('try get item');
+    const { itemId } = req.params;
+    console.log(`item id: ${itemId}`);
+    const item = await findById(itemId);
+    if (!item) {
+      return res.status(404).json({ msg: `Item with id ${itemId} was not found.` });
+    }
+    const data = req.body;
+    await patchItem(data, itemId);
+    return res.json({
+      msg: 'item was updated in database successfully',
+      itemId,
+    });
+  } catch (e) {
+    console.log(e.message);
+    return res.status(500).json({ error: e.message });
+  }
+});
+
 module.exports = router;
