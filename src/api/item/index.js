@@ -1,14 +1,11 @@
 /* eslint-disable consistent-return */
 const { Router } = require('express');
 const {
-  addItem,
   findByCategory, findById,
   findByName,
   findAll,
   getAllCategories,
   validateItemData,
-  deleteItem,
-  patchItem,
 } = require('../../models/item');
 const {
   addUuidEntity,
