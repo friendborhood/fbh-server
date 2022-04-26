@@ -22,6 +22,7 @@ app.get('/', (req, res) => {
 });
 app.use('/user', require('./user'));
 app.use('/item', require('./item'));
+app.use('/item', require('./offer'));
 
 const PORT_NUMBER = process.env.PORT || 3000;
 app.listen(PORT_NUMBER);
