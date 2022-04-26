@@ -1,5 +1,6 @@
 const { uuid } = require('short-uuid');
 const Joi = require('joi');
+const { insideCircle } = require('geolocation-utils');
 const getModel = require('../../services/firebase-api/get');
 const upsert = require('../../services/firebase-api/upsert');
 const add = require('../../services/firebase-api/add');
@@ -7,6 +8,13 @@ const { findById } = require('../item');
 
 const modelName = 'offers';
 
+const getOffersInArea = ({ offers, radiusInMeters, targetLocation }) => {
+  const offersInRadius = Object.values(offers).filter((offer) => {
+    const isInsideCircle = insideCircle(offer.location.geoCode, targetLocation, radiusInMeters);
+    return isInsideCircle;
+  });
+  return offersInRadius;
+};
 const validateOfferData = async (data) => {
   console.log('validating offer data : ', data);
   const item = await findById(data.itemId);
@@ -76,5 +84,12 @@ const patchItem = async (data, itemId) => {
   await upsert(modelName, data, itemId);
 };
 module.exports = {
-  addItem, findByCategory, findByOfferId, findAll, deleteItem, patchItem, validateOfferData,
+  getOffersInArea,
+  addItem,
+  findByCategory,
+  findByOfferId,
+  findAll,
+  deleteItem,
+  patchItem,
+  validateOfferData,
 };
