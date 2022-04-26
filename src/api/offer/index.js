@@ -1,15 +1,18 @@
 /* eslint-disable consistent-return */
 const { Router } = require('express');
 const {
-  addItem,
   findByCategory,
   findByOfferId,
   findAll,
   validateOfferData,
-  deleteItem,
-  patchItem,
 } = require('../../models/offer');
+const {
+  addUuidEntity,
+  deleteEntity,
+  patchEntity,
+} = require('../../models/generic');
 
+const offerModel = 'offers';
 const router = Router();
 
 router.get('/', async (req, res) => {
@@ -41,7 +44,7 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: e.message });
     }
     console.log(`try add offer with data ${JSON.stringify(data)}`);
-    const newOfferId = await addItem(data);
+    const newOfferId = await addUuidEntity({ data, offerModel });
 
     return res.json({
       msg: 'offer was added to database successfully',
@@ -61,7 +64,7 @@ router.delete('/:offerId', async (req, res) => {
   if (!offer) {
     return res.status(404).json({ msg: `Offer with id ${offerId} was not found.` });
   }
-  await deleteItem(offerId);
+  await deleteEntity({ offerModel, offerId });
   return res.status(200).json({ msg: `Offer with id:${offerId} was deleted` });
 });
 
@@ -75,7 +78,7 @@ router.patch('/:offerId', async (req, res) => {
       return res.status(404).json({ msg: `Offer with id ${offerId} was not found.` });
     }
     const data = req.body;
-    await patchItem(data, offerId);
+    await patchEntity({ data, offerModel, offerId });
     return res.json({
       msg: 'offer was updated in database successfully',
       offerId,
