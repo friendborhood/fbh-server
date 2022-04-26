@@ -1,5 +1,4 @@
-module.exports = 
-{
+module.exports = {
   root: true,
   env: {
     node: true,
@@ -53,4 +52,4 @@ module.exports =
       },
     },
   },
-}
+};
