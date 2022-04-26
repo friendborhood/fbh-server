@@ -32,6 +32,7 @@ router.get('/:offerId', async (req, res) => {
   return res.json(offer);
 });
 router.post('/', async (req, res) => {
+  console.log('started offer post request');
   try {
     const data = req.body;
     try {
