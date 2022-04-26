@@ -1,74 +1,66 @@
-const Joi = require('joi');
 const { uuid } = require('short-uuid');
+const Joi = require('joi');
 const getModel = require('../../services/firebase-api/get');
 const upsert = require('../../services/firebase-api/upsert');
 const add = require('../../services/firebase-api/add');
+const { findById } = require('../item');
 
-const modelName = 'items';
-const getAllCategories = async () => {
-  const { categories } = await getModel(modelName);
-  return categories;
-};
+const modelName = 'offers';
 
-const validateItemData = async (data) => {
-  console.log('validating item data : ', data);
-  const categories = await getAllCategories();
-  console.log(categories);
+const validateOfferData = async (data) => {
+  console.log('validating offer data : ', data);
+  const item = await findById(data.itemId);
+  if (!item) {
+    throw new Error({ msg: `Item with id ${data.itemId} was not found.` });
+  }
   const schema = Joi.object({
-    itemName: Joi.string()
+    description: Joi.string()
+      .description()
       .min(3)
-      .max(30)
+      .max(280)
       .required(),
-    categoryName: Joi.string().valid(...categories),
-    priceRange: Joi.any().required(),
+    categoryName: Joi.string()
+      .required(),
     imageUrl: Joi.string().uri(),
+    itemId: Joi.string()
+      .guid().required(),
+    priceAsked: Joi.number().integer()
+      .min(item.priceRange.min).max(item.priceRange.max)
+      .required(),
   });
   await schema.validateAsync(data);
-  console.log('item data is okay');
+  console.log('offer data is okay');
 };
+
 const findAll = async () => {
   console.log('getting model from db');
-  const itemModel = await getModel(modelName);
-  return itemModel;
+  const offerModel = await getModel(modelName);
+  return offerModel;
 };
 
-const findByName = async (itemName) => {
-  const itemModel = await getModel(modelName);
-  console.log(`try find item ${itemName}`);
-  const relevantItem = Object.values(itemModel)
-    .find((item) => item.itemName === itemName);
-
-  if (!relevantItem) {
-    console.log(`item ${itemName} was not found`);
-    return null;
-  }
-  console.log(`item ${itemName} was  found `);
-
-  return relevantItem;
-};
-const findById = async (index) => {
+const findByOfferId = async (index) => {
   console.log('getting model from db');
-  const itemModel = await getModel(modelName);
-  const relevantItem = itemModel[index];
-  if (!relevantItem) {
-    console.log('item was not found');
+  const offerModel = await getModel(modelName);
+  const relevantOffer = offerModel[index];
+  if (!relevantOffer) {
+    console.log('offer was not found');
     return null;
   }
-  return relevantItem;
+  return relevantOffer;
 };
 const findByCategory = async (categoryName) => {
-  const itemModel = await getModel(modelName);
-  console.log(`try to find items in ${categoryName}`);
-  console.log(itemModel);
-  const relevantItems = Object.values(itemModel)
-    .filter((item) => item.categoryName === categoryName);
-  if (!relevantItems) {
-    console.log(`items in ${categoryName} were not found`);
+  const offerModel = await getModel(modelName);
+  console.log(`try to find offers in ${categoryName}`);
+  console.log(offerModel);
+  const relevantOffers = Object.values(offerModel)
+    .filter((offer) => offer.categoryName === categoryName);
+  if (!relevantOffers) {
+    console.log(`offers in ${categoryName} were not found`);
     return null;
   }
-  console.log(`item in ${categoryName} were found `);
+  console.log(`offers in ${categoryName} were found `);
 
-  return relevantItems;
+  return relevantOffers;
 };
 const addItem = async (data) => {
   console.log('adding item to db');
@@ -85,13 +77,5 @@ const patchItem = async (data, itemId) => {
   await upsert(modelName, data, itemId);
 };
 module.exports = {
-  addItem,
-  findByCategory,
-  findById,
-  findByName,
-  findAll,
-  validateItemData,
-  getAllCategories,
-  deleteItem,
-  patchItem,
+  addItem, findByCategory, findByOfferId, findAll, deleteItem, patchItem, validateOfferData,
 };

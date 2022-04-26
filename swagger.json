@@ -140,7 +140,7 @@
               }
             ],
             "tags": ["Item"],
-            "summary": "Get all items",
+            "summary": "Get all/filtered items",
             "responses": {
               "200": {
                 "description": "OK"
@@ -216,6 +216,57 @@
             }
           }
         }
+    },
+    "/offer": {
+      "post": {
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Add offer to DB",
+            "schema": {
+              "$ref": "#/definitions/Offer"
+            }
+          }
+        ],
+        "tags": ["Offer"],
+        "summary": "Add a new offer to DB",
+        "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{      
+                  "type": "object",
+                  "$ref": "#/definitions/Offer"
+                },
+                  "required": true
+              }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created"
+          }
+        }
+      },
+      "get": {
+        "parameters": [
+          {
+            "name": "categoryName",
+            "in": "query",
+            "required": false,
+            "description": "Category Name of the offer we want to find",
+            "type": "string"
+          }
+        ],
+        "tags": ["Offer"],
+        "summary": "Get all/filtered Offers",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
       },
       "definitions": {
@@ -250,8 +301,7 @@
             "searchRadius": {
               "type": "integer"
             },
-            "location":
-          {
+            "location": {
             "type": "object",
             "properties": {
               "address": {
@@ -265,7 +315,7 @@
               },
               "lng": {
                 "type": "number"
-              }
+                }
               }
             }
           }
@@ -293,13 +343,57 @@
               }
             }
           },
-          "categoryName":
-          {
+          "categoryName": {
             "type": "string"
           }
       },
       "required": ["itemId"]
-    }
+    },
+    "Offer": {
+      "properties": {
+        "itemId": {
+          "type": "string"
+        },
+        "imageUrl": {
+          "type": "string"
+        },
+        "priceAsked":{
+          "type": "integer"
+        },
+        "categoryName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "condition": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "location": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string"
+            },
+            "geoCode": {
+              "type": "object",
+          "properties": {
+            "lat": {
+              "type": "number"
+            },
+            "lng": {
+              "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
+    "required": ["offerId"]
+  }
     },
     "tags": [
       {
@@ -309,6 +403,10 @@
       {
         "name": "Item",
         "description": "API for item in the system"
+      },
+      {
+        "name": "Offer",
+        "description": "API for offers in the system"
       }
     ],
     "schemes": ["http", "https"],
