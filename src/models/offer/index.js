@@ -18,8 +18,6 @@ const validateOfferData = async (data) => {
       .min(3)
       .max(280)
       .required(),
-    categoryName: Joi.string()
-      .required(),
     imageUrl: Joi.string().uri(),
     itemId: Joi.string()
       .guid().required(),
