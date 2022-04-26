@@ -380,18 +380,18 @@
             },
             "geoCode": {
               "type": "object",
-          "properties": {
-            "lat": {
-              "type": "number"
-            },
-            "lng": {
-              "type": "number"
+              "properties": {
+                "lat": {
+                  "type": "number"
+                },
+                "lng": {
+                  "type": "number"
+                  }
+                }
               }
             }
           }
-        }
-      }
-    },
+        },
     "required": ["offerId"]
   }
     },
