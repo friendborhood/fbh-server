@@ -24,10 +24,10 @@ router.get('/', async (req, res) => {
 router.get('/:offerId', async (req, res) => {
   console.log('try get offer');
   const { offerId } = req.params;
-  console.log(`item id: ${offerId}`);
+  console.log(`offer id: ${offerId}`);
   const offer = await findByOfferId(offerId);
   if (!offer) {
-    return res.status(404).json({ msg: `Offer of item with id ${offerId} was not found.` });
+    return res.status(404).json({ msg: `Offer with id ${offerId} was not found.` });
   }
   return res.json(offer);
 });
@@ -44,7 +44,7 @@ router.post('/', async (req, res) => {
     const newOfferId = await addItem(data);
 
     return res.json({
-      msg: 'item was added to database successfully',
+      msg: 'offer was added to database successfully',
       offerId: newOfferId,
     });
   } catch (e) {
@@ -56,7 +56,7 @@ router.post('/', async (req, res) => {
 router.delete('/:offerId', async (req, res) => {
   console.log('try get offer');
   const { offerId } = req.params;
-  console.log(`item id: ${offerId}`);
+  console.log(`offer id: ${offerId}`);
   const offer = await findByOfferId(offerId);
   if (!offer) {
     return res.status(404).json({ msg: `Offer with id ${offerId} was not found.` });
@@ -72,12 +72,12 @@ router.patch('/:offerId', async (req, res) => {
     console.log(`Offer id: ${offerId}`);
     const offer = await findByOfferId(offerId);
     if (!offer) {
-      return res.status(404).json({ msg: `Item with id ${offerId} was not found.` });
+      return res.status(404).json({ msg: `Offer with id ${offerId} was not found.` });
     }
     const data = req.body;
     await patchItem(data, offerId);
     return res.json({
-      msg: 'item was updated in database successfully',
+      msg: 'offer was updated in database successfully',
       offerId,
     });
   } catch (e) {

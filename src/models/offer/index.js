@@ -15,7 +15,6 @@ const validateOfferData = async (data) => {
   }
   const schema = Joi.object({
     description: Joi.string()
-      .description()
       .min(3)
       .max(280)
       .required(),
@@ -28,7 +27,7 @@ const validateOfferData = async (data) => {
       .min(item.priceRange.min).max(item.priceRange.max)
       .required(),
   });
-  await schema.validateAsync(data);
+  await schema.validateAsync(data, { allowUnknown: true });
   console.log('offer data is okay');
 };
 
