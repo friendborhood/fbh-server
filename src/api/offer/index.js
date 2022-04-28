@@ -16,7 +16,7 @@ const offerModel = 'offers';
 const router = Router();
 
 router.get('/', async (req, res) => {
-  console.log('try get all offered items');
+  console.log('try get all offer');
   const { categoryName } = req.query;
   const offers = categoryName ? await findByCategory(categoryName) : await findAll();
   if (!offers) {
@@ -70,7 +70,7 @@ router.delete('/:offerId', async (req, res) => {
 
 router.patch('/:offerId', async (req, res) => {
   try {
-    console.log('try get item');
+    console.log('try get offer');
     const { offerId } = req.params;
     console.log(`Offer id: ${offerId}`);
     const offer = await findByOfferId(offerId);

@@ -28,7 +28,7 @@ const validateOfferData = async (data) => {
   console.log('validating offer data : ', data);
   const item = await findById(data.itemId);
   if (!item) {
-    throw new Error({ msg: `Item with id ${data.itemId} was not found.` });
+    throw new Error(`Item with id ${data.itemId} was not found.`);
   }
   const schema = Joi.object({
     description: Joi.string()
