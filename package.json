@@ -32,6 +32,8 @@
     "geolocation-utils": "^1.2.5",
     "jest": "^27.4.7",
     "joi": "^17.6.0",
+    "moment": "^2.29.3",
+    "moment-timezone": "^0.5.34",
     "nodemailer": "^6.7.2",
     "nodemon": "^2.0.15",
     "openapi": "^1.0.1",

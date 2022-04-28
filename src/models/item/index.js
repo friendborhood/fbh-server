@@ -3,6 +3,7 @@ const { uuid } = require('short-uuid');
 const getModel = require('../../services/firebase-api/get');
 const upsert = require('../../services/firebase-api/upsert');
 const add = require('../../services/firebase-api/add');
+const { formatKeyToJsonArray } = require('../generic');
 
 const modelName = 'items';
 const getAllCategories = async () => {
@@ -60,15 +61,16 @@ const findByCategory = async (categoryName) => {
   const itemModel = await getModel(modelName);
   console.log(`try to find items in ${categoryName}`);
   console.log(itemModel);
-  const relevantItems = Object.values(itemModel)
-    .filter((item) => item.categoryName === categoryName);
+  const relevantItems = Object.entries(itemModel)
+    .filter(([, item]) => item.categoryName === categoryName);
+
   if (!relevantItems) {
     console.log(`items in ${categoryName} were not found`);
     return null;
   }
   console.log(`item in ${categoryName} were found `);
 
-  return relevantItems;
+  return formatKeyToJsonArray(relevantItems);
 };
 const addItem = async (data) => {
   console.log('adding item to db');

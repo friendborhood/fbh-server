@@ -10,9 +10,10 @@ const {
   addUuidEntity,
   deleteEntity,
   patchEntity,
+  addTimeStamp,
 } = require('../../models/generic');
 
-const offerModel = 'offers';
+const OFFER_MODEL = 'offers';
 const router = Router();
 
 router.get('/', async (req, res) => {
@@ -44,7 +45,7 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: e.message });
     }
     console.log(`try add offer with data ${JSON.stringify(data)}`);
-    const newOfferId = await addUuidEntity({ data, offerModel });
+    const newOfferId = await addUuidEntity({ data, modelName: OFFER_MODEL });
 
     return res.json({
       msg: 'offer was added to database successfully',
@@ -64,7 +65,7 @@ router.delete('/:offerId', async (req, res) => {
   if (!offer) {
     return res.status(404).json({ msg: `Offer with id ${offerId} was not found.` });
   }
-  await deleteEntity({ offerModel, offerId });
+  await deleteEntity({ model: OFFER_MODEL, id: offerId });
   return res.status(200).json({ msg: `Offer with id:${offerId} was deleted` });
 });
 
@@ -78,7 +79,7 @@ router.patch('/:offerId', async (req, res) => {
       return res.status(404).json({ msg: `Offer with id ${offerId} was not found.` });
     }
     const data = req.body;
-    await patchEntity({ data, offerModel, offerId });
+    await patchEntity({ data, model: OFFER_MODEL, entityId: offerId });
     return res.json({
       msg: 'offer was updated in database successfully',
       offerId,

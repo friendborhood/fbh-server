@@ -13,7 +13,7 @@ const {
   patchEntity,
 } = require('../../models/generic');
 
-const itemModel = 'items';
+const ITEM_MODEL = 'items';
 
 const router = Router();
 
@@ -55,7 +55,7 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ msg: `Item name ${data.itemName} already exists. item name must be unique` });
     }
     console.log(`try add item with data ${JSON.stringify(data)}`);
-    const newItemId = await addUuidEntity({ data, itemModel });
+    const newItemId = await addUuidEntity({ data, modelName: ITEM_MODEL });
 
     return res.json({
       msg: 'item was added to database successfully',
@@ -75,7 +75,7 @@ router.delete('/:itemId', async (req, res) => {
   if (!item) {
     return res.status(404).json({ msg: `Item with id ${itemId} was not found.` });
   }
-  await deleteEntity({ itemModel, itemId });
+  await deleteEntity({ ITEM_MODEL, itemId });
   return res.status(200).json({ msg: `item with id:${itemId} was deleted` });
 });
 
@@ -89,7 +89,7 @@ router.patch('/:itemId', async (req, res) => {
       return res.status(404).json({ msg: `Item with id ${itemId} was not found.` });
     }
     const data = req.body;
-    await patchEntity({ data, itemModel, itemId });
+    await patchEntity({ data, modelName: ITEM_MODEL, entityId: itemId });
     return res.json({
       msg: 'item was updated in database successfully',
       itemId,
