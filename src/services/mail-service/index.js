@@ -9,9 +9,13 @@ const sendAuthCodeToUserEmail = async (userEmail) => {
   return authCode;
 };
 const sendMail = async ({ mailSubject, content, userEmail }) => {
-  await transporter.sendMail({
-    from: FBH_EMAIL, subject: mailSubject, to: userEmail, text: content,
-  });
+  try {
+    await transporter.sendMail({
+      from: FBH_EMAIL, subject: mailSubject, to: userEmail, text: content,
+    });
+  } catch (e) {
+    console.error('mail error', e);
+  }
 };
 
 module.exports = { sendAuthCodeToUserEmail, sendMail };
