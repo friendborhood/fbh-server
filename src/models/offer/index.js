@@ -12,13 +12,13 @@ const getDistanceFromOfferToTarget = (offer, target) => {
   const { location: { geoCode: offerGeoCode } } = offer;
   return distanceTo(offerGeoCode, target);
 };
-const getOffersInArea = ({ offers, radiusInMeters, targetLocation }) => Object.values(offers)
+const filterOffersByArea = ({ offers, radiusInMeters, targetLocation }) => Object.entries(offers)
   .filter((offer) => {
     const isInsideCircle = insideCircle(offer.location.geoCode, targetLocation, radiusInMeters);
     return isInsideCircle;
   });
 
-const sortOrdersByDistance = ({ offers, targetLocation }) => Object.values(offers)
+const sortOffersByDistance = ({ offers, targetLocation }) => Object.entries(offers)
   .sort((offerA, offerB) => {
     const distanceFromTargetToA = getDistanceFromOfferToTarget(offerA, targetLocation);
     const distanceFromTargetToB = getDistanceFromOfferToTarget(offerB, targetLocation);
@@ -65,13 +65,13 @@ const findByOfferId = async (index) => {
 const findByCategory = async (categoryName) => {
   const offerModel = await getModel(modelName);
   logger.info(`try to find offers in ${categoryName}`);
-  logger.info(offerModel);
-  const relevantOffers = Object.values(offerModel)
+  const relevantOffers = Object.entries(offerModel)
     .filter((offer) => offer.categoryName === categoryName);
-  if (!relevantOffers) {
+  if (relevantOffers.length === 0) {
     logger.warn(`offers in ${categoryName} were not found`);
     return null;
   }
+  console.log(relevantOffers);
   logger.info(`offers in ${categoryName} were found `);
 
   return relevantOffers;
@@ -90,7 +90,17 @@ const patchItem = async (data, itemId) => {
   logger.info(`patching item ${itemId}, modifing data ${JSON.stringify(data)}`);
   await upsert(modelName, data, itemId);
 };
+const assertCategoryAndFind = async (categoryName) => (categoryName
+  ? findByCategory(categoryName) : findAll());
+const getOffersInArea = async ({ targetLocation, radius, categoryName }) => {
+  const relevantOffersByCategory = await assertCategoryAndFind(categoryName);
+  const filteredByArea = filterOffersByArea(
+    { offers: relevantOffersByCategory, radiusInMeters: radius, targetLocation },
+  );
+  return filteredByArea;
+};
 module.exports = {
+  sortOffersByDistance,
   getOffersInArea,
   addItem,
   findByCategory,
@@ -99,5 +109,4 @@ module.exports = {
   deleteItem,
   patchItem,
   validateOfferData,
-  sortOrdersByDistance,
 };

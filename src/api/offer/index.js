@@ -5,6 +5,8 @@ const {
   findByOfferId,
   findAll,
   validateOfferData,
+  getOffersInArea,
+  sortOffersByDistance,
 } = require('../../models/offer');
 const {
   addUuidEntity,
@@ -12,6 +14,7 @@ const {
   patchEntity,
 } = require('../../models/generic');
 const logger = require('../../logger');
+const { findByName } = require('../../models/user');
 
 const OFFER_MODEL = 'offers';
 const router = Router();
@@ -24,6 +27,26 @@ router.get('/', async (req, res) => {
     return res.status(404).json({ msg: 'No Offered Items were  found.' });
   }
   return res.json(offers);
+});
+
+router.get('/in-area/:userName', async (req, res) => {
+  const userName = req.params;
+  const { categoryName = null, radius } = req.query;
+  logger.info('try get offers in area', { userName, radius, categoryName });
+  const user = await findByName(userName);
+  if (!user) {
+    logger.error(`user ${userName} was not found. cant find offers`);
+    return res.status(404).json({ msg: `User ${userName} not found` });
+  }
+  const { location: { geoCode: userLocation } } = user;
+  const offersInArea = await getOffersInArea(
+    { targetLocation: userLocation, radius, categoryName },
+  );
+  if (!offersInArea) {
+    return res.status(404).json({ msg: 'No relevant offers were found.' });
+  }
+  const orderedOffersInArea = sortOffersByDistance({ offers: offersInArea, userLocation });
+  return res.json(orderedOffersInArea);
 });
 router.get('/:offerId', async (req, res) => {
   logger.info('try get offer');
