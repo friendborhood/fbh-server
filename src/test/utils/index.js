@@ -17,58 +17,51 @@ const COMPLEX_OBJECT = {
 };
 const mockDataOffersInArea = [
   {
-    name: '4',
+    name: 'Taizu',
     location: {
       geoCode: {
-        lat: 31.27566902435525, lng: 34.75106102314429,
+        lat: 32.063823740125144, lng: 34.77991637605572,
       },
     },
   },
   {
-    name: '1',
+    name: 'Safari RamatGan',
     location: {
       geoCode: {
-        lat: 32.1716207368198, lng: 34.847595734248976,
+        lat: 32.051639340346966, lng: 34.769788355219255,
       },
     },
   },
   {
-    name: '3',
+    name: 'Auckland',
     location: {
       geoCode: {
-        lat: 38.68283263477214, lng: -9.063595043382376,
+        lat: -36.23905226945528, lng: 174.6325671519025,
       },
     },
   },
   {
-    name: '8',
+    name: 'Haifa',
     location: {
       geoCode: {
-        lat: 28.19485862635811, lng: 18.348766841649137,
+        lat: 32.79471141572239, lng: 34.988451356599754,
+      },
+    },
+  },
+
+  {
+    name: 'Modiin',
+    location: {
+      geoCode: {
+        lat: -36.23905226945528, lng: 174.6325671519025,
       },
     },
   },
   {
-    name: '5',
+    name: 'Pizza Lila',
     location: {
       geoCode: {
-        lat: 31.768282467383457, lng: 35.178790083757946,
-      },
-    },
-  },
-  {
-    name: '6',
-    location: {
-      geoCode: {
-        lat: 31.903431003993127, lng: 34.98240458871311,
-      },
-    },
-  },
-  {
-    name: '1',
-    location: {
-      geoCode: {
-        lat: 32.06969216175387, lng: 34.77153511285643,
+        lat: 32.060350442324626, lng: 34.77184829173633,
       },
     },
 
@@ -76,9 +69,12 @@ const mockDataOffersInArea = [
 
 ];
 const mockTargetLocation = {
-  lat: 32.06969216175387, lng: 34.77153511285643,
+  name: 'Dalida',
+  lat: 32.06005947945416,
+  lng: 34.77300700597368,
+
 };
-const mockRadius = 250000;
+const mockRadius = 25000;
 module.exports = {
   mockRadius,
   mockDataOffersInArea,

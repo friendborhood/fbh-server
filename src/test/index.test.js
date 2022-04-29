@@ -58,6 +58,9 @@ describe('Basic sanity server CRUD tests', () => {
       },
     );
     sortOffersByDistance({ offers: relevantOffers, targetLocation: mockTargetLocation });
-    expect(relevantOffers.length).toBe(5);
+    expect(relevantOffers[0].name).toBe('Pizza Lila');
+    expect(relevantOffers[1].name).toBe('Taizu');
+    expect(relevantOffers[2].name).toBe('Safari RamatGan');
+    expect(relevantOffers.length).toBe(3);
   });
 });
