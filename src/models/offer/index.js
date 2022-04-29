@@ -12,11 +12,12 @@ const getDistanceFromOfferToTarget = (offer, target) => {
   const { location: { geoCode: offerGeoCode } } = offer;
   return distanceTo(offerGeoCode, target);
 };
-const filterOffersByArea = ({ offers, radiusInMeters, targetLocation }) => Object.entries(offers)
-  .filter(([, offer]) => {
+const filterOffersByArea = ({ offers, radiusInMeters, targetLocation }) => offers.filter(
+  ([, offer]) => {
     const isInsideCircle = insideCircle(offer.location.geoCode, targetLocation, radiusInMeters);
     return isInsideCircle;
-  });
+  },
+);
 
 const sortOffersByDistance = ({ offers, targetLocation }) => Object.entries(offers)
   .sort(([, offerA], [, offerB]) => {
