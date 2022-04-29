@@ -39,7 +39,7 @@ router.post('/auth/:userName', async (req, res) => {
       message: 'OK',
     });
   } catch (e) {
-    console.error(e);
+    logger.error(e);
     res.status(500).json({
       error: e,
     });
