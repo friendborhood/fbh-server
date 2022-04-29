@@ -59,7 +59,7 @@ router.get('/auth/validate/:userName', async (req, res) => {
     const correctCode = await CacheService.getKey(userName);
     logger.info(`user code ${userCodeInput} correct code ${correctCode}`);
     if (correctCode !== userCodeInput) {
-      logger.info('wrong code');
+      logger.warn('wrong code');
       return res.status(400).json({
         error: 'user entered wrong pin code',
       });
