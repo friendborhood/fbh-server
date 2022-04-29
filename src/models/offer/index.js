@@ -13,13 +13,13 @@ const getDistanceFromOfferToTarget = (offer, target) => {
   return distanceTo(offerGeoCode, target);
 };
 const filterOffersByArea = ({ offers, radiusInMeters, targetLocation }) => Object.entries(offers)
-  .filter((offer) => {
+  .filter(([, offer]) => {
     const isInsideCircle = insideCircle(offer.location.geoCode, targetLocation, radiusInMeters);
     return isInsideCircle;
   });
 
 const sortOffersByDistance = ({ offers, targetLocation }) => Object.entries(offers)
-  .sort((offerA, offerB) => {
+  .sort(([, offerA], [, offerB]) => {
     const distanceFromTargetToA = getDistanceFromOfferToTarget(offerA, targetLocation);
     const distanceFromTargetToB = getDistanceFromOfferToTarget(offerB, targetLocation);
     return distanceFromTargetToA - distanceFromTargetToB;
