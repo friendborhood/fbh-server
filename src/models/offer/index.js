@@ -26,7 +26,6 @@ const sortOrdersByDistance = ({ offers, targetLocation }) => Object.values(offer
   });
 
 const validateOfferData = async (data) => {
-  logger.info('validating offer data : ', data);
   const item = await findById(data.itemId);
   if (!item) {
     throw new Error(`Item with id ${data.itemId} was not found.`);
@@ -58,7 +57,7 @@ const findByOfferId = async (index) => {
   const offerModel = await getModel(modelName);
   const relevantOffer = offerModel[index];
   if (!relevantOffer) {
-    logger.info('offer was not found');
+    logger.warn('offer was not found');
     return null;
   }
   return relevantOffer;

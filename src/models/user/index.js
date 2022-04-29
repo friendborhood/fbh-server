@@ -6,7 +6,6 @@ const upsert = require('../../services/firebase-api/upsert');
 const DEFAULT_SEARCH_RADIUS = 3;
 const modelName = 'users';
 const validateUserData = async (data) => {
-  logger.info('validating user data : ', data);
   const schema = Joi.object({
     userName: Joi.string()
       .alphanum()
@@ -31,7 +30,7 @@ const findByName = async (userName) => {
   const userModel = await getModel(modelName);
   const relevantUser = userModel[userName];
   if (!relevantUser) {
-    logger.info('user not found');
+    logger.warn('user not found');
     return null;
   }
   return relevantUser;

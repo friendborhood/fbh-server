@@ -94,7 +94,7 @@ router.patch('/:userName', async (req, res) => {
 
     });
   } catch (e) {
-    logger.info(e.message);
+    logger.error(e.message);
     return res.status(500).json({ error: e.message });
   }
 });
@@ -105,7 +105,7 @@ router.post('/', async (req, res) => {
     try {
       await validateUserData(data);
     } catch (e) {
-      logger.info(e.message);
+      logger.error(e.message);
       return res.status(400).json({ error: e.message });
     }
     const { userName } = data;
@@ -129,7 +129,7 @@ router.post('/', async (req, res) => {
       userName,
     });
   } catch (e) {
-    logger.info(e.message);
+    logger.error(e.message);
     return res.status(500).json({ error: e.message });
   }
 });

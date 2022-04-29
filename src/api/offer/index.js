@@ -85,7 +85,7 @@ router.patch('/:offerId', async (req, res) => {
       offerId,
     });
   } catch (e) {
-    logger.info(e.message);
+    logger.error(e.message);
     return res.status(500).json({ error: e.message });
   }
 });

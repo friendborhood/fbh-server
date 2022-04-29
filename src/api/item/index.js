@@ -63,7 +63,7 @@ router.post('/', async (req, res) => {
       itemId: newItemId,
     });
   } catch (e) {
-    logger.info(e.message);
+    logger.error(e.message);
     return res.status(500).json({ error: e.message });
   }
 });
@@ -96,7 +96,7 @@ router.patch('/:itemId', async (req, res) => {
       itemId,
     });
   } catch (e) {
-    logger.info(e.message);
+    logger.error(e.message);
     return res.status(500).json({ error: e.message });
   }
 });

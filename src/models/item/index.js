@@ -13,7 +13,6 @@ const getAllCategories = async () => {
 };
 
 const validateItemData = async (data) => {
-  logger.info('validating item data : ', data);
   const categories = await getAllCategories();
   logger.info(categories);
   const schema = Joi.object({
@@ -53,7 +52,7 @@ const findById = async (index) => {
   const itemModel = await getModel(modelName);
   const relevantItem = itemModel[index];
   if (!relevantItem) {
-    logger.info('item was not found');
+    logger.warn('item was not found');
     return null;
   }
   return relevantItem;
@@ -66,7 +65,7 @@ const findByCategory = async (categoryName) => {
     .filter(([, item]) => item.categoryName === categoryName);
 
   if (!relevantItems) {
-    logger.info(`items in ${categoryName} were not found`);
+    logger.warn(`items in ${categoryName} were not found`);
     return null;
   }
   logger.info(`item in ${categoryName} were found `);
