@@ -303,6 +303,38 @@
       }
     },
     "/offer/{offerId}": {
+      "patch": {
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "description": "patch offer",
+              "schema": {
+                "$ref": "#/definitions/Offer"
+              }
+            }
+          ],
+          "tags": ["Offer"],
+          "summary": "patch offer",
+          "requestBody":{
+              "content":{
+                "application/json":{
+                  "schema":{      
+                    "type": "object",
+                    "$ref": "#/definitions/Offer"
+                  },
+                    "required":false
+                }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Created"
+            }
+          }
+        
+      },
       "delete": {
         "parameters": [
           {
