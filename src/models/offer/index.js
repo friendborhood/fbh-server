@@ -94,7 +94,7 @@ const patchItem = async (data, itemId) => {
 };
 const assertCategoryAndFind = async (categoryName) => (categoryName
   ? findByCategory(categoryName) : findAll());
-const getOffersInArea = async ({ targetLocation, radius, categoryName }) => {
+const getOffersInArea = async ({ targetLocation, radius, categoryName = null }) => {
   const relevantOffersByCategory = await assertCategoryAndFind(categoryName);
   const filteredByArea = filterOffersByArea(
     { offers: relevantOffersByCategory, radiusInMeters: radius, targetLocation },
@@ -106,6 +106,7 @@ module.exports = {
   getOffersInArea,
   addItem,
   findByCategory,
+  filterOffersByArea,
   findByOfferId,
   findAll,
   deleteItem,

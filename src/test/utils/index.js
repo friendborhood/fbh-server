@@ -15,7 +15,74 @@ const COMPLEX_OBJECT = {
     },
   },
 };
+const mockDataOffersInArea = [
+  {
+    name: '4',
+    location: {
+      geoCode: {
+        lat: 31.27566902435525, lon: 34.75106102314429,
+      },
+    },
+  },
+  {
+    name: '1',
+    location: {
+      geoCode: {
+        lat: 32.1716207368198, lon: 34.847595734248976,
+      },
+    },
+  },
+  {
+    name: '3',
+    location: {
+      geoCode: {
+        lat: 38.68283263477214, lon: -9.063595043382376,
+      },
+    },
+  },
+  {
+    name: '8',
+    location: {
+      geoCode: {
+        lat: 28.19485862635811, lon: 18.348766841649137,
+      },
+    },
+  },
+  {
+    name: '5',
+    location: {
+      geoCode: {
+        lat: 31.768282467383457, lon: 35.178790083757946,
+      },
+    },
+  },
+  {
+    name: '6',
+    location: {
+      geoCode: {
+        lat: 31.903431003993127, lon: 34.98240458871311,
+      },
+    },
+  },
+  {
+    name: '1',
+    location: {
+      geoCode: {
+        lat: 32.06969216175387, lon: 34.77153511285643,
+      },
+    },
+
+  },
+
+];
+const mockTargetLocation = {
+  lat: 32.06969216175387, lon: 34.77153511285643,
+};
+const mockRadius = 250000;
 module.exports = {
+  mockRadius,
+  mockDataOffersInArea,
+  mockTargetLocation,
   TEST_RADIUS,
   TEST_USER,
   testNetwork,

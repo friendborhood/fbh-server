@@ -1,6 +1,6 @@
 require('dotenv').config();
 const logger = require('../logger');
-const { validateOfferData } = require('../models/offer');
+const { validateOfferData, filterOffersByArea, sortOffersByDistance } = require('../models/offer');
 const {
   USER_END_POINT,
   NON_EXISTING_USER_ID,
@@ -11,6 +11,9 @@ const {
   OFFERS_END_POINT,
   TEST_USER,
   TEST_RADIUS,
+  mockTargetLocation,
+  mockDataOffersInArea,
+  mockRadius,
 } = require('./utils');
 require('../api');
 
@@ -46,7 +49,15 @@ describe('Basic sanity server CRUD tests', () => {
     await Promise.all(offers.map((offer) => validateOfferData(offer)));
     expect(offers.length).toBe(2);
   });
-  it('Offers in area - Mock', async () => {
-
+  it('Offers in area - Mock', () => {
+    const relevantOffers = filterOffersByArea(
+      {
+        offers: mockDataOffersInArea,
+        radiusInMeters: mockRadius,
+        targetLocation: mockTargetLocation,
+      },
+    );
+    sortOffersByDistance({ offers: relevantOffers, targetLocation: mockTargetLocation });
+    expect(relevantOffers.length).toBe(5);
   });
 });
