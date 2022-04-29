@@ -3,7 +3,6 @@ const logger = require('../../logger');
 const getModel = require('../../services/firebase-api/get');
 const upsert = require('../../services/firebase-api/upsert');
 
-const DEFAULT_SEARCH_RADIUS = 3;
 const modelName = 'users';
 const validateUserData = async (data) => {
   const schema = Joi.object({
@@ -37,7 +36,7 @@ const findByName = async (userName) => {
 };
 const addUser = async (data, userName) => {
   logger.info('adding user to db');
-  await upsert(modelName, { ...data, searchRadius: DEFAULT_SEARCH_RADIUS }, userName);
+  await upsert(modelName, { ...data }, userName);
 };
 const patchUser = async (data, userName) => {
   logger.info(`patching user ${userName}, modifing data ${JSON.stringify(data)}`);
