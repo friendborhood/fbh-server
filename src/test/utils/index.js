@@ -16,11 +16,12 @@ const COMPLEX_OBJECT = {
   },
 };
 const mockDataOffersInArea = [
+
   {
-    name: 'Taizu',
+    name: 'Auckland',
     location: {
       geoCode: {
-        lat: 32.063823740125144, lng: 34.77991637605572,
+        lat: -36.23905226945528, lng: 174.6325671519025,
       },
     },
   },
@@ -33,10 +34,10 @@ const mockDataOffersInArea = [
     },
   },
   {
-    name: 'Auckland',
+    name: 'Taizu',
     location: {
       geoCode: {
-        lat: -36.23905226945528, lng: 174.6325671519025,
+        lat: 32.063823740125144, lng: 34.77991637605572,
       },
     },
   },

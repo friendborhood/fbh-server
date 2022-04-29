@@ -49,13 +49,13 @@ router.get('/in-area/:userName', async (req, res) => {
     const offersInArea = await getOffersInArea(
       { targetLocation: userLocation, radius, categoryName },
     );
-    if (!offersInArea) {
+    if (offersInArea.length === 0) {
       return res.status(404).json({ msg: 'No relevant offers were found.' });
     }
-    const orderedOffersInArea = sortOffersByDistance(
+    sortOffersByDistance(
       { offers: offersInArea, targetLocation: userLocation },
     );
-    return res.json(orderedOffersInArea);
+    return res.json(offersInArea);
   } catch (e) {
     logger.error('got 500 offers in area', e);
     return res.status(500).json({ error: e.message });
