@@ -10,7 +10,6 @@ const {
   addUuidEntity,
   deleteEntity,
   patchEntity,
-  addTimeStamp,
 } = require('../../models/generic');
 const logger = require('../../logger');
 
