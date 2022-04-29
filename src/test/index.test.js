@@ -1,6 +1,7 @@
 require('dotenv').config();
+const logger = require('../logger');
 const {
-  USER_END_POINT, NON_EXISTING_USER_ID, EXISTING_USER_ID, testNetwork,
+  USER_END_POINT, NON_EXISTING_USER_ID, EXISTING_USER_ID, testNetwork, COMPLEX_OBJECT,
 } = require('./utils');
 require('../api');
 
@@ -19,5 +20,10 @@ describe('Basic sanity server CRUD tests', () => {
       const { response: { status } } = error;
       expect(status).toBe(404);
     }
+  });
+  it('Logger test', () => {
+    logger.info('i am an info', COMPLEX_OBJECT);
+    logger.warn('i am a warning ', { warning: 'warn' });
+    logger.error(' i am an error', { someError: ['error1', 'error2'] });
   });
 });
