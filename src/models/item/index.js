@@ -4,6 +4,7 @@ const getModel = require('../../services/firebase-api/get');
 const upsert = require('../../services/firebase-api/upsert');
 const add = require('../../services/firebase-api/add');
 const { formatKeyToJsonArray } = require('../generic');
+const logger = require('../../logger');
 
 const modelName = 'items';
 const getAllCategories = async () => {
@@ -12,9 +13,9 @@ const getAllCategories = async () => {
 };
 
 const validateItemData = async (data) => {
-  console.log('validating item data : ', data);
+  logger.info('validating item data : ', data);
   const categories = await getAllCategories();
-  console.log(categories);
+  logger.info(categories);
   const schema = Joi.object({
     itemName: Joi.string()
       .min(3)
@@ -25,65 +26,65 @@ const validateItemData = async (data) => {
     imageUrl: Joi.string().uri(),
   });
   await schema.validateAsync(data);
-  console.log('item data is okay');
+  logger.info('item data is okay');
 };
 const findAll = async () => {
-  console.log('getting model from db');
+  logger.info('getting model from db');
   const itemModel = await getModel(modelName);
   return itemModel;
 };
 
 const findByName = async (itemName) => {
   const itemModel = await getModel(modelName);
-  console.log(`try find item ${itemName}`);
+  logger.info(`try find item ${itemName}`);
   const relevantItem = Object.values(itemModel)
     .find((item) => item.itemName === itemName);
 
   if (!relevantItem) {
-    console.log(`item ${itemName} was not found`);
+    logger.info(`item ${itemName} was not found`);
     return null;
   }
-  console.log(`item ${itemName} was  found `);
+  logger.info(`item ${itemName} was  found `);
 
   return relevantItem;
 };
 const findById = async (index) => {
-  console.log('getting model from db');
+  logger.info('getting model from db');
   const itemModel = await getModel(modelName);
   const relevantItem = itemModel[index];
   if (!relevantItem) {
-    console.log('item was not found');
+    logger.info('item was not found');
     return null;
   }
   return relevantItem;
 };
 const findByCategory = async (categoryName) => {
   const itemModel = await getModel(modelName);
-  console.log(`try to find items in ${categoryName}`);
-  console.log(itemModel);
+  logger.info(`try to find items in ${categoryName}`);
+  logger.info(itemModel);
   const relevantItems = Object.entries(itemModel)
     .filter(([, item]) => item.categoryName === categoryName);
 
   if (!relevantItems) {
-    console.log(`items in ${categoryName} were not found`);
+    logger.info(`items in ${categoryName} were not found`);
     return null;
   }
-  console.log(`item in ${categoryName} were found `);
+  logger.info(`item in ${categoryName} were found `);
 
   return formatKeyToJsonArray(relevantItems);
 };
 const addItem = async (data) => {
-  console.log('adding item to db');
+  logger.info('adding item to db');
   const generatedId = uuid();
   await upsert(modelName, data, generatedId);
   return generatedId;
 };
 const deleteItem = async (index) => {
-  console.log('deleting item from db');
+  logger.info('deleting item from db');
   await add(modelName, null, index);
 };
 const patchItem = async (data, itemId) => {
-  console.log(`patching item ${itemId}, modifing data ${JSON.stringify(data)}`);
+  logger.info(`patching item ${itemId}, modifing data ${JSON.stringify(data)}`);
   await upsert(modelName, data, itemId);
 };
 module.exports = {

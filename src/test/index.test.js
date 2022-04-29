@@ -16,7 +16,7 @@ describe('Basic sanity server CRUD tests', () => {
     try {
       await testNetwork.get(`${USER_END_POINT}/${NON_EXISTING_USER_ID}`);
     } catch (error) {
-      console.log(error);
+      logger.warn(error);
       const { response: { status } } = error;
       expect(status).toBe(404);
     }
