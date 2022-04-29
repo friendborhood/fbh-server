@@ -12,6 +12,7 @@ const {
   patchEntity,
   addTimeStamp,
 } = require('../../models/generic');
+const logger = require('../../logger');
 
 const OFFER_MODEL = 'offers';
 const router = Router();
@@ -36,7 +37,7 @@ router.get('/:offerId', async (req, res) => {
   return res.json(offer);
 });
 router.post('/', async (req, res) => {
-  console.log('started offer post request');
+  logger.info('started offer post request');
   try {
     const data = req.body;
     try {
@@ -44,7 +45,7 @@ router.post('/', async (req, res) => {
     } catch (e) {
       return res.status(400).json({ error: e.message });
     }
-    console.log(`try add offer with data ${JSON.stringify(data)}`);
+    logger.info(`try add offer with data ${JSON.stringify(data)}`);
     const newOfferId = await addUuidEntity({ data, modelName: OFFER_MODEL });
 
     return res.json({
@@ -52,7 +53,7 @@ router.post('/', async (req, res) => {
       offerId: newOfferId,
     });
   } catch (e) {
-    console.log(e.message);
+    logger.error(e.message);
     return res.status(500).json({ error: e.message });
   }
 });
