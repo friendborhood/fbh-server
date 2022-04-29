@@ -5,6 +5,7 @@ const getModel = require('../../services/firebase-api/get');
 const upsert = require('../../services/firebase-api/upsert');
 const add = require('../../services/firebase-api/add');
 const { findById } = require('../item');
+const logger = require('../../logger');
 
 const modelName = 'offers';
 const getDistanceFromOfferToTarget = (offer, target) => {
@@ -25,7 +26,6 @@ const sortOrdersByDistance = ({ offers, targetLocation }) => Object.values(offer
   });
 
 const validateOfferData = async (data) => {
-  console.log('validating offer data : ', data);
   const item = await findById(data.itemId);
   if (!item) {
     throw new Error(`Item with id ${data.itemId} was not found.`);
@@ -43,51 +43,51 @@ const validateOfferData = async (data) => {
       .required(),
   });
   await schema.validateAsync(data, { allowUnknown: true });
-  console.log('offer data is okay');
+  logger.info('offer data is okay');
 };
 
 const findAll = async () => {
-  console.log('getting model from db');
+  logger.info('getting model from db');
   const offerModel = await getModel(modelName);
   return offerModel;
 };
 
 const findByOfferId = async (index) => {
-  console.log('getting model from db');
+  logger.info('getting model from db');
   const offerModel = await getModel(modelName);
   const relevantOffer = offerModel[index];
   if (!relevantOffer) {
-    console.log('offer was not found');
+    logger.warn('offer was not found');
     return null;
   }
   return relevantOffer;
 };
 const findByCategory = async (categoryName) => {
   const offerModel = await getModel(modelName);
-  console.log(`try to find offers in ${categoryName}`);
-  console.log(offerModel);
+  logger.info(`try to find offers in ${categoryName}`);
+  logger.info(offerModel);
   const relevantOffers = Object.values(offerModel)
     .filter((offer) => offer.categoryName === categoryName);
   if (!relevantOffers) {
-    console.log(`offers in ${categoryName} were not found`);
+    logger.warn(`offers in ${categoryName} were not found`);
     return null;
   }
-  console.log(`offers in ${categoryName} were found `);
+  logger.info(`offers in ${categoryName} were found `);
 
   return relevantOffers;
 };
 const addItem = async (data) => {
-  console.log('adding item to db');
+  logger.info('adding item to db');
   const generatedId = uuid();
   await upsert(modelName, data, generatedId);
   return generatedId;
 };
 const deleteItem = async (index) => {
-  console.log('deleting item from db');
+  logger.info('deleting item from db');
   await add(modelName, null, index);
 };
 const patchItem = async (data, itemId) => {
-  console.log(`patching item ${itemId}, modifing data ${JSON.stringify(data)}`);
+  logger.info(`patching item ${itemId}, modifing data ${JSON.stringify(data)}`);
   await upsert(modelName, data, itemId);
 };
 module.exports = {

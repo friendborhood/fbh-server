@@ -1,11 +1,11 @@
 const Joi = require('joi');
+const logger = require('../../logger');
 const getModel = require('../../services/firebase-api/get');
 const upsert = require('../../services/firebase-api/upsert');
 
 const DEFAULT_SEARCH_RADIUS = 3;
 const modelName = 'users';
 const validateUserData = async (data) => {
-  console.log('validating user data : ', data);
   const schema = Joi.object({
     userName: Joi.string()
       .alphanum()
@@ -22,25 +22,25 @@ const validateUserData = async (data) => {
     imageUrl: Joi.string().uri(),
   });
   await schema.validateAsync(data);
-  console.log('user data okay');
+  logger.info('user data okay');
 };
 
 const findByName = async (userName) => {
-  console.log('getting model from db');
+  logger.info('getting model from db');
   const userModel = await getModel(modelName);
   const relevantUser = userModel[userName];
   if (!relevantUser) {
-    console.log('user not found');
+    logger.warn('user not found');
     return null;
   }
   return relevantUser;
 };
 const addUser = async (data, userName) => {
-  console.log('adding user to db');
+  logger.info('adding user to db');
   await upsert(modelName, { ...data, searchRadius: DEFAULT_SEARCH_RADIUS }, userName);
 };
 const patchUser = async (data, userName) => {
-  console.log(`patching user ${userName}, modifing data ${JSON.stringify(data)}`);
+  logger.info(`patching user ${userName}, modifing data ${JSON.stringify(data)}`);
   await upsert(modelName, data, userName);
 };
 module.exports = {
