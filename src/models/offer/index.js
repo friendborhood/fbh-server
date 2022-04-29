@@ -66,12 +66,11 @@ const findByCategory = async (categoryName) => {
   const offerModel = await getModel(modelName);
   logger.info(`try to find offers in ${categoryName}`);
   const relevantOffers = Object.entries(offerModel)
-    .filter((offer) => offer.categoryName === categoryName);
+    .filter(([, offer]) => offer.categoryName === categoryName);
   if (relevantOffers.length === 0) {
     logger.warn(`offers in ${categoryName} were not found`);
     return null;
   }
-  console.log(relevantOffers);
   logger.info(`offers in ${categoryName} were found `);
 
   return relevantOffers;
