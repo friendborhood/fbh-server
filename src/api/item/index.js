@@ -1,20 +1,25 @@
 /* eslint-disable consistent-return */
 const { Router } = require('express');
 const {
-  addItem,
   findByCategory, findById,
   findByName,
   findAll,
   getAllCategories,
   validateItemData,
-  deleteItem,
-  patchItem,
 } = require('../../models/item');
+const {
+  addUuidEntity,
+  deleteEntity,
+  patchEntity,
+} = require('../../models/generic');
+const logger = require('../../logger');
+
+const ITEM_MODEL = 'items';
 
 const router = Router();
 
 router.get('/', async (req, res) => {
-  console.log('try get all items');
+  logger.info('try get all items');
   const { categoryName } = req.query;
   const items = categoryName ? await findByCategory(categoryName) : await findAll();
   if (!items) {
@@ -23,9 +28,9 @@ router.get('/', async (req, res) => {
   return res.json(items);
 });
 router.get('/:itemId', async (req, res) => {
-  console.log('try get item');
+  logger.info('try get item');
   const { itemId } = req.params;
-  console.log(`item id: ${itemId}`);
+  logger.info(`item id: ${itemId}`);
   const item = await findById(itemId);
   if (!item) {
     return res.status(404).json({ msg: `Item with id ${itemId} was not found.` });
@@ -34,7 +39,7 @@ router.get('/:itemId', async (req, res) => {
 });
 router.get('/categories', async (req, res) => {
   const categories = await getAllCategories();
-  console.log(categories);
+  logger.info(categories);
   return res.json({ categories });
 });
 router.post('/', async (req, res) => {
@@ -45,53 +50,53 @@ router.post('/', async (req, res) => {
     } catch (e) {
       return res.status(400).json({ error: e.message });
     }
-    console.log(`try add item by name ${data.itemName}`);
+    logger.info(`try add item by name ${data.itemName}`);
     const isExist = await findByName(data.itemName);
     if (isExist) {
       return res.status(400).json({ msg: `Item name ${data.itemName} already exists. item name must be unique` });
     }
-    console.log(`try add item with data ${JSON.stringify(data)}`);
-    const newItemId = await addItem(data);
+    logger.info(`try add item with data ${JSON.stringify(data)}`);
+    const newItemId = await addUuidEntity({ data, modelName: ITEM_MODEL });
 
     return res.json({
       msg: 'item was added to database successfully',
       itemId: newItemId,
     });
   } catch (e) {
-    console.log(e.message);
+    logger.error(e.message);
     return res.status(500).json({ error: e.message });
   }
 });
 
 router.delete('/:itemId', async (req, res) => {
-  console.log('try get item');
+  logger.info('try get item');
   const { itemId } = req.params;
-  console.log(`item id: ${itemId}`);
+  logger.info(`item id: ${itemId}`);
   const item = await findById(itemId);
   if (!item) {
     return res.status(404).json({ msg: `Item with id ${itemId} was not found.` });
   }
-  await deleteItem(itemId);
+  await deleteEntity({ modelName: ITEM_MODEL, id: itemId });
   return res.status(200).json({ msg: `item with id:${itemId} was deleted` });
 });
 
 router.patch('/:itemId', async (req, res) => {
   try {
-    console.log('try get item');
+    logger.info('try get item');
     const { itemId } = req.params;
-    console.log(`item id: ${itemId}`);
+    logger.info(`item id: ${itemId}`);
     const item = await findById(itemId);
     if (!item) {
       return res.status(404).json({ msg: `Item with id ${itemId} was not found.` });
     }
     const data = req.body;
-    await patchItem(data, itemId);
+    await patchEntity({ data, modelName: ITEM_MODEL, entityId: itemId });
     return res.json({
       msg: 'item was updated in database successfully',
       itemId,
     });
   } catch (e) {
-    console.log(e.message);
+    logger.error(e.message);
     return res.status(500).json({ error: e.message });
   }
 });

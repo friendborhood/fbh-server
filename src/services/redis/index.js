@@ -1,4 +1,5 @@
 const { createClient } = require('redis');
+const logger = require('../../logger');
 require('dotenv').config();
 
 class RedisService {
@@ -8,7 +9,7 @@ class RedisService {
 
   async init() {
     if (!this.created) {
-      console.log('try init redis');
+      logger.info('try init redis');
       const redisUrl = process.env.REDIS_URL;
       if (redisUrl) {
         this.client = createClient({ url: redisUrl });
@@ -17,18 +18,18 @@ class RedisService {
       }
       await this.client.connect();
       await this.client.flushDb();
-      console.log('success init redis');
+      logger.info('success init redis');
       this.created = true;
     }
   }
 
   async removeKey(key) {
-    console.log(`removing from cache ${key}`);
+    logger.info(`removing from cache ${key}`);
     await this.client.del(key);
   }
 
   async setKey(key, value) {
-    console.log(`adding to cache ${key} with value ${value}`);
+    logger.info(`adding to cache ${key} with value ${value}`);
     await this.client.set(key, value);
   }
 

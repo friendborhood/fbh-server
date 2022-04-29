@@ -140,7 +140,7 @@
               }
             ],
             "tags": ["Item"],
-            "summary": "Get all items",
+            "summary": "Get all/filtered items",
             "responses": {
               "200": {
                 "description": "OK"
@@ -216,6 +216,148 @@
             }
           }
         }
+    },
+    "/offer": {
+      "post": {
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Add offer to DB",
+            "schema": {
+              "$ref": "#/definitions/Offer"
+            }
+          }
+        ],
+        "tags": ["Offer"],
+        "summary": "Add a new offer to DB",
+        "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{      
+                  "type": "object",
+                  "$ref": "#/definitions/Offer"
+                },
+                  "required": true
+              }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created"
+          }
+        }
+      },
+      "get": {
+        "parameters": [
+          {
+            "name": "categoryName",
+            "in": "query",
+            "required": false,
+            "description": "Category Name of the offer we want to find",
+            "type": "string"
+          }
+        ],
+        "tags": ["Offer"],
+        "summary": "Get all/filtered Offers",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/offer/in-area/{userName}": {
+      "get": {
+        "parameters": [
+          {
+            "name": "userName",
+            "in": "path",
+            "required": true,
+            "description": "ID of user that who searches offers in his area",
+            "type": "string"
+          },
+          {
+            "name": "categoryName",
+            "in": "query",
+            "required": false,
+            "description": "Category Name of the offer we want to find",
+            "type": "string"
+          },
+          {
+            "name": "radius",
+            "in": "query",
+            "required": true,
+            "description": "Maximum radius limit of offers in area",
+            "type": "integer"
+          }
+        ],
+        "tags": ["Offer"],
+        "summary": "Get all/filtered Offers",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/offer/{offerId}": {
+      "patch": {
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "description": "patch offer",
+              "schema": {
+                "$ref": "#/definitions/Offer"
+              }
+            }
+          ],
+          "tags": ["Offer"],
+          "summary": "patch offer",
+          "requestBody":{
+              "content":{
+                "application/json":{
+                  "schema":{      
+                    "type": "object",
+                    "$ref": "#/definitions/Offer"
+                  },
+                    "required":false
+                }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Created"
+            }
+          }
+        
+      },
+      "delete": {
+        "parameters": [
+          {
+            "name": "offerId",
+            "in": "path",
+            "required": true,
+            "description": "Delete offer from DB"
+          }
+        ],
+        "tags": ["Offer"],
+        "summary": "Delete offer by id",
+        "responses": {
+          "200": {
+            "description": "Deleted"
+            },
+          "401": {
+            "description": "Unauthorized"
+            },
+          "404": {
+            "description": "id not found"
+            }
+          }
+        }
     }
       },
       "definitions": {
@@ -250,8 +392,7 @@
             "searchRadius": {
               "type": "integer"
             },
-            "location":
-          {
+            "location": {
             "type": "object",
             "properties": {
               "address": {
@@ -265,7 +406,7 @@
               },
               "lng": {
                 "type": "number"
-              }
+                }
               }
             }
           }
@@ -293,13 +434,57 @@
               }
             }
           },
-          "categoryName":
-          {
+          "categoryName": {
             "type": "string"
           }
       },
       "required": ["itemId"]
-    }
+    },
+    "Offer": {
+      "properties": {
+        "itemId": {
+          "type": "string"
+        },
+        "imageUrl": {
+          "type": "string"
+        },
+        "priceAsked":{
+          "type": "integer"
+        },
+        "categoryName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "condition": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "location": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string"
+            },
+            "geoCode": {
+              "type": "object",
+              "properties": {
+                "lat": {
+                  "type": "number"
+                },
+                "lng": {
+                  "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+    "required": ["offerId"]
+  }
     },
     "tags": [
       {
@@ -309,6 +494,10 @@
       {
         "name": "Item",
         "description": "API for item in the system"
+      },
+      {
+        "name": "Offer",
+        "description": "API for offers in the system"
       }
     ],
     "schemes": ["http", "https"],
