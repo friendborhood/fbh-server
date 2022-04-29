@@ -69,7 +69,7 @@ const findByCategory = async (categoryName) => {
   const relevantOffers = Object.values(offerModel)
     .filter((offer) => offer.categoryName === categoryName);
   if (!relevantOffers) {
-    logger.info(`offers in ${categoryName} were not found`);
+    logger.warn(`offers in ${categoryName} were not found`);
     return null;
   }
   logger.info(`offers in ${categoryName} were found `);

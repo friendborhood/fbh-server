@@ -40,7 +40,7 @@ const findByName = async (itemName) => {
     .find((item) => item.itemName === itemName);
 
   if (!relevantItem) {
-    logger.info(`item ${itemName} was not found`);
+    logger.warn(`item ${itemName} was not found`);
     return null;
   }
   logger.info(`item ${itemName} was  found `);
