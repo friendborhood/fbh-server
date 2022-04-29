@@ -48,15 +48,6 @@ const mockDataOffersInArea = [
       },
     },
   },
-
-  {
-    name: 'Modiin',
-    location: {
-      geoCode: {
-        lat: -36.23905226945528, lng: 174.6325671519025,
-      },
-    },
-  },
   {
     name: 'Pizza Lila',
     location: {
