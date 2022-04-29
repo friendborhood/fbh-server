@@ -14,7 +14,8 @@ const deleteEntity = async ({ modelName, id }) => {
   await add(modelName, null, id);
 };
 const patchEntity = async ({ data, modelName, entityId }) => {
-  await upsert(modelName, data, entityId);
+  const timeStampedData = addTimeStamp(data);
+  await upsert(modelName, timeStampedData, entityId);
 };
 const formatKeyToJsonArray = (objectsArray, idKeyName = 'id') => objectsArray
   .map((object) => ({ ...object[1], [idKeyName]: object[0] }));
