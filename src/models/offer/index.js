@@ -6,19 +6,19 @@ const upsert = require('../../services/firebase-api/upsert');
 const add = require('../../services/firebase-api/add');
 const { findById } = require('../item');
 const logger = require('../../logger');
-const { formatKeyToJsonArray } = require('../generic');
+const { formatKeyToJsonArray, parseJsonToArrayWithKeys } = require('../generic');
 
 const modelName = 'offers';
 const getDistanceFromOfferToTarget = (offer, target) => {
   const { location: { geoCode: offerGeoCode } } = offer;
   return distanceTo(offerGeoCode, target);
 };
-const filterOffersByArea = ({ offers, radiusInMeters, targetLocation }) => offers.filter(
+const filterOffersByArea = ({ offers, radiusInMeters, targetLocation }) => (offers ? offers.filter(
   (offer) => {
     const isInsideCircle = insideCircle(offer.location.geoCode, targetLocation, radiusInMeters);
     return isInsideCircle;
   },
-);
+) : []);
 
 const sortOffersByDistance = ({ offers, targetLocation }) => (offers)
   .sort((offerA, offerB) => {
@@ -51,7 +51,8 @@ const validateOfferData = async (data) => {
 const findAll = async () => {
   logger.info('getting model from db');
   const offerModel = await getModel(modelName);
-  return formatKeyToJsonArray(offerModel);
+  const formattedOffers = parseJsonToArrayWithKeys(offerModel);
+  return formattedOffers;
 };
 
 const findByOfferId = async (index) => {
@@ -70,10 +71,10 @@ const findByCategory = async (categoryName) => {
   const relevantOffers = Object.entries(offerModel)
     .filter(([, offer]) => offer.categoryName === categoryName);
   if (relevantOffers.length === 0) {
-    logger.warn(`offers in ${categoryName} were not found`);
+    logger.warn(`offers by category ${categoryName} were not found`);
     return null;
   }
-  logger.info(`offers in ${categoryName} were found `);
+  logger.info(`offers by category ${categoryName} were found `);
 
   return formatKeyToJsonArray(relevantOffers);
 };

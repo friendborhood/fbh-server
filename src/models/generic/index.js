@@ -19,7 +19,13 @@ const patchEntity = async ({ data, modelName, entityId }) => {
 const formatKeyToJsonArray = (objectsArray, idKeyName = 'id') => objectsArray
   .map((object) => ({ ...object[1], [idKeyName]: object[0] }));
 
+const parseJsonToArrayWithKeys = (json) => {
+  const jsonAsArray = Object.entries(json);
+  return formatKeyToJsonArray(jsonAsArray);
+};
+
 module.exports = {
+  parseJsonToArrayWithKeys,
   formatKeyToJsonArray,
   addUuidEntity,
   deleteEntity,
