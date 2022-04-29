@@ -33,6 +33,12 @@ router.get('/in-area/:userName', async (req, res) => {
   try {
     const { userName } = req.params;
     const { categoryName = null, radius } = req.query;
+    if (!userName) {
+      return res.status(400).json({ msg: 'must provide userName' });
+    }
+    if (!radius) {
+      return res.status(400).json({ msg: 'must provide radius' });
+    }
     logger.info('try get offers in area', { userName, radius, categoryName });
     const user = await findByName(userName);
     if (!user) {

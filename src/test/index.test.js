@@ -1,7 +1,16 @@
 require('dotenv').config();
 const logger = require('../logger');
+const { validateOfferData } = require('../models/offer');
 const {
-  USER_END_POINT, NON_EXISTING_USER_ID, EXISTING_USER_ID, testNetwork, COMPLEX_OBJECT,
+  USER_END_POINT,
+  NON_EXISTING_USER_ID,
+  EXISTING_USER_ID,
+  testNetwork,
+  COMPLEX_OBJECT,
+  TEST_OFFERS_CATEGORY,
+  OFFERS_END_POINT,
+  TEST_USER,
+  TEST_RADIUS,
 } = require('./utils');
 require('../api');
 
@@ -25,5 +34,19 @@ describe('Basic sanity server CRUD tests', () => {
     logger.info('i am an info', COMPLEX_OBJECT);
     logger.warn('i am a warning ', { warning: 'warn' });
     logger.error(' i am an error', { someError: ['error1', 'error2'] });
+  });
+
+  it('Offers in area - E2E', async () => {
+    const { data: offers } = await testNetwork.get(`${OFFERS_END_POINT}/in-area/${TEST_USER}`, {
+      params: {
+        category: TEST_OFFERS_CATEGORY,
+        radius: TEST_RADIUS,
+      },
+    });
+    await Promise.all(offers.map((offer) => validateOfferData(offer)));
+    expect(offers.length).toBe(2);
+  });
+  it('Offers in area - Mock', async () => {
+
   });
 });
