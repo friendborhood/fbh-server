@@ -76,7 +76,7 @@ router.delete('/:itemId', async (req, res) => {
   if (!item) {
     return res.status(404).json({ msg: `Item with id ${itemId} was not found.` });
   }
-  await deleteEntity({ ITEM_MODEL, itemId });
+  await deleteEntity({ modelName: ITEM_MODEL, id: itemId });
   return res.status(200).json({ msg: `item with id:${itemId} was deleted` });
 });
 

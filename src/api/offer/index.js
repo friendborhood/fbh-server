@@ -101,7 +101,7 @@ router.delete('/:offerId', async (req, res) => {
   if (!offer) {
     return res.status(404).json({ msg: `Offer with id ${offerId} was not found.` });
   }
-  await deleteEntity({ model: OFFER_MODEL, id: offerId });
+  await deleteEntity({ modelName: OFFER_MODEL, id: offerId });
   return res.status(200).json({ msg: `Offer with id:${offerId} was deleted` });
 });
 
@@ -115,7 +115,7 @@ router.patch('/:offerId', async (req, res) => {
       return res.status(404).json({ msg: `Offer with id ${offerId} was not found.` });
     }
     const data = req.body;
-    await patchEntity({ data, model: OFFER_MODEL, entityId: offerId });
+    await patchEntity({ data, modelName: OFFER_MODEL, entityId: offerId });
     return res.json({
       msg: 'offer was updated in database successfully',
       offerId,
