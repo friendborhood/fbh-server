@@ -45,7 +45,9 @@ router.get('/in-area/:userName', async (req, res) => {
   if (!offersInArea) {
     return res.status(404).json({ msg: 'No relevant offers were found.' });
   }
-  const orderedOffersInArea = sortOffersByDistance({ offers: offersInArea, userLocation });
+  const orderedOffersInArea = sortOffersByDistance(
+    { offers: offersInArea, targetLocation: userLocation },
+  );
   return res.json(orderedOffersInArea);
 });
 router.get('/:offerId', async (req, res) => {

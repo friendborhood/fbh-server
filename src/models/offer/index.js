@@ -6,6 +6,7 @@ const upsert = require('../../services/firebase-api/upsert');
 const add = require('../../services/firebase-api/add');
 const { findById } = require('../item');
 const logger = require('../../logger');
+const { formatKeyToJsonArray } = require('../generic');
 
 const modelName = 'offers';
 const getDistanceFromOfferToTarget = (offer, target) => {
@@ -13,14 +14,14 @@ const getDistanceFromOfferToTarget = (offer, target) => {
   return distanceTo(offerGeoCode, target);
 };
 const filterOffersByArea = ({ offers, radiusInMeters, targetLocation }) => offers.filter(
-  ([, offer]) => {
+  (offer) => {
     const isInsideCircle = insideCircle(offer.location.geoCode, targetLocation, radiusInMeters);
     return isInsideCircle;
   },
 );
 
-const sortOffersByDistance = ({ offers, targetLocation }) => Object.entries(offers)
-  .sort(([, offerA], [, offerB]) => {
+const sortOffersByDistance = ({ offers, targetLocation }) => (offers)
+  .sort((offerA, offerB) => {
     const distanceFromTargetToA = getDistanceFromOfferToTarget(offerA, targetLocation);
     const distanceFromTargetToB = getDistanceFromOfferToTarget(offerB, targetLocation);
     return distanceFromTargetToA - distanceFromTargetToB;
@@ -50,7 +51,7 @@ const validateOfferData = async (data) => {
 const findAll = async () => {
   logger.info('getting model from db');
   const offerModel = await getModel(modelName);
-  return offerModel;
+  return formatKeyToJsonArray(offerModel);
 };
 
 const findByOfferId = async (index) => {
@@ -74,7 +75,7 @@ const findByCategory = async (categoryName) => {
   }
   logger.info(`offers in ${categoryName} were found `);
 
-  return relevantOffers;
+  return formatKeyToJsonArray(relevantOffers);
 };
 const addItem = async (data) => {
   logger.info('adding item to db');
