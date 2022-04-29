@@ -20,7 +20,7 @@ const mockDataOffersInArea = [
     name: '4',
     location: {
       geoCode: {
-        lat: 31.27566902435525, lon: 34.75106102314429,
+        lat: 31.27566902435525, lng: 34.75106102314429,
       },
     },
   },
@@ -28,7 +28,7 @@ const mockDataOffersInArea = [
     name: '1',
     location: {
       geoCode: {
-        lat: 32.1716207368198, lon: 34.847595734248976,
+        lat: 32.1716207368198, lng: 34.847595734248976,
       },
     },
   },
@@ -36,7 +36,7 @@ const mockDataOffersInArea = [
     name: '3',
     location: {
       geoCode: {
-        lat: 38.68283263477214, lon: -9.063595043382376,
+        lat: 38.68283263477214, lng: -9.063595043382376,
       },
     },
   },
@@ -44,7 +44,7 @@ const mockDataOffersInArea = [
     name: '8',
     location: {
       geoCode: {
-        lat: 28.19485862635811, lon: 18.348766841649137,
+        lat: 28.19485862635811, lng: 18.348766841649137,
       },
     },
   },
@@ -52,7 +52,7 @@ const mockDataOffersInArea = [
     name: '5',
     location: {
       geoCode: {
-        lat: 31.768282467383457, lon: 35.178790083757946,
+        lat: 31.768282467383457, lng: 35.178790083757946,
       },
     },
   },
@@ -60,7 +60,7 @@ const mockDataOffersInArea = [
     name: '6',
     location: {
       geoCode: {
-        lat: 31.903431003993127, lon: 34.98240458871311,
+        lat: 31.903431003993127, lng: 34.98240458871311,
       },
     },
   },
@@ -68,7 +68,7 @@ const mockDataOffersInArea = [
     name: '1',
     location: {
       geoCode: {
-        lat: 32.06969216175387, lon: 34.77153511285643,
+        lat: 32.06969216175387, lng: 34.77153511285643,
       },
     },
 
@@ -76,7 +76,7 @@ const mockDataOffersInArea = [
 
 ];
 const mockTargetLocation = {
-  lat: 32.06969216175387, lon: 34.77153511285643,
+  lat: 32.06969216175387, lng: 34.77153511285643,
 };
 const mockRadius = 250000;
 module.exports = {
