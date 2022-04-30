@@ -25,12 +25,9 @@ const sortOffersByDistance = ({ offers, targetLocation }) => {
     ...offer,
     distanceFromUser: getDistanceFromOfferToTarget(offer, targetLocation),
   }));
-  console.log(offersWithDistanceFromUser);
-  offersWithDistanceFromUser.sort((offerA, offerB) => {
-    console.log(offerA.distanceFromUser - offerB.distanceFromUser);
-    return offerA.distanceFromUser - offerB.distanceFromUser;
-  });
-  console.log(offersWithDistanceFromUser);
+  offersWithDistanceFromUser.sort(
+    (offerA, offerB) => offerA.distanceFromUser - offerB.distanceFromUser,
+  );
   return offersWithDistanceFromUser;
 };
 
