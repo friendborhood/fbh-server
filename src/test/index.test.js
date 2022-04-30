@@ -47,6 +47,7 @@ describe('Basic sanity server CRUD tests', () => {
       },
     });
     await Promise.all(offers.map((offer) => validateOfferData(offer)));
+    console.log(offers);
     expect(offers.length).toBe(2);
   });
   it('Offers in area - Mock', () => {
@@ -57,10 +58,12 @@ describe('Basic sanity server CRUD tests', () => {
         targetLocation: mockTargetLocation,
       },
     );
-    sortOffersByDistance({ offers: relevantOffers, targetLocation: mockTargetLocation });
-    expect(relevantOffers[0].name).toBe('Pizza Lila');
-    expect(relevantOffers[1].name).toBe('Taizu');
-    expect(relevantOffers[2].name).toBe('Safari RamatGan');
-    expect(relevantOffers.length).toBe(3);
+    const sortedOffers = sortOffersByDistance(
+      { offers: relevantOffers, targetLocation: mockTargetLocation },
+    );
+    expect(sortedOffers[0].name).toBe('Pizza Lila');
+    expect(sortedOffers[1].name).toBe('Taizu');
+    expect(sortedOffers[2].name).toBe('Safari RamatGan');
+    expect(sortedOffers.length).toBe(3);
   });
 });
