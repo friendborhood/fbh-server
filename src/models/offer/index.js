@@ -20,12 +20,16 @@ const filterOffersByArea = ({ offers, radiusInMeters, targetLocation }) => (offe
   },
 ) : []);
 
-const sortOffersByDistance = ({ offers, targetLocation }) => (offers)
-  .sort((offerA, offerB) => {
-    const distanceFromTargetToA = getDistanceFromOfferToTarget(offerA, targetLocation);
-    const distanceFromTargetToB = getDistanceFromOfferToTarget(offerB, targetLocation);
-    return distanceFromTargetToA - distanceFromTargetToB;
-  });
+const sortOffersByDistance = ({ offers, targetLocation }) => {
+  const offersWithDistanceFromUser = offers.map((offer) => ({
+    ...offer,
+    distanceFromUser: getDistanceFromOfferToTarget(offer, targetLocation),
+  }));
+  offersWithDistanceFromUser.sort(
+    (offerA, offerB) => offerA.distanceFromUser - offerB.distanceFromUser,
+  );
+  return offersWithDistanceFromUser;
+};
 
 const validateOfferData = async (data) => {
   const item = await findById(data.itemId);
