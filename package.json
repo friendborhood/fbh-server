@@ -7,7 +7,7 @@
     "dev": "npm run build && nodemon dist/src/api",
     "linter": "./node_modules/.bin/eslint .",
     "build": "./node_modules/typescript/bin/tsc --project tsconfig.json",
-    "start": "node src/api",
+    "start": "node dist/src/api",
     "postinstall": "npm run build",
     "test": "jest --forceExit"
   },
