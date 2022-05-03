@@ -5,9 +5,10 @@
   "main": "./src/index.js",
   "scripts": {
     "test": "jest --forceExit",
-    "dev": "nodemon src/api",
+    "dev": "npm run build && nodemon dist/src/api",
     "linter": "./node_modules/.bin/eslint .",
-    "start": "node src/api"
+    "build": "tsc --project tsconfig.json",
+    "start": "npm run build && node dist/src/api"
   },
   "repository": {
     "type": "git",
@@ -40,6 +41,7 @@
     "redis": "^4.0.4",
     "short-uuid": "^4.2.0",
     "swagger-ui-express": "^4.3.0",
+    "typescript": "^4.6.4",
     "winston": "^3.7.2"
   },
   "engines": {
@@ -48,5 +50,11 @@
   "keywords": [
     "example",
     "heroku"
-  ]
+  ],
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/parser": "^5.22.0",
+    "ts-jest": "^27.1.4",
+    "typescript-eslint": "^0.0.1-alpha.0"
+  }
 }
