@@ -4,11 +4,11 @@
   "description": "",
   "main": "./src/index.js",
   "scripts": {
-    "test": "jest --forceExit",
     "dev": "npm run build && nodemon dist/src/api",
     "linter": "./node_modules/.bin/eslint .",
     "build": "tsc --project tsconfig.json",
-    "start": "npm run build && node dist/src/api"
+    "start": "npm run build && node dist/src/api",
+    "test": "npm run build && jest --forceExit"
   },
   "repository": {
     "type": "git",
