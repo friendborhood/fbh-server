@@ -8,7 +8,7 @@
     "linter": "./node_modules/.bin/eslint .",
     "build": "tsc --project tsconfig.json",
     "start": "npm run build && node dist/src/api",
-    "test": "npm run build && jest --forceExit"
+    "test": "jest --forceExit"
   },
   "repository": {
     "type": "git",
