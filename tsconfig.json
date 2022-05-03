@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+        "incremental": true,
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "target": "es6",
+        "lib": [
+            "es2020"
+        ],
+        "moduleResolution": "node",
+        "sourceMap": false,
+        "outDir": "./dist",
+        "baseUrl": ".",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "resolveJsonModule": true,
+        "allowJs": true,
+        "paths": {
+            "*": [
+                "node_modules/*"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*", 
+        "src/*"
+    ],
+    "exclude": [
+        "**/*.test.*",
+        "*.test.*"
+    ]
+
+}

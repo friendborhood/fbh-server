@@ -1,3 +1,5 @@
+import '../api';
+
 require('dotenv').config();
 const logger = require('../logger');
 const { validateOfferData, filterOffersByArea, sortOffersByDistance } = require('../models/offer');
@@ -15,7 +17,6 @@ const {
   mockDataOffersInArea,
   mockRadius,
 } = require('./utils');
-require('../api');
 
 jest.setTimeout(1000 * 10);
 describe('Basic sanity server CRUD tests', () => {
