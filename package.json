@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "npm run build && nodemon dist/src/api",
     "linter": "./node_modules/.bin/eslint .",
-    "build": "tsc --project tsconfig.json",
-    "start": "npm run build && node dist/src/api",
+    "build": "./node_modules/typescript/bin/tsc --project tsconfig.json",
+    "start": "node api",
+    "postinstall": "npm run build",
     "test": "jest --forceExit"
   },
   "repository": {
@@ -35,6 +36,7 @@
     "joi": "^17.6.0",
     "moment": "^2.29.3",
     "moment-timezone": "^0.5.34",
+    "node-ts": "^5.1.2",
     "nodemailer": "^6.7.2",
     "nodemon": "^2.0.15",
     "openapi": "^1.0.1",
