@@ -31,7 +31,7 @@ module.exports = {
       },
     ],
   },
-  ignorePatterns: ['lib/*', 'node_modules/', 'jest.config.js'],
+  ignorePatterns: ['dist/*', 'lib/*', 'node_modules/', 'jest.config.js'],
   settings: {
     'import/extensions': [
       'error',
