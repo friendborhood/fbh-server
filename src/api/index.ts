@@ -1,8 +1,11 @@
-const express = require('express');
-const cors = require('cors');
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('../../swagger.json');
-const logger = require('../logger');
+import express from 'express';
+import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
+import { authMiddleware } from '../auth';
+
+import swaggerDocument from '../../swagger.json';
+
+import logger from '../logger';
 
 const app = express();
 app.use(express.json());
@@ -15,6 +18,7 @@ app.use(
   swaggerUi.setup(swaggerDocument),
 );
 app.get('/', (req, res) => {
+  authMiddleware();
   res.json({
     message: 'Welcome to FriendBorHood API! 🐿️',
   });
