@@ -5,6 +5,7 @@ export const testNetwork = axios.create({ baseURL: 'http://localhost:3000' });
 export const addTokenToNetwork = (newToken) => {
   testNetwork.defaults.headers.common.Authorization = `Bearer ${newToken}`;
 };
+export const TEST_API_KEY = process.env.API_KEY;
 export const USER_END_POINT = 'user';
 export const EXISTING_USER_ID = '21ada0dc-ca23-4002-881d-a60a006eb4f5';
 export const NON_EXISTING_USER_ID = '111';

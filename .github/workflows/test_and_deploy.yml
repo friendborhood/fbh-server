@@ -18,6 +18,7 @@ jobs:
         env: 
           FIRE_BASE: ${{secrets.FIRE_BASE}}
           AUTH_ACCESS_SECRET_KEY: ${{secrets.AUTH_ACCESS_SECRET_KEY}}
+          API_KEY: ${{secrets.API_KEY}}
 
   deploy:
     if: github.ref == 'refs/heads/main'

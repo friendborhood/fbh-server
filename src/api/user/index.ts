@@ -1,7 +1,7 @@
 /* eslint-disable import/no-import-module-exports */
 /* eslint-disable consistent-return */
 import { Router } from 'express';
-import { encodeToJwt } from '../../auth';
+import { encodeToJwt, validateApiKey } from '../../auth';
 import logger from '../../logger';
 import {
   findByName, addUser, validateUserData, patchUser,
@@ -23,6 +23,11 @@ router.get('/:userName', async (req, res) => {
 });
 router.post('/login/:userName', async (req, res) => {
   const { userName } = req.params;
+  const { apiKey } = req.body;
+  const isVerifiedToLogIn = validateApiKey(apiKey);
+  if (!isVerifiedToLogIn) {
+    return res.status(403).json('your api key is not verified for log in or no api key was provided.');
+  }
   const userExists = await findByName(userName);
   if (!userExists) {
     res.status(404).json({ error: `User name ${userName} was not found.` });
