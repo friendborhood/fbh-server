@@ -1,9 +1,7 @@
 import '../api';
-
-require('dotenv').config();
-const logger = require('../logger');
-const { validateOfferData, filterOffersByArea, sortOffersByDistance } = require('../models/offer');
-const {
+import logger from '../logger';
+import { validateOfferData, filterOffersByArea, sortOffersByDistance } from '../models/offer';
+import {
   USER_END_POINT,
   NON_EXISTING_USER_ID,
   EXISTING_USER_ID,
@@ -16,7 +14,10 @@ const {
   mockTargetLocation,
   mockDataOffersInArea,
   mockRadius,
-} = require('./utils');
+  addTokenToNetwork,
+} from './utils';
+
+require('dotenv').config();
 
 jest.setTimeout(1000 * 10);
 describe('Basic sanity server CRUD tests', () => {
@@ -41,7 +42,12 @@ describe('Basic sanity server CRUD tests', () => {
   });
 
   it('Offers in area - E2E', async () => {
-    const { data: offers } = await testNetwork.get(`${OFFERS_END_POINT}/in-area/${TEST_USER}`, {
+    const responseFromLogin = await testNetwork.post(`${USER_END_POINT}/login/${TEST_USER}`);
+    const { token } = responseFromLogin.data;
+    addTokenToNetwork(token);
+    console.log(testNetwork.defaults.headers);
+    console.log('token is ', token);
+    const { data: offers } = await testNetwork.get(`${OFFERS_END_POINT}/in-area`, {
       params: {
         categoryName: TEST_OFFERS_CATEGORY,
         radius: TEST_RADIUS,
