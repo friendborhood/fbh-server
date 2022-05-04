@@ -23,6 +23,11 @@ router.get('/:userName', async (req, res) => {
 });
 router.post('/login/:userName', async (req, res) => {
   const { userName } = req.params;
+  const userExists = await findByName(userName);
+  if (!userExists) {
+    res.status(404).json({ error: `User name ${userName} was not found.` });
+    return;
+  }
   logger.info(`try login user by name ${userName}`);
   try {
     const token = encodeToJwt({ userName });
