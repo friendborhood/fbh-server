@@ -9,6 +9,19 @@
         "url": "https://opensource.org/licenses/MIT"
       }
     },
+    "components": {
+  "securitySchemes": {
+    "bearerAuth": {
+      "type": "http",
+      "scheme": "bearer",
+      "bearerFormat": "JWT"
+    }
+  }
+},
+    "security": {
+      "bearerAuth": []  
+    },
+
     "paths": {
       "/user": {
         "parameters": [
@@ -43,19 +56,42 @@
         }
       }
     },
+    "/user/login/{userName}": {
+      "parameters": [
+          {
+            "name": "userName",
+            "in": "path",
+            "required": true,
+            "description": "Name of user that we want to find",
+            "type": "string"
+          }
+        ],
+    "post": {
+      "tags": ["User"],
+      "summary": "Get token by name",
+      "responses": {
+        "200": {
+          "description": "OK",
+          "schema": {
+            "$ref": "#/definitions/User"
+          }
+        }
+      }
+    }
+  },
         "/user/{userName}": {
             "parameters": [
                 {
                   "name": "userName",
                   "in": "path",
                   "required": true,
-                  "description": "ID of user that we want to find",
+                  "description": "Name of user that we want to find",
                   "type": "string"
                 }
               ],
           "get": {
             "tags": ["User"],
-            "summary": "Get user by id",
+            "summary": "Get user by Name",
             "responses": {
               "200": {
                 "description": "OK",
@@ -268,16 +304,12 @@
         }
       }
     },
-    "/offer/in-area/{userName}": {
+    "/offer/in-area": {
       "get": {
+        "security": {
+          "bearerAuth" :[]
+        },
         "parameters": [
-          {
-            "name": "userName",
-            "in": "path",
-            "required": true,
-            "description": "ID of user that who searches offers in his area",
-            "type": "string"
-          },
           {
             "name": "categoryName",
             "in": "query",
@@ -291,6 +323,13 @@
             "required": true,
             "description": "Maximum radius limit of offers in area",
             "type": "integer"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "jwt",
+            "type": "string"
           }
         ],
         "tags": ["Offer"],
