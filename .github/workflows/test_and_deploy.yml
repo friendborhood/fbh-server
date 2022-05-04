@@ -15,9 +15,9 @@ jobs:
       - run: npm i
       - run: npm run linter
       - run: npm run test
-      
         env: 
           FIRE_BASE: ${{secrets.FIRE_BASE}}
+          AUTH_ACCESS_SECRET_KEY: ${{secrets.AUTH_ACCESS_SECRET_KEY}}
 
   deploy:
     if: github.ref == 'refs/heads/main'
