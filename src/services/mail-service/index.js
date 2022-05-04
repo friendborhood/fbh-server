@@ -1,3 +1,4 @@
+const logger = require('../../logger');
 const {
   transporter, mailOptions, getRandomCode, FBH_EMAIL,
 } = require('./utils');
@@ -14,7 +15,7 @@ const sendMail = async ({ mailSubject, content, userEmail }) => {
       from: FBH_EMAIL, subject: mailSubject, to: userEmail, text: content,
     });
   } catch (e) {
-    console.error('mail error', e);
+    logger.error('mail error', e);
   }
 };
 

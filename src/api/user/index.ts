@@ -1,11 +1,13 @@
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable consistent-return */
-const { Router } = require('express');
-const logger = require('../../logger');
-const {
+import { Router } from 'express';
+import { encodeToJwt, validateApiKey } from '../../auth';
+import logger from '../../logger';
+import {
   findByName, addUser, validateUserData, patchUser,
-} = require('../../models/user');
-const { sendAuthCodeToUserEmail, sendMail } = require('../../services/mail-service');
-const CacheService = require('../../services/redis');
+} from '../../models/user';
+import { sendAuthCodeToUserEmail, sendMail } from '../../services/mail-service';
+import CacheService from '../../services/redis';
 
 const router = Router();
 
@@ -19,7 +21,32 @@ router.get('/:userName', async (req, res) => {
   }
   return res.json(user);
 });
-
+router.post('/login/:userName', async (req, res) => {
+  const { userName } = req.params;
+  const { apiKey } = req.body;
+  const isVerifiedToLogIn = validateApiKey(apiKey);
+  if (!isVerifiedToLogIn) {
+    return res.status(403).json('your api key is not verified for log in or no api key was provided.');
+  }
+  const userExists = await findByName(userName);
+  if (!userExists) {
+    res.status(404).json({ error: `User name ${userName} was not found.` });
+    return;
+  }
+  logger.info(`try login user by name ${userName}`);
+  try {
+    const token = encodeToJwt({ userName });
+    return res.json({
+      message: 'success login',
+      token,
+    });
+  } catch (e) {
+    logger.error(e);
+    res.status(500).json({
+      error: e,
+    });
+  }
+});
 router.post('/auth/:userName', async (req, res) => {
   const { userName } = req.params;
   logger.info(`try get user by name ${userName}`);
@@ -65,11 +92,12 @@ router.get('/auth/validate/:userName', async (req, res) => {
       });
     }
     logger.info('correct code');
-
+    const token = encodeToJwt({ userName });
     // no need to await here
     CacheService.removeKey(userName);
 
     return res.json({
+      token,
       message: 'user entered correct code',
     });
   } catch (e) {

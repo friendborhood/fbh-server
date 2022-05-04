@@ -1,21 +1,26 @@
-const axios = require('axios');
+import axios from 'axios';
 
-const testNetwork = axios.create({ baseURL: 'http://localhost:3000' });
-const USER_END_POINT = 'user';
-const EXISTING_USER_ID = '21ada0dc-ca23-4002-881d-a60a006eb4f5';
-const NON_EXISTING_USER_ID = '111';
-const TEST_OFFERS_CATEGORY = 'TestCleaning';
-const OFFERS_END_POINT = 'offers';
-const TEST_USER = 'omergery1996';
-const TEST_RADIUS = 3000000;
-const COMPLEX_OBJECT = {
+export const testNetwork = axios.create({ baseURL: 'http://localhost:3000' });
+
+export const addTokenToNetwork = (newToken) => {
+  testNetwork.defaults.headers.common.Authorization = `Bearer ${newToken}`;
+};
+export const TEST_API_KEY = process.env.API_KEY;
+export const USER_END_POINT = 'user';
+export const EXISTING_USER_ID = '21ada0dc-ca23-4002-881d-a60a006eb4f5';
+export const NON_EXISTING_USER_ID = '111';
+export const TEST_OFFERS_CATEGORY = 'TestCleaning';
+export const OFFERS_END_POINT = 'offers';
+export const TEST_USER = 'omergery1996';
+export const TEST_RADIUS = 3000000;
+export const COMPLEX_OBJECT = {
   placeholder: {
     placeholder2: {
       placeholder3: 'hey from logger',
     },
   },
 };
-const mockDataOffersInArea = [
+export const mockDataOffersInArea = [
 
   {
     name: 'Auckland',
@@ -60,24 +65,10 @@ const mockDataOffersInArea = [
   },
 
 ];
-const mockTargetLocation = {
+export const mockTargetLocation = {
   name: 'Dalida',
   lat: 32.06005947945416,
   lng: 34.77300700597368,
 
 };
-const mockRadius = 25000;
-module.exports = {
-  mockRadius,
-  mockDataOffersInArea,
-  mockTargetLocation,
-  TEST_RADIUS,
-  TEST_USER,
-  testNetwork,
-  TEST_OFFERS_CATEGORY,
-  USER_END_POINT,
-  EXISTING_USER_ID,
-  NON_EXISTING_USER_ID,
-  COMPLEX_OBJECT,
-  OFFERS_END_POINT,
-};
+export const mockRadius = 25000;
