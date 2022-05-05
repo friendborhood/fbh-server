@@ -82,7 +82,7 @@ router.post('/login', async (req, res) => {
     });
   } catch (e) {
     return res.status(500).json({
-      error: e,
+      error: e.message,
     });
   }
 });
