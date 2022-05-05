@@ -10,8 +10,7 @@
     "start": "node dist/src/api",
     "postinstall": "npm run build",
     "test": "jest --forceExit",
-    "build-windows": "/node_modules/typescript/bin/tsc --project tsconfig.json",
-    "dev-windows": "npm run build-windows && nodemon dist/src/api"
+    "dev-windows": "nodemon src/api/index.ts"
   },
   "repository": {
     "type": "git",
