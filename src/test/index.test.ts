@@ -9,13 +9,10 @@ import {
   COMPLEX_OBJECT,
   TEST_OFFERS_CATEGORY,
   OFFERS_END_POINT,
-  TEST_USER,
   TEST_RADIUS,
   mockTargetLocation,
   mockDataOffersInArea,
   mockRadius,
-  addTokenToNetwork,
-  TEST_API_KEY,
 } from './utils';
 
 require('dotenv').config();
@@ -43,9 +40,6 @@ describe('Basic sanity server CRUD tests', () => {
   });
 
   it('Offers in area - E2E', async () => {
-    const responseFromLogin = await testNetwork.post(`${USER_END_POINT}/login/${TEST_USER}`, { apiKey: TEST_API_KEY });
-    const { token } = responseFromLogin.data;
-    addTokenToNetwork(token);
     const { data: offers } = await testNetwork.get(`${OFFERS_END_POINT}/in-area`, {
       params: {
         categoryName: TEST_OFFERS_CATEGORY,
