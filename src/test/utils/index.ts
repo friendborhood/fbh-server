@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const { TEST_TOKEN } = process.env;
+const { TEST_TOKEN } = process.env;
 export const testNetwork = axios.create({
   baseURL: 'http://localhost:3000',
   headers: {
