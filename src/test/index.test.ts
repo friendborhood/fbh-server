@@ -16,6 +16,7 @@ import {
   mockRadius,
   addTokenToNetwork,
   TEST_API_KEY,
+  encodeApiKey,
 } from './utils';
 
 require('dotenv').config();
@@ -43,7 +44,8 @@ describe('Basic sanity server CRUD tests', () => {
   });
 
   it('Offers in area - E2E', async () => {
-    const responseFromLogin = await testNetwork.post(`${USER_END_POINT}/login/${TEST_USER}`, { apiKey: TEST_API_KEY });
+    const apiKey = encodeApiKey(TEST_USER);
+    const responseFromLogin = await testNetwork.post(`${USER_END_POINT}/login/${TEST_USER}`, { apiKey });
     const { token } = responseFromLogin.data;
     addTokenToNetwork(token);
     const { data: offers } = await testNetwork.get(`${OFFERS_END_POINT}/in-area`, {

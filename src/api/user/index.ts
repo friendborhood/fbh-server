@@ -1,7 +1,7 @@
 /* eslint-disable import/no-import-module-exports */
 /* eslint-disable consistent-return */
 import { Router } from 'express';
-import { encodeToJwt, validateApiKey } from '../../auth';
+import { encodeToJwt, validateLoginAuth } from '../../auth';
 import logger from '../../logger';
 import {
   findByName, addUser, validateUserData, patchUser,
@@ -24,7 +24,7 @@ router.get('/:userName', async (req, res) => {
 router.post('/login/:userName', async (req, res) => {
   const { userName } = req.params;
   const { apiKey } = req.body;
-  const isVerifiedToLogIn = validateApiKey(apiKey);
+  const isVerifiedToLogIn = validateLoginAuth(apiKey, userName);
   if (!isVerifiedToLogIn) {
     return res.status(403).json('your api key is not verified for log in or no api key was provided.');
   }
