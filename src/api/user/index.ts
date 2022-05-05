@@ -47,10 +47,9 @@ router.post('/auth/:userName', async (req, res) => {
     });
   }
 });
-router.post('/login/:userName', async (req, res) => {
+router.post('/login', async (req, res) => {
   try {
-    const { userName } = req.params;
-    const { googleAuth } = req.body;
+    const { userName, googleAuth, code: userCodeInput } = req.body;
     const user = await findByName(userName);
     if (!user) {
       res.status(404).json({ error: `User name ${userName} was not found.` });
@@ -62,7 +61,6 @@ router.post('/login/:userName', async (req, res) => {
         return res.status(403).json('error verifying with google auth');
       }
     } else {
-      const { code: userCodeInput } = req.query;
       logger.info(`try validate user ${userName} entered correct pin code`);
       await CacheService.init();
       const correctCode = await CacheService.getKey(userName);
