@@ -7,17 +7,20 @@ dotenv.config();
 const PRIVATE_KEY = process.env.AUTH_ACCESS_SECRET_KEY;
 const LOGIN_SECRET = process.env.API_KEY;
 export const validateLoginAuth = (userApiKey, providedUserName) => {
-  let isVerified = false;
+  let authSuccess = false;
   try {
-    jwt.verify(userApiKey, LOGIN_SECRET);
+    const isVerified = jwt.verify(userApiKey, LOGIN_SECRET);
+    if (!isVerified) {
+      return false;
+    }
     const { userName: decodedUserName } = jwt.decode(userApiKey);
     if (decodedUserName === providedUserName) {
-      isVerified = true;
+      authSuccess = true;
     }
   } catch (e) {
     logger.error('error with verifying login ', e);
   }
-  return isVerified;
+  return authSuccess;
 };
 export const encodeToJwt = (dataToEncode) => jwt.sign(dataToEncode, PRIVATE_KEY);
 const getTokenFromHeaders = (headers) => {
