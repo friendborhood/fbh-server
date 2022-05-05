@@ -152,9 +152,11 @@ router.post('/', async (req, res) => {
       content: `Hello ${userName}`,
       userEmail: data.email,
     });
+    const token = encodeToJwt({ userName });
     return res.json({
       msg: 'user was added to database successfully',
       userName,
+      token,
     });
   } catch (e) {
     logger.error(e.message);
