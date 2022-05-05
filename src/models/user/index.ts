@@ -1,10 +1,10 @@
-const Joi = require('joi');
-const logger = require('../../logger');
-const getModel = require('../../services/firebase-api/get');
-const upsert = require('../../services/firebase-api/upsert');
+import Joi from 'joi';
+import logger from '../../logger';
+import getModel from '../../services/firebase-api/get';
+import upsert from '../../services/firebase-api/upsert';
 
 const modelName = 'users';
-const validateUserData = async (data) => {
+export const validateUserData = async ({ data, userName }) => {
   const schema = Joi.object({
     userName: Joi.string()
       .alphanum()
@@ -20,11 +20,25 @@ const validateUserData = async (data) => {
       .required(),
     imageUrl: Joi.string().uri(),
   });
-  await schema.validateAsync(data);
+  await schema.validateAsync({ data, userName });
   logger.info('user data okay');
 };
 
-const findByName = async (userName) => {
+export const validateUserLocationData = async (data) => {
+  const schema = Joi.object({
+    location: {
+      address: Joi.string().required(),
+      geoCode: {
+        lat: Joi.number().required(),
+        lng: Joi.number().required(),
+      },
+    },
+  });
+  await schema.validateAsync(data);
+  logger.info('user location is okay');
+};
+
+export const findByName = async (userName) => {
   logger.info('getting model from db');
   const userModel = await getModel(modelName);
   const relevantUser = userModel[userName];
@@ -34,17 +48,11 @@ const findByName = async (userName) => {
   }
   return relevantUser;
 };
-const addUser = async (data, userName) => {
+export const addUser = async (data, userName) => {
   logger.info('adding user to db');
   await upsert(modelName, { ...data }, userName);
 };
-const patchUser = async (data, userName) => {
+export const patchUser = async (data, userName) => {
   logger.info(`patching user ${userName}, modifing data ${JSON.stringify(data)}`);
   await upsert(modelName, data, userName);
-};
-module.exports = {
-  patchUser,
-  findByName,
-  addUser,
-  validateUserData,
 };

@@ -1,19 +1,20 @@
 /* eslint-disable import/no-import-module-exports */
 /* eslint-disable consistent-return */
 import { Router } from 'express';
-import { encodeToJwt, verifyGoogle } from '../../auth';
+import { encodeToJwt, verifyGoogle, authMiddleware } from '../../auth';
 import logger from '../../logger';
+
 import {
-  findByName, addUser, validateUserData, patchUser,
+  findByName, addUser, validateUserData, patchUser, validateUserLocationData,
 } from '../../models/user';
 import { sendAuthCodeToUserEmail, sendMail } from '../../services/mail-service';
 import CacheService from '../../services/redis';
 
 const router = Router();
 
-router.get('/:userName', async (req, res) => {
+router.get('/', async (req, res) => {
   logger.info('try get user');
-  const { userName } = req.params;
+  const { userName } = req;
   logger.info(`user name: ${userName}`);
   const user = await findByName(userName);
   if (!user) {
@@ -47,9 +48,10 @@ router.post('/auth/:userName', async (req, res) => {
     });
   }
 });
-router.post('/login', async (req, res) => {
+router.post('/login', authMiddleware, async (req, res) => {
   try {
-    const { userName, googleAuth, code: userCodeInput } = req.body;
+    const { userName } = req;
+    const { googleAuth, code: userCodeInput } = req.body;
     const user = await findByName(userName);
     if (!user) {
       res.status(404).json({ error: `User name ${userName} was not found.` });
@@ -86,14 +88,28 @@ router.post('/login', async (req, res) => {
     });
   }
 });
-router.patch('/:userName', async (req, res) => {
+router.patch('/', authMiddleware, async (req, res) => {
   try {
     const data = req.body;
-    const { userName } = req.params;
+    const { userName: notValidUserName, email } = data;
+    if (notValidUserName || email) {
+      return res.status(400).json({ error: 'userName and email cannot be patched' });
+    }
+    const { userName } = req;
+    // const { userName } = req.params;
     logger.info(`try patch user by name ${userName}`);
     const isExist = await findByName(userName);
     if (!isExist) {
-      return res.status(400).json({ error: `User name ${userName} does not exists. cant patch.` });
+      return res.status(400).json({ error: `User name ${userName} does not exist. cant patch.` });
+    }
+    const { location } = data;
+    if (location) {
+      try {
+        await validateUserLocationData(data);
+      } catch (e) {
+        logger.error(e.message);
+        return res.status(400).json({ error: e.message });
+      }
     }
     await patchUser(data, userName);
 
@@ -106,8 +122,9 @@ router.patch('/:userName', async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 });
-router.post('/', async (req, res) => {
+router.post('/', authMiddleware, async (req, res) => {
   try {
+    const { userName } = req;
     const data = req.body;
     logger.info(data);
     try {
@@ -116,7 +133,6 @@ router.post('/', async (req, res) => {
       logger.error(e.message);
       return res.status(400).json({ error: e.message });
     }
-    const { userName } = data;
     logger.info(`try add user by name ${userName}`);
     const isExist = await findByName(userName);
     if (isExist) {
