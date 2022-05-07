@@ -20,7 +20,7 @@ require('dotenv').config();
 jest.setTimeout(1000 * 10);
 describe('Basic sanity server CRUD tests', () => {
   it('Can get user', async () => {
-    const { data, status } = await testNetwork.get(`${USER_END_POINT}/${EXISTING_USER_ID}`);
+    const { data, status } = await testNetwork.get(`${USER_END_POINT}`);
     expect(data).toBeDefined();
     expect(status).toBe(200);
   });

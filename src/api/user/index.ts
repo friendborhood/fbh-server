@@ -14,7 +14,7 @@ const router = Router();
 
 router.get('/', authMiddleware, async (req, res) => {
   logger.info('try get user');
-  const { userName } = req.params;
+  const { userName } = req.query;
   logger.info(`user name: ${userName}`);
   const user = await findByName(userName);
   if (!user) {
@@ -24,7 +24,7 @@ router.get('/', authMiddleware, async (req, res) => {
 });
 
 router.post('/auth/:userName', async (req, res) => {
-  const { userName } = req.params;
+  const { userName } = req.query;
   logger.info(`try get user by name ${userName}`);
   try {
     const user = await findByName(userName);
@@ -50,7 +50,7 @@ router.post('/auth/:userName', async (req, res) => {
 });
 router.post('/login', authMiddleware, async (req, res) => {
   try {
-    const { userName } = req.params;
+    const { userName } = req.query;
     const { googleAuth, code: userCodeInput } = req.body;
     const user = await findByName(userName);
     if (!user) {
@@ -95,7 +95,7 @@ router.patch('/', authMiddleware, async (req, res) => {
     if (email) {
       return res.status(400).json({ error: 'email cannot be updated' });
     }
-    const { userName } = req.params;
+    const { userName } = req.query;
     logger.info(`try patch user by name ${userName}`);
     const isExist = await findByName(userName);
     if (!isExist) {
