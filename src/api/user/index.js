@@ -12,9 +12,9 @@ import CacheService from '../../services/redis';
 
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/', authMiddleware, async (req, res) => {
   logger.info('try get user');
-  const { userName } = req;
+  const { userName } = req.params;
   logger.info(`user name: ${userName}`);
   const user = await findByName(userName);
   if (!user) {
@@ -50,7 +50,7 @@ router.post('/auth/:userName', async (req, res) => {
 });
 router.post('/login', authMiddleware, async (req, res) => {
   try {
-    const { userName } = req;
+    const { userName } = req.params;
     const { googleAuth, code: userCodeInput } = req.body;
     const user = await findByName(userName);
     if (!user) {
@@ -66,7 +66,7 @@ router.post('/login', authMiddleware, async (req, res) => {
       logger.info(`try validate user ${userName} entered correct pin code`);
       await CacheService.init();
       const correctCode = await CacheService.getKey(userName);
-      logger.info(`user code ${userCodeInput} correct code ${correctCode}`);
+      logger.info(`user code ${userCodeInput} | correct code ${correctCode}`);
       if (correctCode !== userCodeInput) {
         logger.warn('wrong code');
         return res.status(400).json({
@@ -91,12 +91,11 @@ router.post('/login', authMiddleware, async (req, res) => {
 router.patch('/', authMiddleware, async (req, res) => {
   try {
     const data = req.body;
-    const { userName: notValidUserName, email } = data;
-    if (notValidUserName || email) {
-      return res.status(400).json({ error: 'userName and email cannot be patched' });
+    const { email } = data;
+    if (email) {
+      return res.status(400).json({ error: 'email cannot be updated' });
     }
-    const { userName } = req;
-    // const { userName } = req.params;
+    const { userName } = req.params;
     logger.info(`try patch user by name ${userName}`);
     const isExist = await findByName(userName);
     if (!isExist) {
@@ -122,17 +121,18 @@ router.patch('/', authMiddleware, async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 });
-router.post('/', authMiddleware, async (req, res) => {
+router.post('/', async (req, res) => {
   try {
-    const { userName } = req;
     const data = req.body;
-    logger.info(data);
+    logger.info(`${JSON.stringify(data)}`);
     try {
       await validateUserData(data);
     } catch (e) {
       logger.error(e.message);
       return res.status(400).json({ error: e.message });
     }
+
+    const { userName } = data;
     logger.info(`try add user by name ${userName}`);
     const isExist = await findByName(userName);
     if (isExist) {

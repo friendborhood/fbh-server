@@ -4,7 +4,7 @@ import getModel from '../../services/firebase-api/get';
 import upsert from '../../services/firebase-api/upsert';
 
 const modelName = 'users';
-export const validateUserData = async ({ data, userName }) => {
+export const validateUserData = async (data) => {
   const schema = Joi.object({
     userName: Joi.string()
       .alphanum()
@@ -20,7 +20,7 @@ export const validateUserData = async ({ data, userName }) => {
       .required(),
     imageUrl: Joi.string().uri(),
   });
-  await schema.validateAsync({ data, userName });
+  await schema.validateAsync(data);
   logger.info('user data okay');
 };
 
