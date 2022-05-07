@@ -44,6 +44,11 @@ router.get('/categories', async (req, res) => {
 });
 router.post('/', async (req, res) => {
   try {
+    const { isAdmin } = req.query;
+    const { userName } = req.query;
+    if (!isAdmin || isAdmin === false) {
+      return res.status(400).json({ msg: `${userName} is non-admin user. Cannot add items to db` });
+    }
     const data = req.body;
     try {
       await validateItemData(data);
@@ -85,6 +90,11 @@ router.patch('/:itemId', async (req, res) => {
     logger.info('try get item');
     const { itemId } = req.params;
     logger.info(`item id: ${itemId}`);
+    const { isAdmin } = req.query;
+    const { userName } = req.query;
+    if (!isAdmin || isAdmin === false) {
+      return res.status(400).json({ msg: `${userName} is non-admin user. Cannot update items in db` });
+    }
     const item = await findById(itemId);
     if (!item) {
       return res.status(404).json({ msg: `Item with id ${itemId} was not found.` });

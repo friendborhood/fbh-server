@@ -26,6 +26,10 @@ router.patch('/', async (req, res) => {
       return res.status(400).json({ error: 'email cannot be updated' });
     }
     const { userName } = req.query;
+    const { isAdmin } = data;
+    if (isAdmin) {
+      return res.status(400).json({ error: `User name ${userName} tried to update isAdmin field. not allowed operation` });
+    }
     logger.info(`try patch user by name ${userName}`);
     const isExist = await findByName(userName);
     if (!isExist) {
@@ -51,4 +55,9 @@ router.patch('/', async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 });
+
+//  const ensurePermissions = (email, isAdmin) => {
+
+// };
+
 export default router;

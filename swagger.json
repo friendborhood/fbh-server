@@ -74,7 +74,9 @@
           "description": "Created"
         }
       }
-    },
+    }
+  },
+  "/user/me": {
     "get": {
       "parameters": [
         {
@@ -130,6 +132,15 @@
       }
   },
         "/item": {
+          "parameters": [
+            {
+              "name": "authorization",
+              "in": "header",
+              "required": true,
+              "description": "jwt",
+              "type": "string"
+            }
+          ],
           "post": {
             "parameters": [
               {
@@ -187,6 +198,13 @@
               "in": "path",
               "required": true,
               "description": "ID of item that we want to find",
+              "type": "string"
+            },
+            {
+              "name": "authorization",
+              "in": "header",
+              "required": true,
+              "description": "jwt",
               "type": "string"
             }
           ],

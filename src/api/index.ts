@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
   });
 });
 app.use('/user', require('./user'));
-app.use('/item', require('./item'));
+app.use('/item', authMiddleware, require('./item'));
 app.use(['/offer', '/offers'], authMiddleware, require('./offer'));
 
 const PORT_NUMBER = process.env.PORT || 3000;
