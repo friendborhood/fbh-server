@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
 
 router.get('/in-area', async (req, res) => {
   try {
-    const { userName } = req;
+    const { userName } = req.query;
     const { categoryName = null, radius } = req.query;
     if (!userName) {
       return res.status(400).json({ msg: 'must provide userName' });

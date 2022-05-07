@@ -1,29 +1,20 @@
 /* eslint-disable import/no-import-module-exports */
 /* eslint-disable consistent-return */
 import { Router } from 'express';
-import { encodeToJwt, verifyGoogle } from '../../auth';
+import { encodeToJwt, verifyGoogle, authMiddleware } from '../../auth';
 import logger from '../../logger';
+import me from './me';
 import {
-  findByName, addUser, validateUserData, patchUser,
+  findByName, addUser, validateUserData,
 } from '../../models/user';
 import { sendAuthCodeToUserEmail, sendMail } from '../../services/mail-service';
 import CacheService from '../../services/redis';
 
 const router = Router();
-
-router.get('/:userName', async (req, res) => {
-  logger.info('try get user');
-  const { userName } = req.params;
-  logger.info(`user name: ${userName}`);
-  const user = await findByName(userName);
-  if (!user) {
-    return res.status(404).json({ error: `username ${userName} was not found.` });
-  }
-  return res.json(user);
-});
+router.use('/me', authMiddleware, me);
 
 router.post('/auth/:userName', async (req, res) => {
-  const { userName } = req.params;
+  const { userName } = req.query;
   logger.info(`try get user by name ${userName}`);
   try {
     const user = await findByName(userName);
@@ -47,9 +38,10 @@ router.post('/auth/:userName', async (req, res) => {
     });
   }
 });
-router.post('/login', async (req, res) => {
+router.post('/login', authMiddleware, async (req, res) => {
   try {
-    const { userName, googleAuth, code: userCodeInput } = req.body;
+    const { userName } = req.query;
+    const { googleAuth, code: userCodeInput } = req.body;
     const user = await findByName(userName);
     if (!user) {
       res.status(404).json({ error: `User name ${userName} was not found.` });
@@ -64,7 +56,7 @@ router.post('/login', async (req, res) => {
       logger.info(`try validate user ${userName} entered correct pin code`);
       await CacheService.init();
       const correctCode = await CacheService.getKey(userName);
-      logger.info(`user code ${userCodeInput} correct code ${correctCode}`);
+      logger.info(`user code ${userCodeInput} | correct code ${correctCode}`);
       if (correctCode !== userCodeInput) {
         logger.warn('wrong code');
         return res.status(400).json({
@@ -86,36 +78,17 @@ router.post('/login', async (req, res) => {
     });
   }
 });
-router.patch('/:userName', async (req, res) => {
-  try {
-    const data = req.body;
-    const { userName } = req.params;
-    logger.info(`try patch user by name ${userName}`);
-    const isExist = await findByName(userName);
-    if (!isExist) {
-      return res.status(400).json({ error: `User name ${userName} does not exists. cant patch.` });
-    }
-    await patchUser(data, userName);
-
-    return res.json({
-      msg: `user ${userName} was patched successfully`,
-
-    });
-  } catch (e) {
-    logger.error(e.message);
-    return res.status(500).json({ error: e.message });
-  }
-});
 router.post('/', async (req, res) => {
   try {
     const data = req.body;
-    logger.info(data);
+    logger.info(`${JSON.stringify(data)}`);
     try {
       await validateUserData(data);
     } catch (e) {
       logger.error(e.message);
       return res.status(400).json({ error: e.message });
     }
+
     const { userName } = data;
     logger.info(`try add user by name ${userName}`);
     const isExist = await findByName(userName);
