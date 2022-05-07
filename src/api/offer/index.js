@@ -12,6 +12,7 @@ const {
   addUuidEntity,
   deleteEntity,
   patchEntity,
+  extractUserNameFromAuth,
 } = require('../../models/generic');
 const logger = require('../../logger');
 const { findByName } = require('../../models/user');
@@ -31,7 +32,7 @@ router.get('/', async (req, res) => {
 
 router.get('/in-area', async (req, res) => {
   try {
-    const { userName } = req.query;
+    const userName = extractUserNameFromAuth(req);
     const { categoryName = null, radius } = req.query;
     if (!userName) {
       return res.status(400).json({ msg: 'must provide userName' });

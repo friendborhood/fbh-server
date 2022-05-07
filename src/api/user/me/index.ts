@@ -1,6 +1,7 @@
 /* eslint-disable import/no-import-module-exports */
 /* eslint-disable consistent-return */
 import { Router } from 'express';
+import { extractUserNameFromAuth } from '../../../models/generic';
 import logger from '../../../logger';
 import {
   findByName, patchUser, validateUserLocationData,
@@ -10,7 +11,7 @@ const router = Router();
 
 router.get('/', async (req, res) => {
   logger.info('try get user');
-  const { userName } = req.query;
+  const userName = extractUserNameFromAuth(req);
   logger.info(`user name: ${userName}`);
   const user = await findByName(userName);
   if (!user) {
@@ -25,7 +26,7 @@ router.patch('/', async (req, res) => {
     if (email) {
       return res.status(400).json({ error: 'email cannot be updated' });
     }
-    const { userName } = req.query;
+    const { userName } = extractUserNameFromAuth(req);
     logger.info(`try patch user by name ${userName}`);
     const isExist = await findByName(userName);
     if (!isExist) {

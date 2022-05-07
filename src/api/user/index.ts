@@ -14,7 +14,7 @@ const router = Router();
 router.use('/me', authMiddleware, me);
 
 router.post('/auth/:userName', async (req, res) => {
-  const { userName } = req.query;
+  const { userName } = req.params;
   logger.info(`try get user by name ${userName}`);
   try {
     const user = await findByName(userName);
@@ -38,10 +38,9 @@ router.post('/auth/:userName', async (req, res) => {
     });
   }
 });
-router.post('/login', authMiddleware, async (req, res) => {
+router.post('/login', async (req, res) => {
   try {
-    const { userName } = req.query;
-    const { googleAuth, code: userCodeInput } = req.body;
+    const { userName, googleAuth, code: userCodeInput } = req.body;
     const user = await findByName(userName);
     if (!user) {
       res.status(404).json({ error: `User name ${userName} was not found.` });
