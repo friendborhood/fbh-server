@@ -1,18 +1,19 @@
 /* eslint-disable consistent-return */
-const { Router } = require('express');
-const {
+import Router from 'express';
+import {
   findByCategory, findById,
   findByName,
   findAll,
   getAllCategories,
   validateItemData,
-} = require('../../models/item');
-const {
+} from '../../models/item';
+
+import {
   addUuidEntity,
   deleteEntity,
   patchEntity,
-} = require('../../models/generic');
-const logger = require('../../logger');
+} from '../../models/generic';
+import logger from '../../logger';
 
 const ITEM_MODEL = 'items';
 
@@ -46,7 +47,7 @@ router.post('/', async (req, res) => {
   try {
     const { isAdmin } = req.query;
     const { userName } = req.query;
-    if (!isAdmin || isAdmin === false) {
+    if (!isAdmin || isAdmin === 'false') {
       return res.status(400).json({ msg: `${userName} is non-admin user. Cannot add items to db` });
     }
     const data = req.body;
@@ -92,7 +93,7 @@ router.patch('/:itemId', async (req, res) => {
     logger.info(`item id: ${itemId}`);
     const { isAdmin } = req.query;
     const { userName } = req.query;
-    if (!isAdmin || isAdmin === false) {
+    if (!isAdmin || isAdmin === 'false') {
       return res.status(400).json({ msg: `${userName} is non-admin user. Cannot update items in db` });
     }
     const item = await findById(itemId);
