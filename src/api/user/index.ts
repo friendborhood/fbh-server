@@ -3,25 +3,15 @@
 import { Router } from 'express';
 import { encodeToJwt, verifyGoogle, authMiddleware } from '../../auth';
 import logger from '../../logger';
-
+import me from './me';
 import {
-  findByName, addUser, validateUserData, patchUser, validateUserLocationData,
+  findByName, addUser, validateUserData,
 } from '../../models/user';
 import { sendAuthCodeToUserEmail, sendMail } from '../../services/mail-service';
 import CacheService from '../../services/redis';
 
 const router = Router();
-
-router.get('/', authMiddleware, async (req, res) => {
-  logger.info('try get user');
-  const { userName } = req.query;
-  logger.info(`user name: ${userName}`);
-  const user = await findByName(userName);
-  if (!user) {
-    return res.status(404).json({ error: `username ${userName} was not found.` });
-  }
-  return res.json(user);
-});
+router.use('/me', authMiddleware, me);
 
 router.post('/auth/:userName', async (req, res) => {
   const { userName } = req.query;
@@ -86,39 +76,6 @@ router.post('/login', authMiddleware, async (req, res) => {
     return res.status(500).json({
       error: e.message,
     });
-  }
-});
-router.patch('/', authMiddleware, async (req, res) => {
-  try {
-    const data = req.body;
-    const { email } = data;
-    if (email) {
-      return res.status(400).json({ error: 'email cannot be updated' });
-    }
-    const { userName } = req.query;
-    logger.info(`try patch user by name ${userName}`);
-    const isExist = await findByName(userName);
-    if (!isExist) {
-      return res.status(400).json({ error: `User name ${userName} does not exist. cant patch.` });
-    }
-    const { location } = data;
-    if (location) {
-      try {
-        await validateUserLocationData(data);
-      } catch (e) {
-        logger.error(e.message);
-        return res.status(400).json({ error: e.message });
-      }
-    }
-    await patchUser(data, userName);
-
-    return res.json({
-      msg: `user ${userName} was patched successfully`,
-
-    });
-  } catch (e) {
-    logger.error(e.message);
-    return res.status(500).json({ error: e.message });
   }
 });
 router.post('/', async (req, res) => {
