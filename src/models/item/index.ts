@@ -8,8 +8,8 @@ import logger from '../../logger';
 
 const modelName = 'items';
 interface item {
-  itemName: string,
-  categoryName: string
+  itemName?: string,
+  categoryName?: string
 };
 export const getAllCategories = async () => {
   const { categories } = await getModel(modelName);
