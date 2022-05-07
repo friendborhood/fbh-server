@@ -86,7 +86,7 @@
         }
       ],
       "tags": ["User"],
-      "summary": "Get user by Name",
+      "summary": "Get user by jwt",
       "responses": {
         "200": {
           "description": "OK",
