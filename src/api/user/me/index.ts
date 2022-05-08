@@ -42,7 +42,7 @@ router.patch('/', async (req, res) => {
     const { location } = data;
     if (location) {
       try {
-        await validateUserLocationData(data);
+        await validateUserLocationData(location);
       } catch (e) {
         logger.error(e.message);
         return res.status(400).json({ error: e.message });
