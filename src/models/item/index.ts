@@ -41,7 +41,7 @@ export const findByName = async (itemName) => {
   const itemModel = await getModel(modelName);
   logger.info(`try find item ${itemName}`);
   const relevantItem = Object.values(itemModel)
-    .find((item) => item.itemName === itemName);
+    .find((item : any) => item.itemName === itemName);
 
   if (!relevantItem) {
     logger.warn(`item ${itemName} was not found`);
@@ -66,7 +66,7 @@ export const findByCategory = async (categoryName) => {
   logger.info(`try to find items in ${categoryName}`);
   logger.info(itemModel);
   const relevantItems = Object.entries(itemModel)
-    .filter(([, item]) => item.categoryName === categoryName);
+    .filter(([, item] : any) => item.categoryName === categoryName);
 
   if (!relevantItems) {
     logger.warn(`items in ${categoryName} were not found`);
