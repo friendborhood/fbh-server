@@ -27,8 +27,11 @@ router.patch('/', async (req, res) => {
     }
     const { userName } = req.query;
     const { isAdmin } = data;
-    if (isAdmin && userName !== process.env.ADMIN_USER) {
-      return res.status(400).json({ error: `User name ${userName} tried to update isAdmin field. not allowed operation` });
+    if (isAdmin) {
+      return res.status(400).json({
+        error: `User name ${userName} tried to update isAdmin field.
+       not allowed operation`,
+      });
     }
     logger.info(`try patch user by name ${userName}`);
     const isExist = await findByName(userName);
