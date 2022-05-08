@@ -2,6 +2,7 @@ import '../api';
 import logger from '../logger';
 import { validateOfferData, filterOffersByArea, sortOffersByDistance } from '../models/offer';
 import {
+  ME_END_POINT,
   USER_END_POINT,
   NON_EXISTING_USER_ID,
   testNetwork,
@@ -25,7 +26,7 @@ describe('Basic sanity server CRUD tests', () => {
   });
   xit('Return 404 for not exisiting user', async () => {
     try {
-      await testNetwork.get(`${USER_END_POINT}/${NON_EXISTING_USER_ID}`);
+      await testNetwork.get(`${USER_END_POINT}/${ME_END_POINT}/${NON_EXISTING_USER_ID}`);
     } catch (error) {
       logger.warn(error);
       const { response: { status } } = error;
