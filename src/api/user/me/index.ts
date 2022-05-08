@@ -26,7 +26,7 @@ router.patch('/', async (req, res) => {
     if (email) {
       return res.status(400).json({ error: 'email cannot be updated' });
     }
-    const { userName } = extractUserNameFromAuth(req);
+    const userName = extractUserNameFromAuth(req);
     logger.info(`try patch user by name ${userName}`);
     const isExist = await findByName(userName);
     if (!isExist) {
