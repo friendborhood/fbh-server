@@ -37,7 +37,7 @@ export const findByName = async (itemName) => {
   const itemModel = await getModel(modelName);
   logger.info(`try find item ${itemName}`);
   const relevantItem = Object.values(itemModel)
-    .find((item) => item.itemName === itemName);
+    .find((item : any) => item.itemName === itemName);
 
   if (!relevantItem) {
     logger.warn(`item ${itemName} was not found`);
