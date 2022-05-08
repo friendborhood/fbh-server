@@ -47,6 +47,8 @@ router.patch('/', async (req, res) => {
         logger.error(e.message);
         return res.status(400).json({ error: e.message });
       }
+    } else { // handles empty location
+      delete data.location;
     }
     await patchUser(data, userName);
 

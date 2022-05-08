@@ -25,7 +25,7 @@ export const authMiddleware = (req, res, next) => {
     }
     const { userName } = jwt.decode(token);
     req.userName = userName;
-    logger.info(`auth validated for user ${req.query.userName}`);
+    logger.info(`auth validated for user ${req.userName}`);
   } catch (e) {
     logger.error(e);
     return res.status(403).send({ message: e.message });
