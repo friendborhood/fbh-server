@@ -9,6 +9,7 @@ export const testNetwork = axios.create({
 });
 
 export const USER_END_POINT = 'user';
+export const ME_END_POINT = 'me';
 export const EXISTING_USER_ID = '21ada0dc-ca23-4002-881d-a60a006eb4f5';
 export const NON_EXISTING_USER_ID = '111';
 export const TEST_OFFERS_CATEGORY = 'TestCleaning';

@@ -1,18 +1,18 @@
-const Joi = require('joi');
-const { uuid } = require('short-uuid');
-const getModel = require('../../services/firebase-api/get');
-const upsert = require('../../services/firebase-api/upsert');
-const add = require('../../services/firebase-api/add');
-const { formatKeyToJsonArray } = require('../generic');
-const logger = require('../../logger');
+import Joi from 'joi';
+import { uuid } from 'short-uuid';
+import getModel from '../../services/firebase-api/get';
+import upsert from '../../services/firebase-api/upsert';
+import add from '../../services/firebase-api/add';
+import { formatKeyToJsonArray } from '../generic';
+import logger from '../../logger';
 
 const modelName = 'items';
-const getAllCategories = async () => {
+export const getAllCategories = async () => {
   const { categories } = await getModel(modelName);
   return categories;
 };
 
-const validateItemData = async (data) => {
+export const validateItemData = async (data) => {
   const categories = await getAllCategories();
   logger.info(categories);
   const schema = Joi.object({
@@ -27,17 +27,17 @@ const validateItemData = async (data) => {
   await schema.validateAsync(data);
   logger.info('item data is okay');
 };
-const findAll = async () => {
+export const findAll = async () => {
   logger.info('getting model from db');
   const itemModel = await getModel(modelName);
   return itemModel;
 };
 
-const findByName = async (itemName) => {
+export const findByName = async (itemName) => {
   const itemModel = await getModel(modelName);
   logger.info(`try find item ${itemName}`);
   const relevantItem = Object.values(itemModel)
-    .find((item) => item.itemName === itemName);
+    .find((item : any) => item.itemName === itemName);
 
   if (!relevantItem) {
     logger.warn(`item ${itemName} was not found`);
@@ -47,7 +47,7 @@ const findByName = async (itemName) => {
 
   return relevantItem;
 };
-const findById = async (index) => {
+export const findById = async (index) => {
   logger.info('getting model from db');
   const itemModel = await getModel(modelName);
   const relevantItem = itemModel[index];
@@ -57,43 +57,33 @@ const findById = async (index) => {
   }
   return relevantItem;
 };
-const findByCategory = async (categoryName) => {
+export const findByCategory = async (categoryName) => {
   const itemModel = await getModel(modelName);
   logger.info(`try to find items in ${categoryName}`);
   logger.info(itemModel);
   const relevantItems = Object.entries(itemModel)
-    .filter(([, item]) => item.categoryName === categoryName);
+    .filter(([, item] : any) => item.categoryName === categoryName);
 
-  if (!relevantItems) {
+  if (relevantItems.length === 0) {
     logger.warn(`items in ${categoryName} were not found`);
     return null;
-  }
+  } else {
   logger.info(`item in ${categoryName} were found `);
+  }
 
   return formatKeyToJsonArray(relevantItems);
 };
-const addItem = async (data) => {
+export const addItem = async (data) => {
   logger.info('adding item to db');
   const generatedId = uuid();
   await upsert(modelName, data, generatedId);
   return generatedId;
 };
-const deleteItem = async (index) => {
+export const deleteItem = async (index) => {
   logger.info('deleting item from db');
   await add(modelName, null, index);
 };
-const patchItem = async (data, itemId) => {
+export const patchItem = async (data, itemId) => {
   logger.info(`patching item ${itemId}, modifing data ${JSON.stringify(data)}`);
   await upsert(modelName, data, itemId);
-};
-module.exports = {
-  addItem,
-  findByCategory,
-  findById,
-  findByName,
-  findAll,
-  validateItemData,
-  getAllCategories,
-  deleteItem,
-  patchItem,
 };

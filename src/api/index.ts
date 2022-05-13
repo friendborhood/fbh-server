@@ -6,6 +6,7 @@ import swaggerDocument from '../../swagger.json';
 
 import logger from '../logger';
 import { authMiddleware } from '../auth';
+import user from './user';
 
 const app = express();
 app.use(express.json());
@@ -22,8 +23,8 @@ app.get('/', (req, res) => {
     message: 'Welcome to FriendBorHood API! 🐿️',
   });
 });
-app.use('/user', require('./user'));
-app.use('/item', require('./item'));
+app.use('/user', user);
+app.use('/item', authMiddleware, require('./item'));
 app.use(['/offer', '/offers'], authMiddleware, require('./offer'));
 
 const PORT_NUMBER = process.env.PORT || 3000;

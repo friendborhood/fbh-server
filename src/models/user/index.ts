@@ -26,12 +26,10 @@ export const validateUserData = async (data) => {
 
 export const validateUserLocationData = async (data) => {
   const schema = Joi.object({
-    location: {
-      address: Joi.string().required(),
-      geoCode: {
-        lat: Joi.number().required(),
-        lng: Joi.number().required(),
-      },
+    address: Joi.string().required(),
+    geoCode: {
+      lat: Joi.number().required(),
+      lng: Joi.number().required(),
     },
   });
   await schema.validateAsync(data);

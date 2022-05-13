@@ -89,6 +89,10 @@ router.post('/', async (req, res) => {
     }
 
     const { userName } = data;
+    const { isAdmin } = data;
+    if (isAdmin) {
+      return res.status(400).json({ error: `User name ${userName} tried to update isAdmin field. not allowed operation` });
+    }
     logger.info(`try add user by name ${userName}`);
     const isExist = await findByName(userName);
     if (isExist) {
@@ -115,4 +119,4 @@ router.post('/', async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 });
-module.exports = router;
+export default router;

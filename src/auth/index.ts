@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { OAuth2Client } from 'google-auth-library';
+import { findByName } from '../models/user';
 import logger from '../logger';
 
 dotenv.config();
@@ -25,12 +26,23 @@ export const authMiddleware = (req, res, next) => {
     }
     const { userName } = jwt.decode(token);
     req.userName = userName;
-    logger.info(`auth validated for user ${req.query.userName}`);
+    logger.info(`auth validated for user ${req.userName}`);
   } catch (e) {
     logger.error(e);
     return res.status(403).send({ message: e.message });
   }
 
+  return next();
+};
+export const adminMiddleWare = async (req, res, next) => {
+  const { userName } = req;
+  logger.info(`validating that ${userName} is admin`);
+  const { isAdmin } = await findByName(userName);
+  if (!isAdmin) {
+    logger.warn(`${userName} is not admin and tried to use admin method`);
+    return res.status(403).send({ message: 'you dont have permissions to run this method' });
+  }
+  logger.info(`validated admin auth successfully for ${userName}`);
   return next();
 };
 const extractUserNameFromGmail = (gmail) => {

@@ -27,6 +27,13 @@ router.patch('/', async (req, res) => {
       return res.status(400).json({ error: 'email cannot be updated' });
     }
     const userName = extractUserNameFromAuth(req);
+    const { isAdmin } = data;
+    if (isAdmin) {
+      return res.status(400).json({
+        error: `User name ${userName} tried to update isAdmin field.
+       not allowed operation`,
+      });
+    }
     logger.info(`try patch user by name ${userName}`);
     const isExist = await findByName(userName);
     if (!isExist) {
@@ -35,11 +42,13 @@ router.patch('/', async (req, res) => {
     const { location } = data;
     if (location) {
       try {
-        await validateUserLocationData(data);
+        await validateUserLocationData(location);
       } catch (e) {
         logger.error(e.message);
         return res.status(400).json({ error: e.message });
       }
+    } else { // handles empty location
+      delete data.location;
     }
     await patchUser(data, userName);
 
@@ -52,4 +61,5 @@ router.patch('/', async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 });
+
 export default router;
