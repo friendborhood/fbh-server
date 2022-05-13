@@ -62,8 +62,4 @@ router.patch('/', async (req, res) => {
   }
 });
 
-//  const ensurePermissions = (email, isAdmin) => {
-
-// };
-
 export default router;

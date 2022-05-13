@@ -1,5 +1,7 @@
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable consistent-return */
 import Router from 'express';
+import { adminMiddleWare } from '../../auth';
 import {
   findByCategory, findById,
   findByName,
@@ -18,13 +20,14 @@ import logger from '../../logger';
 const ITEM_MODEL = 'items';
 
 const router = Router();
+router.use(adminMiddleWare);
 
 router.get('/', async (req, res) => {
   logger.info('try get all items');
   const { categoryName } = req.query;
   const items = categoryName ? await findByCategory(categoryName) : await findAll();
   if (!items) {
-    return res.status(404).json({ msg: 'Items were not found.' });
+    return res.status(204).json({ msg: 'Items were not found.' });
   }
   return res.json(items);
 });

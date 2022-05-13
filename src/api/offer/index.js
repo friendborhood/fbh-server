@@ -1,5 +1,6 @@
 /* eslint-disable consistent-return */
 const { Router } = require('express');
+const { adminMiddleWare } = require('../../auth');
 const {
   findByCategory,
   findByOfferId,
@@ -20,7 +21,7 @@ const { findByName } = require('../../models/user');
 const OFFER_MODEL = 'offers';
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/', adminMiddleWare, async (req, res) => {
   logger.info('try get all offers');
   const { categoryName } = req.query;
   const offers = categoryName ? await findByCategory(categoryName) : await findAll();

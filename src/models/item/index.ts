@@ -64,11 +64,12 @@ export const findByCategory = async (categoryName) => {
   const relevantItems = Object.entries(itemModel)
     .filter(([, item] : any) => item.categoryName === categoryName);
 
-  if (!relevantItems) {
+  if (relevantItems.length === 0) {
     logger.warn(`items in ${categoryName} were not found`);
     return null;
-  }
+  } else {
   logger.info(`item in ${categoryName} were found `);
+  }
 
   return formatKeyToJsonArray(relevantItems);
 };
