@@ -29,7 +29,7 @@ describe('Basic sanity server CRUD tests', () => {
     logger.warn('i am a warning ', { warning: 'warn' });
     logger.error(' i am an error', { someError: ['error1', 'error2'] });
   });
-  it('Can get categories', async () => {
+  it('Can get categories for non admin user', async () => {
     const categories = await testNetwork.get('categories');
     expect(categories).toBeDefined();
   });
