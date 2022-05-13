@@ -47,7 +47,12 @@ router.get('/in-area', async (req, res) => {
       logger.error('user was not found. cant find offers', userName);
       return res.status(404).json({ msg: `User ${userName} not found` });
     }
-    const { location: { geoCode: userLocation } } = user;
+    const { location } = user;
+    if (!location) {
+      logger.error('user location is unknown, cant get offers in area ', userName);
+      return res.status(400).json({ msg: `User ${userName} not found` });
+    }
+    const { geoCode: userLocation } = location;
     const offersInArea = await getOffersInArea(
       { targetLocation: userLocation, radius, categoryName },
     );

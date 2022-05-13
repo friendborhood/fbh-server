@@ -6,7 +6,6 @@ import {
   findByCategory, findById,
   findByName,
   findAll,
-  getAllCategories,
   validateItemData,
 } from '../../models/item';
 
@@ -41,11 +40,7 @@ router.get('/:itemId', async (req, res) => {
   }
   return res.json(item);
 });
-router.get('/categories', async (req, res) => {
-  const categories = await getAllCategories();
-  logger.info(categories);
-  return res.json({ categories });
-});
+
 router.post('/', async (req, res) => {
   try {
     const { isAdmin } = req.query;
