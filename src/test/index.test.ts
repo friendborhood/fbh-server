@@ -2,9 +2,7 @@ import '../api';
 import logger from '../logger';
 import { validateOfferData, filterOffersByArea, sortOffersByDistance } from '../models/offer';
 import {
-  ME_END_POINT,
   USER_END_POINT,
-  NON_EXISTING_USER_ID,
   testNetwork,
   COMPLEX_OBJECT,
   TEST_OFFERS_CATEGORY,

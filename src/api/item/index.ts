@@ -6,7 +6,6 @@ import {
   findByCategory, findById,
   findByName,
   findAll,
-  getAllCategories,
   validateItemData,
 } from '../../models/item';
 

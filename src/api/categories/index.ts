@@ -7,7 +7,7 @@ router.get('/', async (req, res) => {
   try {
     logger.info('try to return categories');
     const categories = await getAllCategories();
-    return res.json({ categories });
+    return res.json(categories);
   } catch (e) {
     logger.error('error getting categories');
     return res.status(400).json({
