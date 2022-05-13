@@ -30,8 +30,7 @@ router.patch('/', async (req, res) => {
     const { isAdmin } = data;
     if (isAdmin) {
       return res.status(400).json({
-        error: `User name ${userName} tried to update isAdmin field.
-       not allowed operation`,
+        error: `User name ${userName} tried to update isAdmin field. not allowed operation`,
       });
     }
     logger.info(`try patch user by name ${userName}`);
