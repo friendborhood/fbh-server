@@ -14,6 +14,7 @@ export const EXISTING_USER_ID = '21ada0dc-ca23-4002-881d-a60a006eb4f5';
 export const NON_EXISTING_USER_ID = '111';
 export const TEST_OFFERS_CATEGORY = 'TestCleaning';
 export const OFFERS_END_POINT = 'offers';
+
 export const TEST_USER = 'omergery1996';
 export const TEST_RADIUS = 3000000;
 export const COMPLEX_OBJECT = {

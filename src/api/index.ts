@@ -3,7 +3,7 @@ import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 
 import swaggerDocument from '../../swagger.json';
-
+import categories from './categories';
 import logger from '../logger';
 import { authMiddleware } from '../auth';
 import user from './user';
@@ -23,6 +23,7 @@ app.get('/', (req, res) => {
     message: 'Welcome to FriendBorHood API! 🐿️',
   });
 });
+app.use('/categories', authMiddleware, categories);
 app.use('/user', user);
 app.use('/item', authMiddleware, require('./item'));
 app.use(['/offer', '/offers'], authMiddleware, require('./offer'));

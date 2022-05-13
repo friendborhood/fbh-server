@@ -24,21 +24,15 @@ describe('Basic sanity server CRUD tests', () => {
     expect(data).toBeDefined();
     expect(status).toBe(200);
   });
-  xit('Return 404 for not exisiting user', async () => {
-    try {
-      await testNetwork.get(`${USER_END_POINT}/${ME_END_POINT}/${NON_EXISTING_USER_ID}`);
-    } catch (error) {
-      logger.warn(error);
-      const { response: { status } } = error;
-      expect(status).toBe(404);
-    }
-  });
   it('Logger test', () => {
     logger.info('i am an info', COMPLEX_OBJECT);
     logger.warn('i am a warning ', { warning: 'warn' });
     logger.error(' i am an error', { someError: ['error1', 'error2'] });
   });
-
+  it('Can get categories', async () => {
+    const categories = await testNetwork.get('categories');
+    expect(categories).toBeDefined();
+  });
   it('Offers in area - E2E', async () => {
     const { data: offers } = await testNetwork.get(`${OFFERS_END_POINT}/in-area`, {
       params: {
