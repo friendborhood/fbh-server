@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
   logger.info('try get all items');
   const { categoryName } = req.query;
   const items = categoryName ? await findByCategory(categoryName) : await findAll();
-  if (!items) {
+  if (items.length === 0) {
     return res.status(204).json({ msg: 'Items were not found.' });
   }
   return res.json(items);
