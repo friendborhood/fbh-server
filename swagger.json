@@ -52,7 +52,7 @@
           "required": true,
           "description": "Add user to DB",
           "schema": {
-            "$ref": "#/definitions/User"
+            "$ref": "#/definitions/UserSignUpDetails"
           }
         }
       ],
@@ -63,7 +63,7 @@
   "application/json":{
     "schema":{      
       "type": "object",
-      "$ref": "#/definitions/User"
+      "$ref": "#/definitions/UserSignUpDetails"
     },
       "required": true
   }
@@ -93,7 +93,7 @@
         "200": {
           "description": "OK",
           "schema": {
-            "$ref": "#/definitions/User"
+            "$ref": "#/definitions/UserFullDetails"
           }
         }
       }
@@ -112,7 +112,7 @@
           "in": "body",
           "required": true,
           "schema":{
-            "$ref":"#/definitions/User"
+            "$ref":"#/definitions/UserFullDetails"
           }
         }
       ],
@@ -191,6 +191,29 @@
             }
           }
       },
+      "/categories": {
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "jwt",
+            "type": "string"
+          }
+        ],
+        "get": {
+          "tags": ["Item"],
+          "summary": "Get all supported categories",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "400": {
+              "description": "Error fetching categories"
+            }
+          }
+        }
+    },
       "/item/{itemId}": {
         "parameters": [
             {
@@ -268,6 +291,15 @@
         }
     },
     "/offer": {
+      "parameters": [
+        {
+          "name": "authorization",
+          "in": "header",
+          "required": true,
+          "description": "jwt",
+          "type": "string"
+        }
+      ],
       "post": {
         "parameters": [
           {
@@ -314,6 +346,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "404": {
+            "description": "No Offered Items were found"
           }
         }
       }
@@ -351,11 +386,26 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Missing parameter"
+          },
+          "404": {
+            "description": "User not found"
           }
         }
       }
     },
     "/offer/{offerId}": {
+      "parameters": [
+        {
+          "name": "authorization",
+          "in": "header",
+          "required": true,
+          "description": "jwt",
+          "type": "string"
+        }
+      ],
       "patch": {
           "parameters": [
             {
@@ -414,7 +464,7 @@
     }
       },
       "definitions": {
-        "User": {
+        "UserFullDetails": {
           "required": ["userName"],
           "properties": {
               "userName": {
@@ -460,6 +510,27 @@
         }
       }
       },
+      "UserSignUpDetails": {
+        "required": ["userName"],
+        "properties": {
+            "userName": {
+            "type": "string",
+            "uniqueItems": true
+              },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "imageUrl": {
+            "type": "string"
+          }
+    }
+    },
       "Item": {
         "properties": {
           "itemName": {

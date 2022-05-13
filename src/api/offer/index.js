@@ -26,7 +26,7 @@ router.get('/', adminMiddleWare, async (req, res) => {
   const { categoryName } = req.query;
   const offers = categoryName ? await findByCategory(categoryName) : await findAll();
   if (!offers) {
-    return res.status(404).json({ msg: 'No Offered Items were  found.' });
+    return res.status(404).json({ msg: 'No Offered Items were found.' });
   }
   return res.json(offers);
 });
