@@ -19,7 +19,7 @@ export const validateUserData = async (data) => {
     lastName: Joi.string()
       .required(),
     imageUrl: Joi.string().uri(),
-    breaking build on purpose
+    breaking build on purpose2
   });
   await schema.validateAsync(data);
   logger.info('user data okay');
