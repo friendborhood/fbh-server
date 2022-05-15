@@ -1,5 +1,5 @@
 {
-    "swagger": "2.0",
+    "openapi": "3.0.1",
     "info": {
       "version": "1.0.0", 
       "title": "Friendborhood API",
@@ -18,21 +18,11 @@
     }
   }
 },
-    "security": {
+    "security": [{
       "bearerAuth": []  
-    },
-
+    }],
     "paths": {
     "/user/login": {
-      "parameters": [
-        {
-          "name": "authorization",
-          "in": "header",
-          "required": true,
-          "description": "jwt",
-          "type": "string"
-        }
-      ],
     "post": {
       "tags": ["User"],
       "summary": "Get token by name",
@@ -45,6 +35,7 @@
   },
   "/user": {
     "post": {
+      "security": [],
       "parameters": [
         {
           "name": "body",
@@ -78,17 +69,8 @@
   },
   "/user/me": {
     "get": {
-      "parameters": [
-        {
-          "name": "authorization",
-          "in": "header",
-          "required": true,
-          "description": "jwt",
-          "type": "string"
-        }
-      ],
       "tags": ["User"],
-      "summary": "Get user by jwt",
+      "summary": "Get the user which was authenticated",
       "responses": {
         "200": {
           "description": "OK",
@@ -100,13 +82,6 @@
     },
     "patch": {
       "parameters": [
-        {
-          "name": "authorization",
-          "in": "header",
-          "required": true,
-          "description": "jwt",
-          "type": "string"
-        },
         {
           "name": "supportedProperties",
           "in": "body",
@@ -132,15 +107,6 @@
       }
   },
         "/item": {
-          "parameters": [
-            {
-              "name": "authorization",
-              "in": "header",
-              "required": true,
-              "description": "jwt",
-              "type": "string"
-            }
-          ],
           "post": {
             "parameters": [
               {
@@ -192,15 +158,6 @@
           }
       },
       "/categories": {
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": true,
-            "description": "jwt",
-            "type": "string"
-          }
-        ],
         "get": {
           "tags": ["Item"],
           "summary": "Get all supported categories",
@@ -221,13 +178,6 @@
               "in": "path",
               "required": true,
               "description": "ID of item that we want to find",
-              "type": "string"
-            },
-            {
-              "name": "authorization",
-              "in": "header",
-              "required": true,
-              "description": "jwt",
               "type": "string"
             }
           ],
@@ -291,15 +241,6 @@
         }
     },
     "/offer": {
-      "parameters": [
-        {
-          "name": "authorization",
-          "in": "header",
-          "required": true,
-          "description": "jwt",
-          "type": "string"
-        }
-      ],
       "post": {
         "parameters": [
           {
@@ -355,9 +296,6 @@
     },
     "/offer/in-area": {
       "get": {
-        "security": {
-          "bearerAuth" :[]
-        },
         "parameters": [
           {
             "name": "categoryName",
@@ -372,13 +310,6 @@
             "required": true,
             "description": "Maximum radius limit of offers in area",
             "type": "integer"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": true,
-            "description": "jwt",
-            "type": "string"
           }
         ],
         "tags": ["Offer"],
@@ -397,15 +328,6 @@
       }
     },
     "/offer/{offerId}": {
-      "parameters": [
-        {
-          "name": "authorization",
-          "in": "header",
-          "required": true,
-          "description": "jwt",
-          "type": "string"
-        }
-      ],
       "patch": {
           "parameters": [
             {
