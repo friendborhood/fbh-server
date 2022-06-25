@@ -67,6 +67,29 @@
       }
     }
   },
+  "/user/{userId}": {
+        "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
+              "description": "ID of the user that we want to find",
+              "type": "string"
+            }
+          ],
+      "get": {
+        "tags": ["User"],
+        "summary": "Get user by id",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+      }
+    }
+  },
   "/user/me": {
     "get": {
       "tags": ["User"],

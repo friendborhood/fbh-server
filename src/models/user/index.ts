@@ -24,6 +24,16 @@ export const validateUserData = async (data) => {
   logger.info('user data okay');
 };
 
+export const extractPublicUserParams = (userData) => {
+  const publicParams = userData;
+  delete publicParams.favoriteCategory;
+  delete publicParams.isAdmin;
+  delete publicParams.registerDate;
+  delete publicParams.email;
+  delete publicParams.searchRadius;
+  delete publicParams.location;
+  return publicParams;
+};
 export const validateUserLocationData = async (data) => {
   const schema = Joi.object({
     address: Joi.string().required(),
