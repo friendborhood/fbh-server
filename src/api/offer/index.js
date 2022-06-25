@@ -88,7 +88,13 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: e.message });
     }
     logger.info(`try add offer with data ${JSON.stringify(data)}`);
-    const newOfferId = await addUuidEntity({ data, modelName: OFFER_MODEL });
+    const newOfferId = await addUuidEntity({
+      data: {
+        ...data,
+        offererUserName: extractUserNameFromAuth(req),
+      },
+      modelName: OFFER_MODEL,
+    });
 
     return res.json({
       msg: 'offer was added to database successfully',
