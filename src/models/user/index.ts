@@ -25,13 +25,9 @@ export const validateUserData = async (data) => {
 };
 
 export const extractPublicUserParams = (userData) => {
+  const PRIVATE_PARAMS = ['favoriteCategory', 'isAdmin', 'registerDate', 'email', 'searchRadius', 'location'];
   const publicParams = userData;
-  delete publicParams.favoriteCategory;
-  delete publicParams.isAdmin;
-  delete publicParams.registerDate;
-  delete publicParams.email;
-  delete publicParams.searchRadius;
-  delete publicParams.location;
+  PRIVATE_PARAMS.forEach((privateParam) => delete publicParams[privateParam]);
   return publicParams;
 };
 export const validateUserLocationData = async (data) => {
