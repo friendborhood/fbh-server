@@ -24,7 +24,7 @@ export const authMiddleware = (req, res, next) => {
     if (!verified) {
       return res.status(403).send({ message: 'bad token provided' });
     }
-    const { userName } = jwt.decode(token);
+    const { userName } : any = jwt.decode(token);
     req.userName = userName;
     logger.info(`auth validated for user ${req.userName}`);
   } catch (e) {
