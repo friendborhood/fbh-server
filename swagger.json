@@ -67,6 +67,29 @@
       }
     }
   },
+  "/user/{userName}": {
+        "parameters": [
+            {
+              "name": "userName",
+              "in": "path",
+              "required": true,
+              "description": "Name of the user that we want to find",
+              "type": "string"
+            }
+          ],
+      "get": {
+        "tags": ["User"],
+        "summary": "Get public user data by userName",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserFullDetails"
+            }
+          }
+      }
+    }
+  },
   "/user/me": {
     "get": {
       "tags": ["User"],

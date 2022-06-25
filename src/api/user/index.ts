@@ -5,13 +5,25 @@ import { encodeToJwt, verifyGoogle, authMiddleware } from '../../auth';
 import logger from '../../logger';
 import me from './me';
 import {
-  findByName, addUser, validateUserData,
+  findByName, addUser, validateUserData, extractPublicUserParams,
 } from '../../models/user';
 import { sendAuthCodeToUserEmail, sendMail } from '../../services/mail-service';
 import CacheService from '../../services/redis';
 
 const router = Router();
 router.use('/me', authMiddleware, me);
+
+router.get('/:userName', async (req, res) => {
+  logger.info('try get user by name');
+  const { userName } = req.params;
+  logger.info(`user name: ${userName}`);
+  const user = await findByName(userName);
+  if (!user) {
+    return res.status(404).json({ error: `username ${userName} was not found.` });
+  }
+  const publicUserParams = extractPublicUserParams(user);
+  return res.json(publicUserParams);
+});
 
 router.post('/auth/:userName', async (req, res) => {
   const { userName } = req.params;
