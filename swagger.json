@@ -67,19 +67,19 @@
       }
     }
   },
-  "/user/{userId}": {
+  "/user/{userName}": {
         "parameters": [
             {
-              "name": "userId",
+              "name": "userName",
               "in": "path",
               "required": true,
-              "description": "ID of the user that we want to find",
+              "description": "Name of the user that we want to find",
               "type": "string"
             }
           ],
       "get": {
         "tags": ["User"],
-        "summary": "Get user by id",
+        "summary": "Get public user data by userName",
         "responses": {
           "200": {
             "description": "OK",
