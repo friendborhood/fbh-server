@@ -7,6 +7,7 @@ const add = require('../../services/firebase-api/add');
 const { findById } = require('../item');
 const logger = require('../../logger');
 const { formatKeyToJsonArray, parseJsonToArrayWithKeys } = require('../generic');
+const { findByName } = require('../user');
 
 const modelName = 'offers';
 const getDistanceFromOfferToTarget = (offer, target) => {
@@ -51,7 +52,16 @@ const validateOfferData = async (data) => {
   await schema.validateAsync(data, { allowUnknown: true });
   logger.info('offer data is okay');
 };
-
+const enrichOfferData = async (offers) => {
+  const enrichedOffers = await Promise.all(offers.map(async (offer) => {
+    const [itemData, offererUserData] = await Promise.all([
+      findById(offer.itemId),
+      findByName(offer.offererUserName),
+    ]);
+    return ({ ...offer, itemData, offererUserData });
+  }));
+  return enrichedOffers;
+};
 const findAll = async () => {
   logger.info('getting model from db');
   const offerModel = await getModel(modelName);
@@ -103,7 +113,8 @@ const getOffersInArea = async ({ targetLocation, radius, categoryName = null }) 
   const filteredByArea = filterOffersByArea(
     { offers: relevantOffersByCategory, radiusInMeters: radius, targetLocation },
   );
-  return filteredByArea;
+  const enrichedFilteredOffers = await enrichOfferData(filteredByArea);
+  return enrichedFilteredOffers;
 };
 module.exports = {
   sortOffersByDistance,
