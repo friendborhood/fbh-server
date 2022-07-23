@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 
+import bodyParser from 'body-parser';
 import swaggerDocument from '../../swagger.json';
 import categories from './categories';
 import logger from '../logger';
@@ -11,7 +12,7 @@ import user from './user';
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(bodyParser.json({ type: 'application/*+json', limit: '50mb' }));
 app.use(cors());
 app.use(
   '/api-docs',
