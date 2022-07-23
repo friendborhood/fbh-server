@@ -434,6 +434,9 @@
             "imageUrl": {
               "type": "string"
             },
+            "imageBase64": {
+              "type": "string"
+            },
             "location": {
             "type": "object",
             "properties": {
@@ -473,6 +476,9 @@
           },
           "imageUrl": {
             "type": "string"
+          },
+          "imageBase64": {
+            "type": "string"
           }
     }
     },
@@ -483,6 +489,9 @@
             "uniqueItems": true
           },
           "imageUrl": {
+            "type": "string"
+          },
+          "imageBase64": {
             "type": "string"
           },
           "priceRange":
@@ -509,6 +518,9 @@
           "type": "string"
         },
         "imageUrl": {
+          "type": "string"
+        },
+        "imageBase64": {
           "type": "string"
         },
         "priceAsked":{
