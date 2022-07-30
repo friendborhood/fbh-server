@@ -8,6 +8,8 @@ const {
   validateOfferData,
   getOffersInArea,
   sortOffersByDistance,
+  sortOffersByDate,
+  filterRelevantOffersByDistance,
 } = require('../../models/offer');
 const {
   addUuidEntity,
@@ -34,7 +36,7 @@ router.get('/', adminMiddleWare, async (req, res) => {
 router.get('/in-area', async (req, res) => {
   try {
     const userName = extractUserNameFromAuth(req);
-    const { categoryName = null, radius } = req.query;
+    const { categoryName = null, radius, newest = null } = req.query;
     if (!userName) {
       return res.status(400).json({ msg: 'must provide userName' });
     }
@@ -59,9 +61,14 @@ router.get('/in-area', async (req, res) => {
     if (offersInArea.length === 0) {
       return res.status(204).json({ msg: 'No relevant offers were found.' });
     }
-    const sortedOffers = sortOffersByDistance(
-      { offers: offersInArea, targetLocation: userLocation },
-    );
+
+    const relevantOffers = filterRelevantOffersByDistance({
+      offers: offersInArea,
+      targetLocation: userLocation,
+    });
+
+    const sortedOffers = newest ? sortOffersByDate({ offers: relevantOffers })
+      : sortOffersByDistance({ offers: relevantOffers });
     return res.json(sortedOffers);
   } catch (e) {
     logger.error('got 500 offers in area', e);

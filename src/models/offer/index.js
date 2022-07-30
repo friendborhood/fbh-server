@@ -21,15 +21,28 @@ const filterOffersByArea = ({ offers, radiusInMeters, targetLocation }) => (offe
   },
 ) : []);
 
-const sortOffersByDistance = ({ offers, targetLocation }) => {
+const filterRelevantOffersByDistance = ({ offers, targetLocation }) => {
   const offersWithDistanceFromUser = offers.map((offer) => ({
     ...offer,
     distanceFromUser: getDistanceFromOfferToTarget(offer, targetLocation),
   }));
-  offersWithDistanceFromUser.sort(
+  return offersWithDistanceFromUser;
+};
+
+const sortOffersByDistance = ({ offers }) => {
+  logger.info('sorting offers by distance');
+  offers.sort(
     (offerA, offerB) => offerA.distanceFromUser - offerB.distanceFromUser,
   );
-  return offersWithDistanceFromUser;
+  return offers;
+};
+
+const sortOffersByDate = ({ offers }) => {
+  logger.info('sorting offers by newest');
+  offers.sort(
+    (offerA, offerB) => offerA.lastUpdatedAt - offerB.lastUpdatedAt,
+  );
+  return offers;
 };
 
 const validateOfferData = async (data) => {
@@ -116,7 +129,9 @@ const getOffersInArea = async ({ targetLocation, radius, categoryName = null }) 
   return enrichedFilteredOffers;
 };
 module.exports = {
+  filterRelevantOffersByDistance,
   sortOffersByDistance,
+  sortOffersByDate,
   getOffersInArea,
   addItem,
   findByCategory,

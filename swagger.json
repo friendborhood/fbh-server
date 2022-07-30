@@ -328,6 +328,13 @@
             "type": "string"
           },
           {
+            "name": "newest",
+            "in": "query",
+            "required": false,
+            "description": "Sort offer by newest? (pass true)",
+            "type": "boolean"
+          },
+          {
             "name": "radius",
             "in": "query",
             "required": true,
@@ -529,6 +536,9 @@
                 }
               }
             }
+          },
+          "lastUpdatedAt": {
+            "type": "string" 
           }
         },
     "required": ["offerId"]
