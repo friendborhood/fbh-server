@@ -51,7 +51,7 @@ describe('Basic sanity server CRUD tests', () => {
       },
     );
     const sortedOffers = sortOffersByDistance(
-      { offers: relevantOffers, targetLocation: mockTargetLocation },
+      { offers: relevantOffers },
     );
     expect(sortedOffers[0].name).toBe('Pizza Lila');
     expect(sortedOffers[1].name).toBe('Taizu');
