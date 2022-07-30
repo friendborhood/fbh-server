@@ -30,6 +30,7 @@ export const validateItemData = async (data) => {
 export const findAll = async () => {
   logger.info('getting model from db');
   const itemModel = await getModel(modelName);
+  delete itemModel.categories;
   return itemModel;
 };
 
