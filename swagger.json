@@ -428,9 +428,9 @@
             "registerDate": {
                 "type": "integer"
             },
-            "favoriteCategory": {
+            "favoriteCategory": [{
               "type": "string"
-            },
+            }],
             "imageUrl": {
               "type": "string"
             },
