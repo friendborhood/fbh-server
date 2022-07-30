@@ -1,6 +1,8 @@
 import '../api';
 import logger from '../logger';
-import { validateOfferData, filterOffersByArea, sortOffersByDistance } from '../models/offer';
+import {
+  validateOfferData, filterOffersByArea, sortOffersByDistance, filterRelevantOffersByDistance,
+} from '../models/offer';
 import {
   USER_END_POINT,
   testNetwork,
@@ -50,8 +52,11 @@ describe('Basic sanity server CRUD tests', () => {
         targetLocation: mockTargetLocation,
       },
     );
+    const filtered = filterRelevantOffersByDistance(
+      { offers: relevantOffers, targetLocation: mockTargetLocation },
+    );
     const sortedOffers = sortOffersByDistance(
-      { offers: relevantOffers },
+      { offers: filtered },
     );
     expect(sortedOffers[0].name).toBe('Pizza Lila');
     expect(sortedOffers[1].name).toBe('Taizu');
