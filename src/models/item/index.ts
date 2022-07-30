@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi, { object } from 'joi';
 import { uuid } from 'short-uuid';
 import getModel from '../../services/firebase-api/get';
 import upsert from '../../services/firebase-api/upsert';
@@ -15,15 +15,16 @@ export const getAllCategories = async () => {
 export const validateItemData = async (data) => {
   const categories = await getAllCategories();
   logger.info(categories);
+  const categoriesNames = Object.keys(categories)
+  logger.info(categoriesNames);
   const schema = Joi.object({
     itemName: Joi.string()
       .min(3)
       .max(30)
       .required(),
-    categoryName: Joi.string().valid(...categories),
+    categoryName: Joi.string().valid(...categoriesNames),
     priceRange: Joi.any().required(),
-    //imageUrl: Joi.string().uri(),
-    imageBase64: Joi.string(),
+    imageUrl: Joi.string().uri(),
   });
   await schema.validateAsync(data);
   logger.info('item data is okay');

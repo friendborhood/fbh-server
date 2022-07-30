@@ -14,6 +14,8 @@ const deleteEntity = async ({ modelName, id }) => {
   await add(modelName, null, id);
 };
 const extractUserNameFromAuth = (req) => req.userName;
+const extractIsAdminFromAuth = (req) => req.isAdmin;
+
 const patchEntity = async ({ data, modelName, entityId }) => {
   const timeStampedData = addTimeStamp(data);
   await upsert(modelName, timeStampedData, entityId);
@@ -28,6 +30,7 @@ const parseJsonToArrayWithKeys = (json) => {
 
 module.exports = {
   extractUserNameFromAuth,
+  extractIsAdminFromAuth,
   parseJsonToArrayWithKeys,
   formatKeyToJsonArray,
   addUuidEntity,

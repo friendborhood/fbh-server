@@ -13,6 +13,8 @@ import {
   addUuidEntity,
   deleteEntity,
   patchEntity,
+  extractUserNameFromAuth,
+  extractIsAdminFromAuth,
 } from '../../models/generic';
 import logger from '../../logger';
 
@@ -43,11 +45,6 @@ router.get('/:itemId', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const { isAdmin } = req.query;
-    const { userName } = req.query;
-    if (!isAdmin || isAdmin === 'false') {
-      return res.status(400).json({ msg: `${userName} is non-admin user. Cannot add items to db` });
-    }
     const data = req.body;
     try {
       await validateItemData(data);
