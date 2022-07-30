@@ -46,7 +46,6 @@ const validateOfferData = async (data) => {
     itemId: Joi.string()
       .guid().required(),
     priceAsked: Joi.number().integer()
-      .min(item.priceRange.min).max(item.priceRange.max)
       .required(),
   });
   await schema.validateAsync(data, { allowUnknown: true });
