@@ -434,9 +434,6 @@
             "imageUrl": {
               "type": "string"
             },
-            "imageBase64": {
-              "type": "string"
-            },
             "location": {
             "type": "object",
             "properties": {
@@ -476,9 +473,6 @@
           },
           "imageUrl": {
             "type": "string"
-          },
-          "imageBase64": {
-            "type": "string"
           }
     }
     },
@@ -487,24 +481,6 @@
           "itemName": {
             "type": "string",
             "uniqueItems": true
-          },
-          "imageUrl": {
-            "type": "string"
-          },
-          "imageBase64": {
-            "type": "string"
-          },
-          "priceRange":
-          {
-            "type": "object",
-            "properties": {
-              "min": {
-                "type": "integer"
-              },
-              "max": {
-                "type": "integer"
-              }
-            }
           },
           "categoryName": {
             "type": "string"
@@ -518,9 +494,6 @@
           "type": "string"
         },
         "imageUrl": {
-          "type": "string"
-        },
-        "imageBase64": {
           "type": "string"
         },
         "priceAsked":{

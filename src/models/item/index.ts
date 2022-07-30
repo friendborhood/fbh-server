@@ -23,8 +23,6 @@ export const validateItemData = async (data) => {
       .max(30)
       .required(),
     categoryName: Joi.string().valid(...categoriesNames),
-    priceRange: Joi.any().required(),
-    imageUrl: Joi.string().uri(),
   });
   await schema.validateAsync(data);
   logger.info('item data is okay');
