@@ -1,6 +1,7 @@
 const { uuid } = require('short-uuid');
 const Joi = require('joi');
 const { insideCircle, distanceTo } = require('geolocation-utils');
+const moment = require('moment');
 const getModel = require('../../services/firebase-api/get');
 const upsert = require('../../services/firebase-api/upsert');
 const add = require('../../services/firebase-api/add');
@@ -40,7 +41,7 @@ const sortOffersByDistance = ({ offers }) => {
 const sortOffersByDate = ({ offers }) => {
   logger.info('sorting offers by newest');
   offers.sort(
-    (offerA, offerB) => offerA.lastUpdatedAt - offerB.lastUpdatedAt,
+    (offerA, offerB) => moment(offerA.lastUpdatedAt).isBefore(moment(offerB.lastUpdatedAt)),
   );
   return offers;
 };
