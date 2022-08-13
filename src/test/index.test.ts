@@ -42,7 +42,7 @@ describe('Basic sanity server CRUD tests', () => {
     });
     await Promise.all(offers.map((offer) => validateOfferData(offer)));
     expect(offers[0].distanceFromUser).toBeLessThanOrEqual(offers[1].distanceFromUser);
-    expect(offers.length).toBe(2);
+    expect(offers.length).toBe(3);
   });
   it('Offers in area - Mock', () => {
     const relevantOffers = filterOffersByArea(
