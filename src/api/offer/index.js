@@ -62,15 +62,10 @@ router.get('/in-area', async (req, res) => {
       return res.status(204).json({ msg: 'No relevant offers were found.' });
     }
 
-    logger.info('starting to filter offers');
-
     const relevantOffers = filterRelevantOffersByDistance({
       offers: offersInArea,
       targetLocation: userLocation,
     });
-
-    logger.info('finished to filter offers');
-
     const sortedOffers = newest ? sortOffersByDate({ offers: relevantOffers })
       : sortOffersByDistance({ offers: relevantOffers });
     return res.json(sortedOffers);

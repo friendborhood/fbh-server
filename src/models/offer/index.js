@@ -95,7 +95,11 @@ const findByCategory = async (categories) => {
   const offerModel = await getModel(modelName);
   logger.info(`try to find offers in ${categories}`);
   const relevantOffers = Object.entries(offerModel)
-    .filter(([, offer]) => categories.includes(offer.categoryName));
+    .filter(async ([, offer]) => {
+      const { itemId } = offer;
+      const { categoryName } = await findById(itemId);
+      return categories.includes(categoryName);
+    });
   if (relevantOffers.length === 0) {
     logger.warn(`offers by category ${categories} were not found`);
     return null;
@@ -105,24 +109,24 @@ const findByCategory = async (categories) => {
   return formatKeyToJsonArray(relevantOffers);
 };
 const addItem = async (data) => {
-  logger.info('adding item to db');
+  logger.info('adding offer to db');
   const generatedId = uuid();
   await upsert(modelName, data, generatedId);
   return generatedId;
 };
 const deleteItem = async (index) => {
-  logger.info('deleting item from db');
+  logger.info('deleting offer from db');
   await add(modelName, null, index);
 };
-const patchItem = async (data, itemId) => {
-  logger.info(`patching item ${itemId}, modifing data ${JSON.stringify(data)}`);
-  await upsert(modelName, data, itemId);
+const patchItem = async (data, offerId) => {
+  logger.info(`patching offer ${offerId}, modifing data ${JSON.stringify(data)}`);
+  await upsert(modelName, data, offerId);
 };
 const assertCategoryAndFind = async (categoryName) => (categoryName
   ? findByCategory(categoryName) : findAll());
 
-const getOffersInArea = async ({ targetLocation, radius, categoryName = null }) => {
-  const relevantOffersByCategory = await assertCategoryAndFind(categoryName);
+const getOffersInArea = async ({ targetLocation, radius, categories = [] }) => {
+  const relevantOffersByCategory = await assertCategoryAndFind(categories);
   const filteredByArea = filterOffersByArea(
     { offers: relevantOffersByCategory, radiusInMeters: radius, targetLocation },
   );
