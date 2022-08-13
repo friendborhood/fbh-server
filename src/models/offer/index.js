@@ -6,7 +6,7 @@ const upsert = require('../../services/firebase-api/upsert');
 const add = require('../../services/firebase-api/add');
 const { findById } = require('../item');
 const logger = require('../../logger');
-const { formatKeyToJsonArray, parseJsonToArrayWithKeys } = require('../generic');
+const { parseJsonToArrayWithKeys } = require('../generic');
 const { findByName } = require('../user');
 
 const modelName = 'offers';
@@ -95,7 +95,6 @@ const findByCategory = async (categories) => {
   const offerModel = await getModel(modelName);
   logger.info(`try to find offers in ${JSON.stringify(categories)}`);
   const allOfers = Object.entries(offerModel);
-  console.log(allOfers.length);
   const allOffersWithCategory = await Promise.all(allOfers.map(async ([id, offer]) => {
     const { categoryName } = await findById(offer.itemId);
     return {
@@ -104,11 +103,8 @@ const findByCategory = async (categories) => {
       category: categoryName,
     };
   }));
-  console.log(allOffersWithCategory.length);
   const relevantOffers = allOffersWithCategory
     .filter((offer) => categories.includes(offer.category));
-  console.log('relevant offer');
-  console.log(relevantOffers[0]);
   if (relevantOffers.length === 0) {
     logger.warn(`offers by category ${categories} were not found`);
     return null;
@@ -134,7 +130,7 @@ const patchItem = async (data, offerId) => {
 
 const getOffersInArea = async ({ targetLocation, radius, categories = [] }) => {
   const relevantOffersByCategory = await findByCategory(categories);
-  console.log('offers relevantOffersByCategory', relevantOffersByCategory);
+  logger.info(`amount of relevant offers by category filter ${relevantOffersByCategory.length}`);
   const filteredByArea = filterOffersByArea(
     { offers: relevantOffersByCategory, radiusInMeters: radius, targetLocation },
   );
