@@ -36,7 +36,7 @@ router.get('/', adminMiddleWare, async (req, res) => {
 router.get('/in-area', async (req, res) => {
   try {
     const userName = extractUserNameFromAuth(req);
-    const { categories = null, radius, newest = null } = req.query;
+    const { categories = [], radius, newest = null } = req.query;
     if (!userName) {
       return res.status(400).json({ msg: 'must provide userName' });
     }
