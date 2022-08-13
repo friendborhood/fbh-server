@@ -130,7 +130,7 @@ const patchItem = async (data, offerId) => {
 
 const getOffersInArea = async ({ targetLocation, radius, categories = [] }) => {
   const relevantOffersByCategory = await findByCategory(categories);
-  logger.info(`amount of relevant offers by category filter ${relevantOffersByCategory.length}`);
+  logger.info('relevant offers by category', relevantOffersByCategory);
   const filteredByArea = filterOffersByArea(
     { offers: relevantOffersByCategory, radiusInMeters: radius, targetLocation },
   );
