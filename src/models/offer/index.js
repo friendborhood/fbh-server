@@ -93,27 +93,29 @@ const findByOfferId = async (index) => {
 };
 const findByCategory = async (categories) => {
   const offerModel = await getModel(modelName);
-  logger.info(`try to find offers in ${categories}`);
+  logger.info(`try to find offers in ${JSON.stringify(categories)}`);
   const allOfers = Object.entries(offerModel);
   console.log(allOfers.length);
-  const allOffersWithCategory = await Promise.all(allOfers.map(async ([, offer]) => {
+  const allOffersWithCategory = await Promise.all(allOfers.map(async ([id, offer]) => {
     const { categoryName } = await findById(offer.itemId);
     return {
       ...offer,
+      id,
       category: categoryName,
     };
   }));
   console.log(allOffersWithCategory.length);
   const relevantOffers = allOffersWithCategory
     .filter((offer) => categories.includes(offer.category));
-  console.log(relevantOffers.length);
+  console.log('relevant offer');
+  console.log(relevantOffers[0]);
   if (relevantOffers.length === 0) {
     logger.warn(`offers by category ${categories} were not found`);
     return null;
   }
   logger.info(`offers by category ${categories} were found `);
 
-  return formatKeyToJsonArray(relevantOffers);
+  return relevantOffers;
 };
 const addItem = async (data) => {
   logger.info('adding offer to db');
@@ -132,6 +134,7 @@ const patchItem = async (data, offerId) => {
 
 const getOffersInArea = async ({ targetLocation, radius, categories = [] }) => {
   const relevantOffersByCategory = await findByCategory(categories);
+  console.log('offers relevantOffersByCategory', relevantOffersByCategory);
   const filteredByArea = filterOffersByArea(
     { offers: relevantOffersByCategory, radiusInMeters: radius, targetLocation },
   );

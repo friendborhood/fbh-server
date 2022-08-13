@@ -28,7 +28,7 @@ router.get('/', adminMiddleWare, async (req, res) => {
   const { categoryName } = req.query;
   const offers = categoryName ? await findByCategory(categoryName) : await findAll();
   if (offers.length === 0) {
-    return res.status(204).json({ msg: 'No Offered Items were found.' });
+    return res.status(200).json({ msg: 'No Offered Items were found.' });
   }
   return res.json(offers);
 });
@@ -59,7 +59,7 @@ router.get('/in-area', async (req, res) => {
       { targetLocation: userLocation, radius, categories },
     );
     if (offersInArea.length === 0) {
-      return res.status(204).json({ msg: 'No relevant offers were found.' });
+      return res.status(200).json([]);
     }
 
     const relevantOffers = filterRelevantOffersByDistance({
