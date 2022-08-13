@@ -113,7 +113,6 @@ const findByCategory = async (categories) => {
   }
   logger.info(`offers by category ${categories} were found `);
 
-
   return formatKeyToJsonArray(relevantOffers);
 };
 const addItem = async (data) => {
