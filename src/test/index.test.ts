@@ -36,7 +36,7 @@ describe('Basic sanity server CRUD tests', () => {
   it('Offers in area - E2E', async () => {
     const { data: offers } = await testNetwork.get(`${OFFERS_END_POINT}/in-area`, {
       params: {
-        categoryName: TEST_OFFERS_CATEGORY,
+        categories: [TEST_OFFERS_CATEGORY],
         radius: TEST_RADIUS,
       },
     });
