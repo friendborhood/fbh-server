@@ -321,11 +321,15 @@
       "get": {
         "parameters": [
           {
-            "name": "categoryName",
+            "name": "categories[]",
             "in": "query",
             "required": false,
-            "description": "Category Name of the offer we want to find",
-            "type": "string"
+            "description": "Category Names of the offer we want to find",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
           },
           {
             "name": "newest",
