@@ -36,14 +36,14 @@ router.get('/', adminMiddleWare, async (req, res) => {
 router.get('/in-area', async (req, res) => {
   try {
     const userName = extractUserNameFromAuth(req);
-    const { categoryName = null, radius, newest = null } = req.query;
+    const { categories = null, radius, newest = null } = req.query;
     if (!userName) {
       return res.status(400).json({ msg: 'must provide userName' });
     }
     if (!radius) {
       return res.status(400).json({ msg: 'must provide radius' });
     }
-    logger.info('try get offers in area', { userName, radius, categoryName });
+    logger.info('try get offers in area', { userName, radius, categories });
     const user = await findByName(userName);
     if (!user) {
       logger.error('user was not found. cant find offers', userName);
@@ -56,22 +56,26 @@ router.get('/in-area', async (req, res) => {
     }
     const { geoCode: userLocation } = location;
     const offersInArea = await getOffersInArea(
-      { targetLocation: userLocation, radius, categoryName },
+      { targetLocation: userLocation, radius, categories },
     );
     if (offersInArea.length === 0) {
       return res.status(204).json({ msg: 'No relevant offers were found.' });
     }
+
+    logger.info('starting to filter offers');
 
     const relevantOffers = filterRelevantOffersByDistance({
       offers: offersInArea,
       targetLocation: userLocation,
     });
 
+    logger.info('finished to filter offers');
+
     const sortedOffers = newest ? sortOffersByDate({ offers: relevantOffers })
       : sortOffersByDistance({ offers: relevantOffers });
     return res.json(sortedOffers);
   } catch (e) {
-    logger.error('got 500 offers in area', e);
+    logger.error('got error by offers in area', e);
     return res.status(500).json({ error: e.message });
   }
 });

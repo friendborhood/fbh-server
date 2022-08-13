@@ -91,16 +91,16 @@ const findByOfferId = async (index) => {
   }
   return relevantOffer;
 };
-const findByCategory = async (categoryName) => {
+const findByCategory = async (categories) => {
   const offerModel = await getModel(modelName);
-  logger.info(`try to find offers in ${categoryName}`);
+  logger.info(`try to find offers in ${categories}`);
   const relevantOffers = Object.entries(offerModel)
-    .filter(([, offer]) => offer.categoryName === categoryName);
+    .filter(([, offer]) => categories.includes(offer.categoryName));
   if (relevantOffers.length === 0) {
-    logger.warn(`offers by category ${categoryName} were not found`);
+    logger.warn(`offers by category ${categories} were not found`);
     return null;
   }
-  logger.info(`offers by category ${categoryName} were found `);
+  logger.info(`offers by category ${categories} were found `);
 
   return formatKeyToJsonArray(relevantOffers);
 };
@@ -120,6 +120,7 @@ const patchItem = async (data, itemId) => {
 };
 const assertCategoryAndFind = async (categoryName) => (categoryName
   ? findByCategory(categoryName) : findAll());
+
 const getOffersInArea = async ({ targetLocation, radius, categoryName = null }) => {
   const relevantOffersByCategory = await assertCategoryAndFind(categoryName);
   const filteredByArea = filterOffersByArea(
