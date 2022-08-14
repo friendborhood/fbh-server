@@ -43,7 +43,7 @@ export const validateUserLocationData = async (data) => {
 };
 
 export const findByName = async (userName) => {
-  logger.info('getting model from db');
+  logger.info(`getting ${modelName} model from db`);
   const userModel = await getModel(modelName);
   const relevantUser = userModel[userName];
   if (!relevantUser) {

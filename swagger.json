@@ -325,12 +325,13 @@
             "in": "query",
             "required": false,
             "description": "Category Names of the offer we want to find",
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
+            "schema": {
+              "type": "array",
+              "items": {
+                "$type": "string"
+              }
+          }
+        },
           {
             "name": "newest",
             "in": "query",

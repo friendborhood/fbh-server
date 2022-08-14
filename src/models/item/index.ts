@@ -28,7 +28,7 @@ export const validateItemData = async (data) => {
   logger.info('item data is okay');
 };
 export const findAll = async () => {
-  logger.info('getting model from db');
+  logger.info(`getting ${modelName} model from db`);
   const itemModel = await getModel(modelName);
   delete itemModel.categories;
   return itemModel;
@@ -49,7 +49,7 @@ export const findByName = async (itemName) => {
   return relevantItem;
 };
 export const findById = async (index) => {
-  logger.info('getting model from db');
+  logger.info(`getting ${modelName} model from db`);
   const itemModel = await getModel(modelName);
   const relevantItem = itemModel[index];
   if (!relevantItem) {
