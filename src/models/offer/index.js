@@ -40,9 +40,15 @@ const sortOffersByDistance = ({ offers }) => {
 const sortOffersByDate = ({ offers }) => {
   logger.info('sorting offers by newest');
   offers.sort(
-    (offerA, offerB) => offerA.lastUpdatedAt - offerB.lastUpdatedAt,
+    (offerA, offerB) => {
+      const dateA = new Date(offerA.lastUpdatedAt);
+      const dateB = new Date(offerB.lastUpdatedAt);
+      return dateA - dateB;
+    },
   );
-  return offers;
+  const reverseOffers = offers.reverse();
+  // reverseOffers.forEach((element) => console.log(element.lastUpdatedAt));
+  return reverseOffers;
 };
 
 const validateOfferData = async (data) => {
@@ -75,7 +81,7 @@ const enrichOfferData = async (offers) => {
   return enrichedOffers;
 };
 const findAll = async () => {
-  logger.info('getting model from db');
+  logger.info(`getting ${modelName} model from db`);
   const offerModel = await getModel(modelName);
   const formattedOffers = parseJsonToArrayWithKeys(offerModel);
   return formattedOffers;
@@ -84,6 +90,7 @@ const findAll = async () => {
 const findByOfferId = async (id) => {
   logger.info(`getting from model ${modelName} offer ${id}`);
   const relevantOffer = await getFromModelById(modelName, id);
+
   if (!relevantOffer) {
     logger.warn('offer was not found');
     return null;
@@ -129,7 +136,6 @@ const patchItem = async (data, offerId) => {
 
 const getOffersInArea = async ({ targetLocation, radius, categories = [] }) => {
   const relevantOffersByCategory = await findByCategory(categories);
-  logger.info('relevant offers by category', relevantOffersByCategory);
   const filteredByArea = filterOffersByArea(
     { offers: relevantOffersByCategory, radiusInMeters: radius, targetLocation },
   );

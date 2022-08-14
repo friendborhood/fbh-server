@@ -28,7 +28,7 @@ export const validateItemData = async (data) => {
   logger.info('item data is okay');
 };
 export const findAll = async () => {
-  logger.info('getting model from db');
+  logger.info(`getting ${modelName} model from db`);
   const itemModel = await getModel(modelName);
   delete itemModel.categories;
   return itemModel;
@@ -48,9 +48,11 @@ export const findByName = async (itemName) => {
 
   return relevantItem;
 };
+
 export const findById = async (id) => {
   logger.info(`getting ${id} from model ${modelName} from db`);
   const relevantItem = await getFromModelById(modelName,id);
+
   if (!relevantItem) {
     logger.warn('item was not found');
     return null;

@@ -45,6 +45,7 @@ export const validateUserLocationData = async (data) => {
 export const findByName = async (userName) => {
   logger.info(`getting user from model ${modelName} by name ${userName}`);
   const relevantUser = await getFromModelById(modelName, userName);
+
   if (!relevantUser) {
     logger.warn('user not found');
     return null;
