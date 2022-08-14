@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import logger from '../../logger';
-import getModel from '../../services/firebase-api/get';
+import { getFromModelById } from '../../services/firebase-api/get';
 import upsert from '../../services/firebase-api/upsert';
 
 const modelName = 'users';
@@ -43,9 +43,8 @@ export const validateUserLocationData = async (data) => {
 };
 
 export const findByName = async (userName) => {
-  logger.info('getting model from db');
-  const userModel = await getModel(modelName);
-  const relevantUser = userModel[userName];
+  logger.info(`getting user from model ${modelName} by name ${userName}`);
+  const relevantUser = await getFromModelById(modelName, userName);
   if (!relevantUser) {
     logger.warn('user not found');
     return null;

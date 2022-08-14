@@ -81,10 +81,9 @@ const findAll = async () => {
   return formattedOffers;
 };
 
-const findByOfferId = async (index) => {
-  logger.info('getting model from db');
-  const offerModel = await getModel(modelName);
-  const relevantOffer = offerModel[index];
+const findByOfferId = async (id) => {
+  logger.info(`getting from model ${modelName} offer ${id}`);
+  const relevantOffer = await getModel.getFromModelById(modelName, id);
   if (!relevantOffer) {
     logger.warn('offer was not found');
     return null;

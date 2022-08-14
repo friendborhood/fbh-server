@@ -9,4 +9,9 @@ const getModel = async (modelName) => {
   const model = await get(child(dbRef, modelName));
   return model.val();
 };
-module.exports = getModel;
+
+const getFromModelById = async (modelName, entityId) => {
+  const model = await get(child(dbRef, `${modelName}/${entityId}`));
+  return model.val();
+};
+module.exports = { getModel, getFromModelById };
