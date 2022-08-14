@@ -1,6 +1,6 @@
 import Joi, { object } from 'joi';
 import { uuid } from 'short-uuid';
-import getModel from '../../services/firebase-api/get';
+import {getModel, getFromModelById} from '../../services/firebase-api/get';
 import upsert from '../../services/firebase-api/upsert';
 import add from '../../services/firebase-api/add';
 import { formatKeyToJsonArray } from '../generic';
@@ -48,10 +48,11 @@ export const findByName = async (itemName) => {
 
   return relevantItem;
 };
-export const findById = async (index) => {
-  logger.info(`getting ${modelName} model from db`);
-  const itemModel = await getModel(modelName);
-  const relevantItem = itemModel[index];
+
+export const findById = async (id) => {
+  logger.info(`getting ${id} from model ${modelName} from db`);
+  const relevantItem = await getFromModelById(modelName,id);
+
   if (!relevantItem) {
     logger.warn('item was not found');
     return null;

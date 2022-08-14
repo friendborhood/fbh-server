@@ -1,7 +1,7 @@
 const { uuid } = require('short-uuid');
 const Joi = require('joi');
 const { insideCircle, distanceTo } = require('geolocation-utils');
-const getModel = require('../../services/firebase-api/get');
+const { getModel, getFromModelById } = require('../../services/firebase-api/get');
 const upsert = require('../../services/firebase-api/upsert');
 const add = require('../../services/firebase-api/add');
 const { findById } = require('../item');
@@ -87,10 +87,10 @@ const findAll = async () => {
   return formattedOffers;
 };
 
-const findByOfferId = async (index) => {
-  logger.info(`getting ${modelName} model from db`);
-  const offerModel = await getModel(modelName);
-  const relevantOffer = offerModel[index];
+const findByOfferId = async (id) => {
+  logger.info(`getting from model ${modelName} offer ${id}`);
+  const relevantOffer = await getFromModelById(modelName, id);
+
   if (!relevantOffer) {
     logger.warn('offer was not found');
     return null;
