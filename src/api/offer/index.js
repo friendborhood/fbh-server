@@ -36,7 +36,9 @@ router.get('/', adminMiddleWare, async (req, res) => {
 router.get('/in-area', async (req, res) => {
   try {
     const userName = extractUserNameFromAuth(req);
-    const { categories = [], radius, newest = null } = req.query;
+    const {
+      categories = [], radius, newest = null, filterSelf = null,
+    } = req.query;
     if (!userName) {
       return res.status(400).json({ msg: 'must provide userName' });
     }
@@ -68,6 +70,11 @@ router.get('/in-area', async (req, res) => {
     });
     const sortedOffers = newest ? sortOffersByDate({ offers: relevantOffers })
       : sortOffersByDistance({ offers: relevantOffers });
+    if (filterSelf) {
+      logger.info(`${userName}'s offers were filtered out`);
+      return res.json(sortedOffers.filter((offer) => (
+        offer.offererUserName !== userName)));
+    }
     return res.json(sortedOffers);
   } catch (e) {
     logger.error('got error by offers in area', e);
