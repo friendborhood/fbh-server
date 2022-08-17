@@ -7,6 +7,7 @@ const {
   findAll,
   validateOfferData,
   getOffersInArea,
+  getSelfOffers,
   sortOffersByDistance,
   sortOffersByDate,
   filterRelevantOffersByDistance,
@@ -78,6 +79,30 @@ router.get('/in-area', async (req, res) => {
     return res.json(sortedOffers);
   } catch (e) {
     logger.error('got error by offers in area', e);
+    return res.status(500).json({ error: e.message });
+  }
+});
+router.get('/me', async (req, res) => {
+  try {
+    const userName = extractUserNameFromAuth(req);
+    if (!userName) {
+      return res.status(400).json({ msg: 'must provide userName' });
+    }
+    logger.info(`try get the offers of ${userName}`);
+    const user = await findByName(userName);
+    if (!user) {
+      logger.error('user was not found. cant find offers', userName);
+      return res.status(404).json({ msg: `User ${userName} not found` });
+    }
+    const selfOffers = await getSelfOffers({ userName });
+    if (selfOffers.length === 0) {
+      return res.status(200).json([]);
+    }
+
+    const sortedOffers = sortOffersByDate({ offers: selfOffers });
+    return res.json(sortedOffers);
+  } catch (e) {
+    logger.error('got error by self offers', e);
     return res.status(500).json({ error: e.message });
   }
 });

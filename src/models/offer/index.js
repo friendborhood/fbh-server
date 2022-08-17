@@ -119,6 +119,20 @@ const findByCategory = async (categories) => {
 
   return relevantOffers;
 };
+const findByUser = async (userName) => {
+  const offerModel = await getModel(modelName);
+  logger.info(`try to find offers of ${userName}`);
+  const allOfers = Object.entries(offerModel);
+  const allOffersOfUser = allOfers
+    .filter((offer) => (offer.userName === userName));
+  if (allOffersOfUser.length === 0) {
+    logger.warn(`offers by user ${userName} were not found`);
+    return null;
+  }
+  logger.info(`offers by user ${userName} were found `);
+
+  return allOffersOfUser;
+};
 const addItem = async (data) => {
   logger.info('adding offer to db');
   const generatedId = uuid();
@@ -142,15 +156,23 @@ const getOffersInArea = async ({ targetLocation, radius, categories = [] }) => {
   const enrichedFilteredOffers = await enrichOfferData(filteredByArea);
   return enrichedFilteredOffers;
 };
+const getSelfOffers = async ({ targetLocation, radius, categories = [] }) => {
+  const relevantOffersByCategory = await findByCategory(categories);
+  const enrichedFilteredOffers = await enrichOfferData(filteredByArea);
+  return enrichedFilteredOffers;
+};
+
 module.exports = {
   filterRelevantOffersByDistance,
   sortOffersByDistance,
   sortOffersByDate,
   getOffersInArea,
+  getSelfOffers,
   addItem,
   findByCategory,
   filterOffersByArea,
   findByOfferId,
+  findByUser,
   findAll,
   deleteItem,
   patchItem,
