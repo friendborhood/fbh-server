@@ -6,7 +6,7 @@ const upsert = require('../../services/firebase-api/upsert');
 const add = require('../../services/firebase-api/add');
 const { findById } = require('../item');
 const logger = require('../../logger');
-const { parseJsonToArrayWithKeys } = require('../generic');
+const { parseJsonToArrayWithKeys, formatKeyToJsonArray } = require('../generic');
 const { findByName } = require('../user');
 
 const modelName = 'offers';
@@ -47,7 +47,6 @@ const sortOffersByDate = ({ offers }) => {
     },
   );
   const reverseOffers = offers.reverse();
-  // reverseOffers.forEach((element) => console.log(element.lastUpdatedAt));
   return reverseOffers;
 };
 
@@ -71,6 +70,10 @@ const validateOfferData = async (data) => {
   logger.info('offer data is okay');
 };
 const enrichOfferData = async (offers) => {
+  if (offers.length === 0) {
+    logger.warn('enrichOfferData got empty offers');
+    return null;
+  }
   const enrichedOffers = await Promise.all(offers.map(async (offer) => {
     const [itemData, offererUserData] = await Promise.all([
       findById(offer.itemId),
@@ -122,16 +125,16 @@ const findByCategory = async (categories) => {
 const findByUser = async (userName) => {
   const offerModel = await getModel(modelName);
   logger.info(`try to find offers of ${userName}`);
-  const allOfers = Object.entries(offerModel);
-  const allOffersOfUser = allOfers
-    .filter((offer) => (offer.userName === userName));
+  const allOffersOfUser = Object.entries(offerModel).filter(([, offer]) => (
+    offer.offererUserName === userName));
+
   if (allOffersOfUser.length === 0) {
     logger.warn(`offers by user ${userName} were not found`);
     return null;
   }
   logger.info(`offers by user ${userName} were found `);
 
-  return allOffersOfUser;
+  return formatKeyToJsonArray(allOffersOfUser);
 };
 const addItem = async (data) => {
   logger.info('adding offer to db');
@@ -156,9 +159,9 @@ const getOffersInArea = async ({ targetLocation, radius, categories = [] }) => {
   const enrichedFilteredOffers = await enrichOfferData(filteredByArea);
   return enrichedFilteredOffers;
 };
-const getSelfOffers = async ({ targetLocation, radius, categories = [] }) => {
-  const relevantOffersByCategory = await findByCategory(categories);
-  const enrichedFilteredOffers = await enrichOfferData(filteredByArea);
+const getSelfOffers = async ({ userName }) => {
+  const relevantOffersByUsername = await findByUser(userName);
+  const enrichedFilteredOffers = await enrichOfferData(relevantOffersByUsername);
   return enrichedFilteredOffers;
 };
 
