@@ -369,6 +369,23 @@
         }
       }
     },
+    "/offer/me": {
+      "get": {
+        "tags": ["Offer"],
+        "summary": "Get user Offers sorted by newest",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Missing parameter"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
     "/offer/{offerId}": {
       "patch": {
           "parameters": [
