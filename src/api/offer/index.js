@@ -61,7 +61,8 @@ router.get('/in-area', async (req, res) => {
     const offersInArea = await getOffersInArea(
       { targetLocation: userLocation, radius, categories },
     );
-    if (offersInArea.length === 0) {
+    const noOffersInArea = !offersInArea || (offersInArea && offersInArea.length === 0);
+    if (noOffersInArea) {
       return res.status(200).json([]);
     }
 
