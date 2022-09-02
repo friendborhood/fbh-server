@@ -16,6 +16,10 @@ const getDistanceFromOfferToTarget = (offer, target) => {
 };
 const filterOffersByArea = ({ offers, radiusInMeters, targetLocation }) => (offers ? offers.filter(
   (offer) => {
+    if (!offer.location || !offer.location.geoCode) {
+      logger.error(`offer ${offer.id} does not have a defined location. it will be excluded.`);
+      return false;
+    }
     const isInsideCircle = insideCircle(offer.location.geoCode, targetLocation, radiusInMeters);
     return isInsideCircle;
   },
