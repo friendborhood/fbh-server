@@ -3,7 +3,7 @@ import { uuid } from 'short-uuid';
 import {getModel, getFromModelById} from '../../services/firebase-api/get';
 import upsert from '../../services/firebase-api/upsert';
 import add from '../../services/firebase-api/add';
-const { parseJsonToArrayWithKeys, formatKeyToJsonArray } = require('../generic');
+import { formatKeyToJsonArray } from '../generic';
 
 import logger from '../../logger';
 
@@ -32,7 +32,7 @@ export const findAll = async () => {
   logger.info(`getting ${modelName} model from db`);
   const itemModel = await getModel(modelName);
   delete itemModel.categories;
-  return parseJsonToArrayWithKeys(itemModel);
+  return formatKeyToJsonArray(itemModel);
 };
 
 export const findByName = async (itemName) => {
