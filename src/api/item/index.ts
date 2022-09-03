@@ -27,7 +27,8 @@ router.get('/', async (req, res) => {
     return res.status(204).json({ msg: 'Items were not found.' });
   }
   const sortedItems = items.sort((a, b) => a.itemName.localeCompare(b.itemName));
-  return res.json(sortedItems);
+  return res.json(sortedItems.filter((item) => (
+    !item.itemName.includes('Test'))));
 });
 router.get('/:itemId', async (req, res) => {
   logger.info('try get item');
