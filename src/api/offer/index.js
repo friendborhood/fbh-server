@@ -11,6 +11,7 @@ const {
   sortOffersByDistance,
   sortOffersByDate,
   filterRelevantOffersByDistance,
+  filterEnabledOffers,
 } = require('../../models/offer');
 const {
   addUuidEntity,
@@ -72,12 +73,13 @@ router.get('/in-area', async (req, res) => {
     });
     const sortedOffers = newest ? sortOffersByDate({ offers: relevantOffers })
       : sortOffersByDistance({ offers: relevantOffers });
+    const activeSortedOffers = filterEnabledOffers({ offers: sortedOffers });
     if (filterSelf) {
       logger.info(`${userName}'s offers were filtered out`);
-      return res.json(sortedOffers.filter((offer) => (
+      return res.json(activeSortedOffers.filter((offer) => (
         offer.offererUserName !== userName)));
     }
-    return res.json(sortedOffers);
+    return res.json(activeSortedOffers);
   } catch (e) {
     logger.error('got error by offers in area', e);
     return res.status(500).json({ error: e.message });

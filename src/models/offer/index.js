@@ -54,6 +54,12 @@ const sortOffersByDate = ({ offers }) => {
   return reverseOffers;
 };
 
+const filterEnabledOffers = ({ offers }) => {
+  logger.info('filtering out disabled offers');
+  return offers.filter((offer) => (
+    offer.state !== 'Disabled'));
+};
+
 const validateOfferData = async (data) => {
   const item = await findById(data.itemId);
   if (!item) {
@@ -178,6 +184,7 @@ module.exports = {
   addItem,
   findByCategory,
   filterOffersByArea,
+  filterEnabledOffers,
   findByOfferId,
   findByUser,
   findAll,
