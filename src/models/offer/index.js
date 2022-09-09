@@ -69,7 +69,7 @@ const validateOfferData = async (data) => {
     description: Joi.string()
       .min(3)
       .max(280)
-      .required(),
+      .optional(),
     imageUrl: Joi.string().uri(),
     itemId: Joi.string()
       .guid().required(),
