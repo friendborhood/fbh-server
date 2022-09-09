@@ -67,7 +67,7 @@ const validateOfferData = async (data) => {
   }
   const schema = Joi.object({
     description: Joi.string()
-      .min(3)
+      .min(1)
       .max(280)
       .optional(),
     imageUrl: Joi.string().uri(),
