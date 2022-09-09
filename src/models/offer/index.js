@@ -66,7 +66,7 @@ const validateOfferData = async (data) => {
     throw new Error(`Item with id ${data.itemId} was not found.`);
   }
   const schema = Joi.object({
-    description: Joi.string().allow(null, '', undefined).optional(),
+    description: Joi.string().allow(null, '').optional(),
     imageUrl: Joi.string().uri(),
     itemId: Joi.string()
       .guid().required(),
