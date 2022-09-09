@@ -75,9 +75,7 @@ const validateOfferData = async (data) => {
       .guid().required(),
     priceAsked: Joi.number().integer()
       .required(),
-    location: Joi.object().keys({
-      address: Joi.string().required(),
-    }),
+    location: Joi.any().required(),
   });
   await schema.validateAsync(data, { allowUnknown: true });
   logger.info('offer data is okay');
