@@ -165,7 +165,8 @@ const getOffersInArea = async ({ targetLocation, radius, categories = [] }) => {
     { offers: relevantOffersByCategory, radiusInMeters: radius, targetLocation },
   );
   const enrichedFilteredOffers = await enrichOfferData(filteredByArea);
-  return enrichedFilteredOffers;
+  const offersWithOffererData = enrichedFilteredOffers.filter((offer) => offer.offererUserData);
+  return offersWithOffererData;
 };
 const getSelfOffers = async ({ userName }) => {
   const relevantOffersByUsername = await findByUser(userName);
