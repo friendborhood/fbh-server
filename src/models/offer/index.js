@@ -165,7 +165,10 @@ const getOffersInArea = async ({ targetLocation, radius, categories = [] }) => {
     { offers: relevantOffersByCategory, radiusInMeters: radius, targetLocation },
   );
   const enrichedFilteredOffers = await enrichOfferData(filteredByArea);
-  const offersWithOffererData = enrichedFilteredOffers.filter((offer) => offer.offererUserData);
+  let offersWithOffererData = [];
+  if (enrichedFilteredOffers && enrichedFilteredOffers.length > 0) {
+    offersWithOffererData = enrichedFilteredOffers.filter((offer) => offer.offererUserData);
+  }
   return offersWithOffererData;
 };
 const getSelfOffers = async ({ userName }) => {
