@@ -56,7 +56,7 @@ router.get('/in-area', async (req, res) => {
     const { location } = user;
     if (!location) {
       logger.error('user location is unknown, cant get offers in area ', userName);
-      return res.status(406).json({ msg: 'Fill in your address to start watching items around you' });
+      return res.status(406).json({ msg: 'Fill in your address under \'Your Info\' section to start watching items around you' });
     }
     const { geoCode: userLocation } = location;
     const offersInArea = await getOffersInArea(
