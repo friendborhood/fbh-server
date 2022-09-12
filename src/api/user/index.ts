@@ -116,8 +116,13 @@ router.post('/', async (req, res) => {
     await addUser(data, userName);
 
     sendMail({
-      mailSubject: 'Welcome to friendborhood!',
-      content: `Hello ${userName}`,
+      mailSubject: 'Welcome to Friendborhood!',
+      content: `Hello ${userName},
+      Friendborhood was aimed to make the neighborhood a better place and we glad you have chosen to take part :)
+      Fill in your location and start looking at items around you.
+      
+      We wish you a very friendly experience,
+      Friendborhood Team 🦊`,
       userEmail: data.email,
     });
     const token = encodeToJwt({ userName });
