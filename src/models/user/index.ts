@@ -16,6 +16,8 @@ export const validateUserData = async (data) => {
       .required(),
     firstName: Joi.string()
       .required(),
+    lastName: Joi.string()
+      .required(),
     imageUrl: Joi.string().uri(),
   });
   await schema.validateAsync(data);
